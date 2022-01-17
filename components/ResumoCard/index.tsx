@@ -11,6 +11,7 @@ interface CardItemProps {
   qtd: any;
   navegacao: any;
   sizeIcon: number;
+  themeColor?: string;
 }
 
 export const ResumoCard = ({
@@ -19,13 +20,14 @@ export const ResumoCard = ({
   qtd,
   navegacao,
   sizeIcon,
+  themeColor,
 }: CardItemProps) => {
   return (
     <>
       <Pressable
         style={({ pressed }) => [
           {
-            borderColor: pressed ? theme.colors.primary : theme.colors.disabled,
+            borderColor: pressed ? themeColor : theme.colors.disabled,
             borderWidth: pressed ? 1 : 1,
           },
           styles.container,
@@ -33,15 +35,15 @@ export const ResumoCard = ({
         onPress={navegacao}
       >
         <View>
-          <Ionicons name={nameIcon} size={sizeIcon} color="orange" />
+          <Ionicons name={nameIcon} size={sizeIcon} color={themeColor} />
           <Title style={styles.title}>{titleCard}</Title>
         </View>
 
         <View style={styles.lineFooter}>
-          <Badge size={24} style={{ backgroundColor: theme.colors.primary }}>
+          <Badge size={24} style={{ backgroundColor: themeColor }}>
             {qtd}
           </Badge>
-          <Text style={styles.btnVer}>Ver Todas</Text>
+          <Text style={[{ color: themeColor }, styles.btnVer]}>Ver +</Text>
         </View>
       </Pressable>
     </>
@@ -53,11 +55,12 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     paddingVertical: 8,
     paddingHorizontal: 10,
-    width: "40%",
+    width: "30%",
     height: 150,
+    marginHorizontal: 5,
   },
   title: {
-    fontSize: 16,
+    fontSize: 15,
   },
   pressed: {
     backgroundColor: "#abeafe",
@@ -72,7 +75,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   btnVer: {
-    color: theme.colors.primary,
     fontSize: 12,
   },
 });
