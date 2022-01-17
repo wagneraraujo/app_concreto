@@ -10,8 +10,6 @@ export const theme = {
         green:'#16a34a',
         darkGreen:"#065f46",
         blue:"#2563eb",
-
-
-
+        gray:"#525252"
     },
 };

@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     flexDirection: "row",
     paddingVertical: RFValue(8),
-    paddingLeft: RFValue(22),
+    paddingLeft: RFValue(10),
   },
 
   nome: {
