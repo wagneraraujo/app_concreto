@@ -8,10 +8,12 @@ import { theme } from "../theme/theme";
 import { Title } from "react-native-paper";
 import { RFValue } from "react-native-responsive-fontsize";
 import { ItemServico } from "../components/ItemListaServico";
+import { useRoute } from "@react-navigation/native";
 
 export default function TabOneScreen({
   navigation,
 }: RootTabScreenProps<"TabOne">) {
+  const route = useRoute;
   return (
     <>
       <ScrollView style={styles.containerView}>
@@ -21,23 +23,23 @@ export default function TabOneScreen({
             nameIcon="alarm-outline"
             sizeIcon={24}
             titleCard="Solitações de serviços"
-            qtd={6}
+            qtd={5}
             themeColor={theme.colors.primary}
-            navegacao={() => console.log("navegacao")}
+            navegacao={() => console.log("v")}
           />
           <ResumoCard
             nameIcon="cog"
             sizeIcon={24}
-            titleCard="Em andamento"
-            qtd={6}
+            titleCard="Em progresso"
+            qtd={3}
             themeColor={theme.colors.accent}
-            navegacao={() => console.log("navegacao")}
+            navegacao={() => console.log("navegacao", {})}
           />
           <ResumoCard
             nameIcon="checkbox"
             sizeIcon={24}
             titleCard="Serviços concluídos"
-            qtd={6}
+            qtd={3}
             themeColor={theme.colors.green}
             navegacao={() => console.log("navegacao")}
           />
@@ -59,6 +61,7 @@ export default function TabOneScreen({
             progresso="Não iniciado"
             nomeColaborador=""
             key={1}
+            navegacao={() => navigation.navigate("DetalheServico", { id: 1 })}
           />
 
           <ItemServico
@@ -68,6 +71,7 @@ export default function TabOneScreen({
             progresso="Em progresso"
             nomeColaborador="Marcos Silva"
             key={2}
+            navegacao={() => navigation.navigate("DetalheServico")}
           />
 
           <ItemServico
@@ -77,6 +81,26 @@ export default function TabOneScreen({
             progresso="Concluído"
             nomeColaborador="João Costa"
             key={3}
+            navegacao={() => navigation.navigate("DetalheServico")}
+          />
+          <ItemServico
+            titulo="Pintura de parede"
+            empresa="Lojão dos fornos"
+            bairro="RJ centro"
+            progresso="Em progresso"
+            nomeColaborador="Marcos Silva"
+            key={4}
+            navegacao={() => navigation.navigate("DetalheServico")}
+          />
+
+          <ItemServico
+            titulo="Limpeza de poço"
+            empresa="Cond. Cidade dos mundos"
+            bairro="Caxias do Sul"
+            progresso="Concluído"
+            nomeColaborador="João Costa"
+            key={5}
+            navegacao={() => navigation.navigate("DetalheServico")}
           />
         </View>
       </ScrollView>
@@ -87,6 +111,7 @@ export default function TabOneScreen({
 const styles = StyleSheet.create({
   containerView: {
     paddingHorizontal: 10,
+    backgroundColor: "#fff",
   },
   container: {
     alignItems: "flex-start",

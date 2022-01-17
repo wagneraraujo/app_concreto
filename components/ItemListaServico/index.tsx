@@ -10,6 +10,7 @@ interface ItemServicoProps {
   bairro: string;
   progresso: "Em progresso" | "Não iniciado" | "Concluído";
   nomeColaborador?: string;
+  navegacao: any;
 }
 export const ItemServico = ({
   titulo,
@@ -17,13 +18,11 @@ export const ItemServico = ({
   bairro,
   progresso,
   nomeColaborador,
+  navegacao,
 }: ItemServicoProps) => {
   return (
     <>
-      <Pressable
-        style={styles.pressable}
-        onPress={() => console.log("servico")}
-      >
+      <Pressable style={styles.pressable} onPress={navegacao}>
         <View>
           <View>
             <Text style={styles.titleServico}>{titulo}</Text>
@@ -41,20 +40,27 @@ export const ItemServico = ({
                   color:
                     progresso === "Não iniciado"
                       ? theme.colors.notification
-                      : "",
+                      : theme.colors.accent,
                 },
-                {
-                  color:
-                    progresso === "Em progresso" ? theme.colors.accent : "",
-                },
-                {
-                  color:
-                    progresso === "Concluído" ? theme.colors.darkGreen : "",
-                },
+
                 styles.textProgress,
               ]}
             >
-              {progresso}
+              {progresso === "Concluído" ? (
+                <Text
+                  style={[
+                    {
+                      color: theme.colors.green,
+                    },
+
+                    styles.textProgress,
+                  ]}
+                >
+                  {progresso}
+                </Text>
+              ) : (
+                <Text>{progresso}</Text>
+              )}
             </Text>
 
             {progresso === "Não iniciado" ? (
@@ -103,6 +109,8 @@ const styles = StyleSheet.create({
   },
   textProgress: {
     marginRight: RFValue(10),
+    fontWeight: "bold",
+    // color: theme.colors.darkGreen,
   },
   nomeColaborador: {
     marginLeft: RFValue(10),
