@@ -1,20 +1,37 @@
 import { useNavigation } from '@react-navigation/native'
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import { TextInput, Button } from 'react-native-paper'
 import { HeaderScreens } from '../../components/HeaderScreens'
 import { theme } from '../../theme/theme'
 export function CriarContaScreen() {
   const [email, setEmail] = React.useState('')
   const [senha, setSenha] = React.useState('')
+  const [nome, setNome] = React.useState('')
+  const [telefone, setTelefone] = React.useState('')
   const navigation = useNavigation()
   return (
-    <View style={styles.viewForm}>
+    <ScrollView style={styles.viewForm}>
       <HeaderScreens
         title="Concreto Serviços"
         subtitle="Crie sua conta de colaborador"
       />
       <View style={styles.contentForm}>
+        <TextInput
+          label="Nome"
+          value={nome}
+          style={styles.spaceInput}
+          onChangeText={(text) => setNome(text)}
+          right={<TextInput.Icon name="account" />}
+        />
+        <TextInput
+          label="Telefone"
+          value={telefone}
+          keyboardType="decimal-pad"
+          style={styles.spaceInput}
+          onChangeText={(text) => setTelefone(text)}
+          right={<TextInput.Icon name="phone" />}
+        />
         <TextInput
           label="Email"
           value={email}
@@ -23,7 +40,7 @@ export function CriarContaScreen() {
           right={<TextInput.Icon name="email" />}
         />
         <TextInput
-          label="Password"
+          label="Senha"
           secureTextEntry
           style={styles.spaceInput}
           value={senha}
@@ -36,9 +53,10 @@ export function CriarContaScreen() {
         <Button
           icon="arrow-right"
           mode="contained"
+          color={theme.colors.darkGreen}
           onPress={() => console.log('Pressed')}
         >
-          Entrar na minha conta
+          Criar Minha Conta
         </Button>
       </View>
 
@@ -46,30 +64,17 @@ export function CriarContaScreen() {
         <Button
           mode="text"
           color={theme.colors.gray}
-          onPress={() => navigation.navigate('EsqueciSenhaScreen')}
+          onPress={() => navigation.navigate('LoginScreen')}
         >
-          Esqueci a senha
-        </Button>
-
-        <Button
-          mode="text"
-          color={theme.colors.gray}
-          onPress={() => console.log('Pressed')}
-        >
-          Criar conta
+          Voltar para o login
         </Button>
       </View>
-    </View>
+    </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
-  viewForm: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignContent: 'center',
-    flex: 1,
-  },
+  viewForm: {},
   contentForm: {
     paddingHorizontal: 20,
   },

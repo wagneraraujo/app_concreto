@@ -7,8 +7,7 @@ import { theme } from '../../theme/theme'
 export function Login() {
   const [email, setEmail] = React.useState('')
   const [senha, setSenha] = React.useState('')
-  const [nome, setNome] = React.useState('')
-  const [telefone, setTelefone] = React.useState('')
+
   const navigation = useNavigation()
   return (
     <ScrollView style={styles.viewForm}>
@@ -18,21 +17,6 @@ export function Login() {
       />
       <View style={styles.contentForm}>
         <TextInput
-          label="Nome"
-          value={nome}
-          style={styles.spaceInput}
-          onChangeText={(text) => setNome(text)}
-          right={<TextInput.Icon name="account" />}
-        />
-        <TextInput
-          label="Telefone"
-          value={telefone}
-          keyboardType="decimal-pad"
-          style={styles.spaceInput}
-          onChangeText={(text) => setTelefone(text)}
-          right={<TextInput.Icon name="phone" />}
-        />
-        <TextInput
           label="Email"
           value={email}
           style={styles.spaceInput}
@@ -40,7 +24,7 @@ export function Login() {
           right={<TextInput.Icon name="email" />}
         />
         <TextInput
-          label="Senha"
+          label="Password"
           secureTextEntry
           style={styles.spaceInput}
           value={senha}
@@ -53,10 +37,9 @@ export function Login() {
         <Button
           icon="arrow-right"
           mode="contained"
-          color={theme.colors.darkGreen}
           onPress={() => console.log('Pressed')}
         >
-          Criar Minha Conta
+          Entrar na minha conta
         </Button>
       </View>
 
