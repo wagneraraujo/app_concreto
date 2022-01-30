@@ -1,19 +1,19 @@
-import React from "react";
-import { StyleSheet, ScrollView } from "react-native";
-import { NomeUsuario } from "../components/NomeUser";
-import { Text, View } from "../components/Themed";
-import { RootTabScreenProps } from "../types";
-import { ResumoCard } from "../components/ResumoCard";
-import { theme } from "../theme/theme";
-import { Title } from "react-native-paper";
-import { RFValue } from "react-native-responsive-fontsize";
-import { ItemServico } from "../components/ItemListaServico";
-import { useRoute } from "@react-navigation/native";
+import React from 'react'
+import { StyleSheet, ScrollView } from 'react-native'
+import { NomeUsuario } from '../components/NomeUser'
+import { Text, View } from '../components/Themed'
+import { RootTabScreenProps } from '../types'
+import { ResumoCard } from '../components/ResumoCard'
+import { theme } from '../theme/theme'
+import { Title } from 'react-native-paper'
+import { RFValue } from 'react-native-responsive-fontsize'
+import { ItemServico } from '../components/ItemListaServico'
+import { useRoute } from '@react-navigation/native'
 
-export default function TabOneScreen({
+export default function HomeScreen({
   navigation,
-}: RootTabScreenProps<"TabOne">) {
-  const route = useRoute;
+}: RootTabScreenProps<'TabOne'>) {
+  const route = useRoute
   return (
     <>
       <ScrollView style={styles.containerView}>
@@ -25,7 +25,7 @@ export default function TabOneScreen({
             titleCard="Solitações de serviços"
             qtd={5}
             themeColor={theme.colors.primary}
-            navegacao={() => console.log("v")}
+            navegacao={() => console.log('v')}
           />
           <ResumoCard
             nameIcon="cog"
@@ -33,7 +33,7 @@ export default function TabOneScreen({
             titleCard="Em progresso"
             qtd={3}
             themeColor={theme.colors.accent}
-            navegacao={() => console.log("navegacao", {})}
+            navegacao={() => console.log('navegacao', {})}
           />
           <ResumoCard
             nameIcon="checkbox"
@@ -41,7 +41,7 @@ export default function TabOneScreen({
             titleCard="Serviços concluídos"
             qtd={3}
             themeColor={theme.colors.green}
-            navegacao={() => console.log("navegacao")}
+            navegacao={() => console.log('navegacao')}
           />
 
           <View
@@ -61,7 +61,7 @@ export default function TabOneScreen({
             progresso="Não iniciado"
             nomeColaborador=""
             key={1}
-            navegacao={() => navigation.navigate("DetalheServico", { id: 1 })}
+            navegacao={() => navigation.navigate('DetalheServico', { id: 1 })}
           />
 
           <ItemServico
@@ -71,7 +71,7 @@ export default function TabOneScreen({
             progresso="Em progresso"
             nomeColaborador="Marcos Silva"
             key={2}
-            navegacao={() => navigation.navigate("DetalheServico")}
+            navegacao={() => navigation.navigate('DetalheServico')}
           />
 
           <ItemServico
@@ -81,7 +81,7 @@ export default function TabOneScreen({
             progresso="Concluído"
             nomeColaborador="João Costa"
             key={3}
-            navegacao={() => navigation.navigate("DetalheServico")}
+            navegacao={() => navigation.navigate('DetalheServico')}
           />
           <ItemServico
             titulo="Pintura de parede"
@@ -90,7 +90,7 @@ export default function TabOneScreen({
             progresso="Em progresso"
             nomeColaborador="Marcos Silva"
             key={4}
-            navegacao={() => navigation.navigate("DetalheServico")}
+            navegacao={() => navigation.navigate('DetalheServico')}
           />
 
           <ItemServico
@@ -100,35 +100,35 @@ export default function TabOneScreen({
             progresso="Concluído"
             nomeColaborador="João Costa"
             key={5}
-            navegacao={() => navigation.navigate("DetalheServico")}
+            navegacao={() => navigation.navigate('DetalheServico')}
           />
         </View>
       </ScrollView>
     </>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   containerView: {
     paddingHorizontal: 10,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
   container: {
-    alignItems: "flex-start",
-    flexDirection: "row",
-    justifyContent: "space-between",
+    alignItems: 'flex-start',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   title: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   separator: {
     marginVertical: 30,
     height: 1,
-    width: "80%",
+    width: '80%',
   },
   containerListaServicos: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     marginTop: RFValue(16),
   },
-});
+})
