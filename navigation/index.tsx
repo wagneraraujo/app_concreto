@@ -20,7 +20,7 @@ import HomeScreen from '../screens/Home'
 import ModalScreen from '../screens/ModalScreen'
 import NotFoundScreen from '../screens/NotFoundScreen'
 import { DetalheServicoScreen } from '../screens/servicos/detalheServicoSceen'
-
+import { useAuth } from '../hooks/auth'
 import {
   RootStackParamList,
   RootTabParamList,
@@ -33,12 +33,16 @@ export default function Navigation({
 }: {
   colorScheme: ColorSchemeName
 }) {
+  const { user } = useAuth()
+  console.log(user)
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
       theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
     >
-      <AuthStack />
+      {/* <RootNavigator /> */}
+      {/* <AuthStack /> */}
+      {user.id ? <RootNavigator /> : <AuthStack />}
     </NavigationContainer>
   )
 }
@@ -118,9 +122,9 @@ function BottomTabNavigator() {
         })}
       />
 
-      {/* <BottomTab.Screen
+      <BottomTab.Screen
         name="meusservicos"
-        component={TabTwoScreen}
+        component={HomeScreen}
         options={{
           title: 'Meus Serviços',
           tabBarIcon: ({ color }) => (
@@ -130,12 +134,12 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="configuracoes"
-        component={TabTwoScreen}
+        component={HomeScreen}
         options={{
           title: 'Confirgurações',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
-      /> */}
+      />
     </BottomTab.Navigator>
   )
 }

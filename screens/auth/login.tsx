@@ -4,11 +4,20 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import { TextInput, Button } from 'react-native-paper'
 import { HeaderScreens } from '../../components/HeaderScreens'
 import { theme } from '../../theme/theme'
+import { useAuth } from '../../hooks/auth'
 export function Login() {
   const [email, setEmail] = React.useState('')
   const [senha, setSenha] = React.useState('')
 
   const navigation = useNavigation()
+
+  const { user, loginAuth } = useAuth()
+
+  function handleSubmitLogin() {
+    console.log('dados do form', email, senha)
+    loginAuth(email, senha)
+  }
+
   return (
     <ScrollView style={styles.viewForm}>
       <HeaderScreens
@@ -34,11 +43,7 @@ export function Login() {
       </View>
 
       <View style={styles.viewBtn}>
-        <Button
-          icon="arrow-right"
-          mode="contained"
-          onPress={() => console.log('Pressed')}
-        >
+        <Button icon="arrow-right" mode="contained" onPress={handleSubmitLogin}>
           Entrar na minha conta
         </Button>
       </View>
