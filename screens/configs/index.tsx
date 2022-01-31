@@ -8,12 +8,14 @@ import {
 import { TextInput, Button } from 'react-native-paper'
 import { useAuth } from '../../hooks/auth'
 export default function ConfigScreen() {
-  const { Logout } = useAuth()
+  const { Logout, user } = useAuth()
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Configurações</Text>
+      <Text style={styles.textN}>{user.email}</Text>
+      <Text style={styles.textN}>Nome de usuário: {user.name}</Text>
       <TouchableOpacity onPress={Logout} style={styles.link}>
-        <Text style={styles.linkText}>Go to home screen!</Text>
+        <Text style={styles.linkText}>Sair</Text>
       </TouchableOpacity>
     </View>
   )
@@ -37,5 +39,8 @@ const styles = StyleSheet.create({
   linkText: {
     fontSize: 14,
     color: '#2e78b7',
+  },
+  textN: {
+    color: '#191919',
   },
 })
