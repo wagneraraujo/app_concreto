@@ -28,13 +28,13 @@ import {
 } from '../types'
 import LinkingConfiguration from './LinkingConfiguration'
 import { AuthStack } from './auth_stack'
+import { ConfigStack } from './configs_stack'
 export default function Navigation({
   colorScheme,
 }: {
   colorScheme: ColorSchemeName
 }) {
   const { user } = useAuth()
-  console.log(user)
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
@@ -134,7 +134,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="configuracoes"
-        component={HomeScreen}
+        component={ConfigStack}
         options={{
           title: 'Confirgurações',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,

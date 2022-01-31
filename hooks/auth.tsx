@@ -7,6 +7,7 @@ import {
 } from 'react'
 import { loginUser } from '../services/api'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import Loading from '../components/LoadingScreen'
 
 const AuthContext = createContext({} as AuthDataType)
 
@@ -23,16 +24,22 @@ interface User {
 interface AuthDataType {
   user: User
   loginAuth: any
+  Logout(): void
+  userStorageLoading: Boolean
+  erroReq: any
 }
 function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>({} as User)
   const [userStorageLoading, setuserStorageLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
+  const [erroReq, setErroReq] = useState(false)
 
   async function loginAuth(identifier: any, password: any) {
     try {
+      setLoading(true)
       const response = await loginUser(identifier, password)
       if (response.status === 200) {
-        console.log(response.data.user.email)
+        // console.log(response.data.user.email)
 
         const userLogado = {
           id: response.data.user.id,
@@ -44,9 +51,18 @@ function AuthProvider({ children }: AuthProviderProps) {
         await AsyncStorage.setItem('@userConcreto', JSON.stringify(userLogado))
       }
     } catch (error) {
-      console.log(error)
+      // console.log(error)
+      setErroReq(true)
       throw new Error(' Algo deu errado')
+    } finally {
+      setLoading(false)
+      // setErroReq(false)
     }
+  }
+
+  async function Logout() {
+    setUser({} as User)
+    await AsyncStorage.removeItem('@userConcreto')
   }
 
   useEffect(() => {
@@ -64,8 +80,10 @@ function AuthProvider({ children }: AuthProviderProps) {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ user, loginAuth }}>
-      {children}
+    <AuthContext.Provider
+      value={{ user, loginAuth, Logout, userStorageLoading, erroReq }}
+    >
+      {loading ? <Loading /> : children}
     </AuthContext.Provider>
   )
 }

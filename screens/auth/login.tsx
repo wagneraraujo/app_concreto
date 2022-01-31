@@ -1,21 +1,43 @@
 import { useNavigation } from '@react-navigation/native'
-import React from 'react'
+import React, { useState } from 'react'
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import { TextInput, Button } from 'react-native-paper'
 import { HeaderScreens } from '../../components/HeaderScreens'
 import { theme } from '../../theme/theme'
 import { useAuth } from '../../hooks/auth'
+import { useForm, Controller } from 'react-hook-form'
+
 export function Login() {
   const [email, setEmail] = React.useState('')
   const [senha, setSenha] = React.useState('')
+  const {
+    register,
+    setValue,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  })
+
+  // const onChange = (arg) => {
+  //   return {
+  //     value: arg.nativeEvent.text,
+  //   }
+  // }
 
   const navigation = useNavigation()
 
-  const { user, loginAuth } = useAuth()
+  const { user, loginAuth, erroReq } = useAuth()
 
-  function handleSubmitLogin() {
-    console.log('dados do form', email, senha)
-    loginAuth(email, senha)
+  function handleSubmitLogin(data: any) {
+    // console.log(data)
+    loginAuth(data.email, data.password)
+    // console.log(data.email, data.senha)
   }
 
   return (
@@ -25,25 +47,57 @@ export function Login() {
         subtitle="Olá, entre na sua conta agora"
       />
       <View style={styles.contentForm}>
-        <TextInput
-          label="Email"
-          value={email}
-          style={styles.spaceInput}
-          onChangeText={(text) => setEmail(text)}
-          right={<TextInput.Icon name="email" />}
+        <Controller
+          control={control}
+          rules={{
+            required: true,
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              label="Email"
+              onBlur={onBlur}
+              onChangeText={(value) => onChange(value)}
+              value={value}
+              right={<TextInput.Icon name="email" />}
+            />
+          )}
+          name="email"
         />
-        <TextInput
-          label="Password"
-          secureTextEntry
-          style={styles.spaceInput}
-          value={senha}
-          right={<TextInput.Icon name="eye" />}
-          onChangeText={(text) => setSenha(text)}
+        {errors.email && (
+          <Text style={styles.msgErroText}>
+            Campo está vazio ou email inválido
+          </Text>
+        )}
+
+        <Controller
+          control={control}
+          rules={{
+            required: true,
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              label="Password"
+              secureTextEntry
+              style={styles.spaceInput}
+              onBlur={onBlur}
+              onChangeText={(value) => onChange(value)}
+              value={value}
+              right={<TextInput.Icon name="eye" />}
+            />
+          )}
+          name="password"
         />
+        {errors.password && (
+          <Text style={styles.msgErroText}>Digite sua senha</Text>
+        )}
       </View>
 
       <View style={styles.viewBtn}>
-        <Button icon="arrow-right" mode="contained" onPress={handleSubmitLogin}>
+        <Button
+          icon="arrow-right"
+          mode="contained"
+          onPress={handleSubmit(handleSubmitLogin)}
+        >
           Entrar na minha conta
         </Button>
       </View>
@@ -65,6 +119,14 @@ export function Login() {
           Criar conta
         </Button>
       </View>
+
+      <View style={styles.ViewErro}>
+        {erroReq && (
+          <Text style={styles.msgErroTextLogin}>
+            Email ou senha inválidos, tente novamente
+          </Text>
+        )}
+      </View>
     </ScrollView>
   )
 }
@@ -85,5 +147,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 16,
+  },
+  msgErroText: {
+    color: 'red',
+  },
+  ViewErro: {
+    paddingHorizontal: 20,
+    marginTop: 16,
+  },
+  msgErroTextLogin: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: theme.colors.notification,
   },
 })

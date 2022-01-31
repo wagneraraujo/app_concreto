@@ -7,13 +7,14 @@ import Navigation from './navigation'
 import { Provider as PaperProvider } from 'react-native-paper'
 import { theme } from './theme/theme'
 import { withTheme } from 'react-native-paper'
-import { AuthProvider } from './hooks/auth'
+import { AuthProvider, useAuth } from './hooks/auth'
+import Loading from './components/LoadingScreen'
 export default function App(props: any) {
   const isLoadingComplete = useCachedResources()
   const colorScheme = useColorScheme()
-
-  if (!isLoadingComplete) {
-    return null
+  const { userStorageLoading } = useAuth()
+  if (!isLoadingComplete || userStorageLoading) {
+    return <Loading />
   } else {
     return (
       <SafeAreaProvider>
