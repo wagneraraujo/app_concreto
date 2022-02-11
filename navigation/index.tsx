@@ -29,6 +29,8 @@ import {
 import LinkingConfiguration from './LinkingConfiguration'
 import { AuthStack } from './auth_stack'
 import { ConfigStack } from './configs_stack'
+import { SolicitacoesAuth } from './solicitacoes_auth'
+import { theme } from '../theme/theme'
 export default function Navigation({
   colorScheme,
 }: {
@@ -38,7 +40,8 @@ export default function Navigation({
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
-      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+      // theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+      theme={DefaultTheme}
     >
       {/* <RootNavigator /> */}
       {/* <AuthStack /> */}
@@ -96,6 +99,11 @@ function BottomTabNavigator() {
       initialRouteName="TabOne"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
+        tabBarStyle: {
+          backgroundColor: '#272727',
+          borderTopColor: '#000',
+          borderTopWidth: 1,
+        },
       }}
     >
       <BottomTab.Screen
@@ -138,6 +146,17 @@ function BottomTabNavigator() {
         options={{
           title: 'Confirgurações',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+        }}
+      />
+
+      <BottomTab.Screen
+        name="Solicitações"
+        component={SolicitacoesAuth}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="file-text" color={color} />
+          ),
         }}
       />
     </BottomTab.Navigator>

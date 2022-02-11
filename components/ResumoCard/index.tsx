@@ -1,17 +1,17 @@
-import React from "react";
-import { View, StyleSheet, Pressable, Text } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { Title, useTheme } from "react-native-paper";
-import { theme } from "../../theme/theme";
-import { Badge } from "react-native-paper";
+import React from 'react'
+import { View, StyleSheet, Pressable, Text } from 'react-native'
+import { Ionicons } from '@expo/vector-icons'
+import { Title, useTheme } from 'react-native-paper'
+import { theme } from '../../theme/theme'
+import { Badge } from 'react-native-paper'
 
 interface CardItemProps {
-  titleCard: string;
-  nameIcon: string | any;
-  qtd: any;
-  navegacao: any;
-  sizeIcon: number;
-  themeColor?: string;
+  titleCard: string
+  nameIcon: string | any
+  qtd: any
+  navegacao: any
+  sizeIcon: number
+  themeColor?: string
 }
 
 export const ResumoCard = ({
@@ -47,34 +47,35 @@ export const ResumoCard = ({
         </View>
       </Pressable>
     </>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
     borderRadius: 4,
     paddingVertical: 8,
     paddingHorizontal: 10,
-    width: "30%",
+    width: '30%',
     height: 150,
     marginHorizontal: 5,
+    backgroundColor: '#fff',
   },
   title: {
     fontSize: 15,
   },
   pressed: {
-    backgroundColor: "#abeafe",
+    backgroundColor: '#abeafe',
   },
   subtitleCard: {
     fontSize: 14,
   },
   lineFooter: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginTop: 10,
-    alignItems: "center",
+    alignItems: 'center',
   },
   btnVer: {
     fontSize: 12,
   },
-});
+})

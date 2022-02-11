@@ -6,16 +6,12 @@ import { RFValue } from 'react-native-responsive-fontsize'
 
 interface ItemServicoProps {
   titulo: string
-  empresa?: string
-  bairro?: string
-  progresso: 'Em progresso' | 'Não iniciado' | 'Concluído'
+  progresso: 'Em progresso' | 'Não iniciado'
   nomeColaborador?: string
   navegacao: any
 }
-export const ItemServico = ({
+export const ItemServicoCliente = ({
   titulo,
-  empresa,
-  bairro,
   progresso,
   nomeColaborador,
   navegacao,
@@ -28,40 +24,20 @@ export const ItemServico = ({
             <Text style={styles.titleServico}>{titulo}</Text>
           </View>
 
-          <View style={styles.subTitle}>
-            <Text style={styles.textEmpresa}>{empresa}</Text>
-
-            <Text>/</Text>
-            <Text style={styles.textBairro}>{bairro}</Text>
-          </View>
           <View style={styles.viewProgresso}>
             <Text
               style={[
                 {
                   color:
-                    progresso === 'Não iniciado'
-                      ? theme.colors.notification
-                      : theme.colors.accent,
+                    progresso === 'Em progresso'
+                      ? theme.colors.green
+                      : theme.colors.notification,
                 },
 
                 styles.textProgress,
               ]}
             >
-              {progresso === 'Concluído' ? (
-                <Text
-                  style={[
-                    {
-                      color: theme.colors.green,
-                    },
-
-                    styles.textProgress,
-                  ]}
-                >
-                  {progresso}
-                </Text>
-              ) : (
-                <Text>{progresso}</Text>
-              )}
+              {progresso}
             </Text>
 
             {progresso === 'Não iniciado' ? (
