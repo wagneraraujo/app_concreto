@@ -1,13 +1,13 @@
 import { useNavigation } from '@react-navigation/native'
 import React from 'react'
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
-import { TextInput, TextInputMask, Button } from 'react-native-paper'
+import { TextInput, Button } from 'react-native-paper'
 import { HeaderScreens } from '../../components/HeaderScreens'
 import { useForm, Controller } from 'react-hook-form'
 
 import { theme } from '../../theme/theme'
-import { createColaboradorAccount } from '../../services/api'
-export function CriarContaScreen() {
+import { createEmpresaAccount } from '../../services/api'
+export function CriarContaEmpresaScreen() {
   const [email, setEmail] = React.useState('')
   const [senha, setSenha] = React.useState('')
   const [nome, setNome] = React.useState('')
@@ -30,16 +30,13 @@ export function CriarContaScreen() {
   })
 
   function handleSubmitLogin(data: any) {
-    // console.log(data)
-    // const newData = JSON.stringify(dataObjForm)
-    // console.log(newData)
-    createColaboradorAccount(
+    createEmpresaAccount(
       data.email,
       data.email,
       data.password,
       data.name.replace(' ', '_'),
       data.telefone,
-      'colaborador',
+      'empresa',
       data.name,
     )
       .then((res) => {
@@ -57,8 +54,8 @@ export function CriarContaScreen() {
   return (
     <ScrollView style={styles.viewForm}>
       <HeaderScreens
-        title="Concreto Serviços"
-        subtitle="Crie sua conta de colaborador"
+        title="Conta para Empresa"
+        subtitle="Crie sua conta para solicitar serviços"
       />
       <View style={styles.contentForm}>
         <Controller
@@ -68,7 +65,7 @@ export function CriarContaScreen() {
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
-              label="Nome e Sobrenome"
+              label="Nome dono ou Gerente"
               onBlur={onBlur}
               onChangeText={(value) => onChange(value)}
               value={value}
@@ -91,7 +88,7 @@ export function CriarContaScreen() {
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
-              label="DDD + Telefone"
+              label="DDD + Telefone principal"
               keyboardType="decimal-pad"
               onBlur={onBlur}
               onChangeText={(value) => onChange(value)}
@@ -156,7 +153,7 @@ export function CriarContaScreen() {
         <Button
           icon="arrow-right"
           mode="contained"
-          color={theme.colors.darkGreen}
+          color={theme.colors.blue}
           onPress={handleSubmit(handleSubmitLogin)}
         >
           Criar Minha Conta

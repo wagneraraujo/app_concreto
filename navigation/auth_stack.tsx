@@ -3,6 +3,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Login } from '../screens/auth/login'
 import { EsqueciSenhaScreen } from '../screens/auth/esqueci_senha'
 import { CriarContaScreen } from '../screens/auth/criar_conta'
+import { ChoiceRegisterScreen } from '../screens/auth/choice_register'
+import { RegisterOk } from '../screens/auth/register_ok'
+import { CriarContaEmpresaScreen } from '../screens/auth/criar_conta_empresa'
 
 //pages
 
@@ -27,7 +30,22 @@ export function AuthStack() {
         <Stack.Screen
           name="CriarContaScreen"
           component={CriarContaScreen}
-          options={{ headerShown: true, title: 'Criar minha conta' }}
+          options={{ headerShown: true, title: 'Criar conta de colaborador' }}
+        />
+        <Stack.Screen
+          name="ChoiceRegisterScreen"
+          component={ChoiceRegisterScreen}
+          options={{ headerShown: true, title: 'Qual conta deseja criar?' }}
+        />
+        <Stack.Screen
+          name="CriarContaEmpresaScreen"
+          component={CriarContaEmpresaScreen}
+          options={{ headerShown: true, title: 'Conta para Empresa' }}
+        />
+        <Stack.Screen
+          name="RegisterOk"
+          component={RegisterOk}
+          options={{ headerShown: false, title: 'Cadastro concluído' }}
         />
       </Stack.Group>
     </Stack.Navigator>

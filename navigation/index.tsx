@@ -31,6 +31,7 @@ import { AuthStack } from './auth_stack'
 import { ConfigStack } from './configs_stack'
 import { SolicitacoesAuth } from './solicitacoes_auth'
 import { theme } from '../theme/theme'
+import { navigationRef } from './RootNavigation'
 export default function Navigation({
   colorScheme,
 }: {
@@ -40,6 +41,7 @@ export default function Navigation({
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
+      ref={navigationRef}
       // theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
       theme={DefaultTheme}
     >

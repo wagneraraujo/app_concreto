@@ -1,13 +1,16 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
-import { TextInput, Button } from 'react-native-paper'
+import { TextInput, Button, Modal, Portal } from 'react-native-paper'
 import { HeaderScreens } from '../../components/HeaderScreens'
 import { theme } from '../../theme/theme'
 import { useAuth } from '../../hooks/auth'
 import { useForm, Controller } from 'react-hook-form'
+import { ContentModalRegister } from '../../components/ContentModalRegister'
 
 export function Login() {
+  const [visible, setVisible] = React.useState(false)
+
   const [email, setEmail] = React.useState('')
   const [senha, setSenha] = React.useState('')
   const {
@@ -24,6 +27,8 @@ export function Login() {
     },
   })
 
+  const showModal = () => setVisible(true)
+  const hideModal = () => setVisible(false)
   // const onChange = (arg) => {
   //   return {
   //     value: arg.nativeEvent.text,
@@ -114,9 +119,9 @@ export function Login() {
         <Button
           mode="text"
           color={theme.colors.gray}
-          onPress={() => navigation.navigate('CriarContaScreen')}
+          onPress={() => navigation.navigate('ChoiceRegisterScreen')}
         >
-          Criar conta
+          Criar Conta
         </Button>
       </View>
 
@@ -159,5 +164,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: theme.colors.notification,
+  },
+  viewModal: {
+    backgroundColor: '#fff',
+    margin: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
   },
 })
