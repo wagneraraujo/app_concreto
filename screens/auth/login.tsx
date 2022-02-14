@@ -29,11 +29,6 @@ export function Login() {
 
   const showModal = () => setVisible(true)
   const hideModal = () => setVisible(false)
-  // const onChange = (arg) => {
-  //   return {
-  //     value: arg.nativeEvent.text,
-  //   }
-  // }
 
   const navigation = useNavigation()
 

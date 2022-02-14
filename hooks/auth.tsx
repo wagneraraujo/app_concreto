@@ -19,7 +19,9 @@ interface User {
   id: number
   name: string
   email: string
-  telefone?: number
+  telefone: number
+  nome_sobrenome: string
+  tipo_conta: string
 }
 interface AuthDataType {
   user: User
@@ -45,6 +47,9 @@ function AuthProvider({ children }: AuthProviderProps) {
           id: response.data.user.id,
           name: response.data.user.username,
           email: response.data.user.email,
+          telefone: response.data.user.telefone,
+          nome_sobrenome: response.data.user.nome_sobrenome,
+          tipo_conta: response.data.user.tipo_conta,
         }
 
         setUser(userLogado)

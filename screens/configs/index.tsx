@@ -9,11 +9,16 @@ import { TextInput, Button } from 'react-native-paper'
 import { useAuth } from '../../hooks/auth'
 export default function ConfigScreen() {
   const { Logout, user } = useAuth()
+  console.log(user)
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Configurações</Text>
       <Text style={styles.textN}>{user.email}</Text>
       <Text style={styles.textN}>Nome de usuário: {user.name}</Text>
+      <Text style={styles.textN}>Telefone: {user.telefone}</Text>
+      <Text style={styles.textN}>Nome: {user.nome_sobrenome}</Text>
+      <Text style={styles.textN}>Tipo de Usuário: {user.tipo_conta}</Text>
+
       <TouchableOpacity onPress={Logout} style={styles.link}>
         <Text style={styles.linkText}>Sair</Text>
       </TouchableOpacity>
@@ -42,5 +47,6 @@ const styles = StyleSheet.create({
   },
   textN: {
     color: '#191919',
+    textTransform: 'capitalize',
   },
 })
