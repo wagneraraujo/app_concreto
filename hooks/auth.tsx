@@ -22,6 +22,7 @@ interface User {
   telefone: number
   nome_sobrenome: string
   tipo_conta: string
+  token: any
 }
 interface AuthDataType {
   user: User
@@ -40,9 +41,8 @@ function AuthProvider({ children }: AuthProviderProps) {
     try {
       setLoading(true)
       const response = await loginUser(identifier, password)
+      // console.log(response.data.jwt)
       if (response.status === 200) {
-        // console.log(response.data.user.email)
-
         const userLogado = {
           id: response.data.user.id,
           name: response.data.user.username,
@@ -50,6 +50,7 @@ function AuthProvider({ children }: AuthProviderProps) {
           telefone: response.data.user.telefone,
           nome_sobrenome: response.data.user.nome_sobrenome,
           tipo_conta: response.data.user.tipo_conta,
+          token: response.data.jwt,
         }
 
         setUser(userLogado)
@@ -73,7 +74,7 @@ function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     async function LoadStorageUser() {
       const data = await AsyncStorage.getItem('@userConcreto')
-      console.log(data)
+      // console.log(data)
       if (data) {
         const userLogado = JSON.parse(data) as User
         setUser(userLogado)

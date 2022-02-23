@@ -2,6 +2,8 @@ import * as React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import ConfigScreen from '../screens/configs'
+import { CadastrarEmpresa } from '../screens/empresas/Cadastrar'
+import { OkScreen } from '../screens/configs/register_ok'
 
 //pages
 
@@ -17,6 +19,16 @@ export function ConfigStack() {
           name="ConfigScreen"
           component={ConfigScreen}
           options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="CadastrarEmpresa"
+          component={CadastrarEmpresa}
+          options={{ title: 'Cadastrar minha empresa', headerShown: false }}
+        />
+        <Stack.Screen
+          name="CadastroEmpresaOk"
+          component={OkScreen}
+          options={{ title: 'Cadastrar minha empresa', headerShown: false }}
         />
       </Stack.Group>
     </Stack.Navigator>

@@ -6,9 +6,10 @@ import { HeaderScreens } from '../../components/HeaderScreens'
 import { useForm, Controller } from 'react-hook-form'
 
 import { theme } from '../../theme/theme'
-import { createColaboradorAccount } from '../../services/api'
+import { cadastrarEmpresa, createColaboradorAccount } from '../../services/api'
 import Loading from '../../components/LoadingScreen'
-export function CriarContaScreen() {
+import { useAuth } from '../../hooks/auth'
+export function CadastrarEmpresa() {
   const [email, setEmail] = React.useState('')
   const [senha, setSenha] = React.useState('')
   const [nome, setNome] = React.useState('')
@@ -16,7 +17,7 @@ export function CriarContaScreen() {
   const navigation = useNavigation()
   const [loading, setLoading] = useState(false)
   const [errorRegister, setErrorRegister] = useState(false)
-
+  const { user } = useAuth()
   const {
     register,
     setValue,
@@ -26,42 +27,42 @@ export function CriarContaScreen() {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      password: '',
-      email: '',
       telefone: '',
       name: '',
+      endereco: '',
+      cnpj: '',
+      adminempresa: user.id,
     },
   })
 
   function handleSubmitLogin(data: any) {
-    // console.log(data)
-    // const newData = JSON.stringify(dataObjForm)
-    // console.log(newData)
     setLoading(true)
-    createColaboradorAccount(
-      data.email,
-      data.email,
-      data.password,
-      data.email,
+    cadastrarEmpresa(
       data.telefone,
-      'colaborador',
       data.name,
+      data.endereco,
+      data.cnpj,
+      user.id,
+      user.token,
     )
       .then((res) => {
         if (res.status == 200) {
-          navigation.navigate('RegisterOk')
+          reset()
+          navigation.navigate('CadastroEmpresaOk')
         }
       })
       .catch((err) => {
         setLoading(false)
         setErrorRegister(true)
-
-        console.log(err)
       })
       .finally(() => {
         setLoading(false)
       })
   }
+
+  // async function handleSubmitLogin(data: any) {
+  //   cadastrarEmpresa({ data }, user.token)
+  // }
 
   return (
     <>
@@ -70,8 +71,8 @@ export function CriarContaScreen() {
       ) : (
         <ScrollView style={styles.viewForm}>
           <HeaderScreens
-            title="Concreto Serviços"
-            subtitle="Crie sua conta de colaborador"
+            title="Cadastrar Minha Empresa"
+            subtitle="Preencha os campos corretamente para solicitar serviços"
           />
           <View style={styles.contentForm}>
             <Controller
@@ -81,7 +82,7 @@ export function CriarContaScreen() {
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
-                  label="Nome e Sobrenome"
+                  label="Razão Social"
                   onBlur={onBlur}
                   onChangeText={(value) => onChange(value)}
                   value={value}
@@ -126,24 +127,18 @@ export function CriarContaScreen() {
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
+                  label="Endereço"
                   onBlur={onBlur}
                   onChangeText={(value) => onChange(value)}
                   value={value}
-                  label="Email"
-                  keyboardType="email-address"
                   style={styles.spaceInput}
-                  right={<TextInput.Icon name="email" />}
+                  right={<TextInput.Icon name="map-marker" />}
                 />
               )}
-              name="email"
+              name="endereco"
             />
-            <Text style={styles.msgInput}>
-              Digite um email válido seuemail@gmail.com
-            </Text>
-            {errors.email && (
-              <Text style={styles.msgErroText}>
-                Campo Email está vazio ou inválido
-              </Text>
+            {errors.endereco && (
+              <Text style={styles.msgErroText}>Campo endereço está vazio</Text>
             )}
 
             <Controller
@@ -153,22 +148,19 @@ export function CriarContaScreen() {
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
-                  label="Senha"
-                  secureTextEntry
+                  label="CNPJ"
                   onBlur={onBlur}
+                  keyboardType="number-pad"
                   onChangeText={(value) => onChange(value)}
                   value={value}
                   style={styles.spaceInput}
-                  right={<TextInput.Icon name="eye" />}
+                  right={<TextInput.Icon name="domain" />}
                 />
               )}
-              name="password"
+              name="cnpj"
             />
-            <Text style={styles.msgInput}>Minimo de 6 caracteres</Text>
-            {errors.password && (
-              <Text style={styles.msgErroText}>
-                Crie uma senha para você com minimo de 6 caracteres
-              </Text>
+            {errors.cnpj && (
+              <Text style={styles.msgErroText}>Campo CNPJ está vazio</Text>
             )}
           </View>
 
@@ -176,28 +168,17 @@ export function CriarContaScreen() {
             <Button
               icon="arrow-right"
               mode="contained"
-              color={theme.colors.darkGreen}
+              color={theme.colors.onSurface}
               onPress={handleSubmit(handleSubmitLogin)}
             >
-              Criar Minha Conta
+              Cadastrar Empresa
             </Button>
           </View>
           {errorRegister && (
             <Text style={styles.msgErroText}>
-              Algo deu errado, tenta novamente, verifique seu email está
-              correto.
+              Algo deu errado, tenta novamente, confirme os dados.
             </Text>
           )}
-
-          <View style={styles.footerLogin}>
-            <Button
-              mode="text"
-              color={theme.colors.gray}
-              onPress={() => navigation.navigate('LoginScreen')}
-            >
-              Voltar para o login
-            </Button>
-          </View>
         </ScrollView>
       )}
     </>

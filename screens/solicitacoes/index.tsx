@@ -43,7 +43,7 @@ export default function SolicitacoesScreen({
           />
         </View>
 
-        <View style={styles.ViewCriarSolicitacao}>
+        {/* <View style={styles.ViewCriarSolicitacao}>
           <Text style={styles.textsolicitarservico}>
             Deseja solicitar um serviço agora?
           </Text>
@@ -56,7 +56,7 @@ export default function SolicitacoesScreen({
           >
             Solicitar Serviço
           </Button>
-        </View>
+        </View> */}
         <View style={styles.containerListaServicos}>
           <Title>Minhas Solicitações</Title>
           <Divider />

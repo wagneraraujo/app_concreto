@@ -105,6 +105,7 @@ function BottomTabNavigator() {
       initialRouteName="TabOne"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
+        // headerShown: false,
         tabBarStyle: {
           backgroundColor: '#272727',
           borderTopColor: '#000',
@@ -112,7 +113,7 @@ function BottomTabNavigator() {
         },
       }}
     >
-      {noEmpresa && (
+      {noEmpresa === 'empresa' && (
         <>
           <BottomTab.Screen
             name="Solicitações"
@@ -129,7 +130,7 @@ function BottomTabNavigator() {
             name="ServicosSolicitados"
             component={NovaSolicitacaoScreen}
             options={{
-              headerShown: false,
+              headerShown: true,
               title: 'Novo Serviço',
               tabBarIcon: ({ color }) => (
                 <TabBarIcon name="plus" color={color} />
@@ -139,7 +140,7 @@ function BottomTabNavigator() {
         </>
       )}
 
-      {!noEmpresa && (
+      {noEmpresa === 'colaborador' && (
         <>
           <BottomTab.Screen
             name="TabOne"

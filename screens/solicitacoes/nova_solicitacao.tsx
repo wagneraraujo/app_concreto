@@ -1,12 +1,8 @@
 import React, { useState } from 'react'
 import { StyleSheet, ScrollView, Alert } from 'react-native'
-import { NomeUsuario } from '../../components/NomeUser'
 import { Text, View } from '../../components/Themed'
-import { RootTabScreenProps } from '../../types'
-import { ResumoCard } from '../../components/ResumoCard'
 import { theme } from '../../theme/theme'
 import { Divider, Title, Button, TextInput } from 'react-native-paper'
-import { RFValue } from 'react-native-responsive-fontsize'
 import { ItemServico } from '../../components/ItemListaServico'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { HeaderColors } from '../../components/headerColor'
@@ -97,7 +93,7 @@ export default function NovaSolicitacaoScreen({
             </Text>
           )}
 
-          <Controller
+                <Controller
             control={control}
             rules={{
               required: true,

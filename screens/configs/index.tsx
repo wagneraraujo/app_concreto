@@ -1,3 +1,6 @@
+import { useNavigation } from '@react-navigation/native'
+import { StackActions } from '@react-navigation/native'
+
 import {
   TouchableOpacity,
   View,
@@ -9,6 +12,7 @@ import { TextInput, Button } from 'react-native-paper'
 import { useAuth } from '../../hooks/auth'
 export default function ConfigScreen() {
   const { Logout, user } = useAuth()
+  const navigation = useNavigation()
   console.log(user)
   return (
     <View style={styles.container}>
@@ -18,7 +22,13 @@ export default function ConfigScreen() {
       <Text style={styles.textN}>Telefone: {user.telefone}</Text>
       <Text style={styles.textN}>Nome: {user.nome_sobrenome}</Text>
       <Text style={styles.textN}>Tipo de Usuário: {user.tipo_conta}</Text>
-
+      <Button
+        icon="camera"
+        mode="contained"
+        onPress={() => navigation.navigate('CadastrarEmpresa')}
+      >
+        Cadastrar Empresa
+      </Button>
       <TouchableOpacity onPress={Logout} style={styles.link}>
         <Text style={styles.linkText}>Sair</Text>
       </TouchableOpacity>

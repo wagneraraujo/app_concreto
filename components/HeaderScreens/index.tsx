@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     paddingVertical: 16,
     paddingHorizontal: 16,
-    marginTop: 38,
+    marginTop: 10,
     marginHorizontal: 5,
   },
   title: {
