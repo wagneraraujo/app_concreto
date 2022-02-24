@@ -34,7 +34,7 @@ export default function ConfigScreen() {
           </Button>
 
           <Button
-            icon="camera"
+            icon="format-list-bulleted"
             mode="contained"
             color={theme.colors.onSurface}
             onPress={() => navigation.navigate('ListEmpresasScreen')}

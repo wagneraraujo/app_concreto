@@ -104,6 +104,31 @@ export const cadastrarEmpresa = async (
   )
 }
 
+export const createServices = async (
+  Titulo: string,
+  Descricao: string,
+  empresas: number,
+  tipos_servicos: number,
+  jwt: any,
+) => {
+  return api.post(
+    '/api/criar-servicos',
+    {
+      data: {
+        Titulo: Titulo,
+        Descricao: Descricao,
+        empresas: empresas,
+        tipos_servicos: tipos_servicos,
+      },
+    },
+    {
+      headers: {
+        Authorization: 'Bearer ' + jwt,
+      },
+    },
+  )
+}
+
 export const getEmpresas = async () => {
   const res = await api.get('/api/empresas')
   return res.data
