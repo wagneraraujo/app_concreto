@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, StackActions } from '@react-navigation/native'
 import React from 'react'
 import { View, StyleSheet, Image, Text } from 'react-native'
 import { Button, Title } from 'react-native-paper'
@@ -16,6 +16,14 @@ export function OkScreen() {
       <Text style={styles.textcenter}>
         Empresa cadastrada, agora você pode solicitar serviços
       </Text>
+      <Button
+        icon="camera"
+        mode="contained"
+        color={theme.colors.onSurface}
+        onPress={() => navigation.navigate('SolicitacoesScreen')}
+      >
+        Ir para Solicitações
+      </Button>
     </View>
   )
 }
@@ -26,6 +34,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignContent: 'center',
     flex: 1,
+    padding: 16,
   },
   contentForm: {
     paddingHorizontal: 20,
@@ -51,5 +60,6 @@ const styles = StyleSheet.create({
   },
   textcenter: {
     textAlign: 'center',
+    marginBottom: 16,
   },
 })

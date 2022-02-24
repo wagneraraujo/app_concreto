@@ -2,6 +2,7 @@ import axios from 'axios'
 import { UserInterfaceIdiom } from 'expo-constants'
 import { useAuth } from '../hooks/auth'
 
+// http://192.168.0.106:1337/api/empresas?filters[adminempresa][username][$eq]=marcos@gmail.com
 // const baseUrl = 'http://localhost:1337'
 const baseUrl = 'http://192.168.0.106:1337'
 //http://192.168.0.108:1337/api/auth/local/register
@@ -101,4 +102,16 @@ export const cadastrarEmpresa = async (
       },
     },
   )
+}
+
+export const getEmpresas = async () => {
+  const res = await api.get('/api/empresas')
+  return res.data
+}
+
+export const getMyEmpresas = async (username: string) => {
+  const res = await api.get(
+    `/api/empresas?filters[adminempresa][username][$eq]=${username}`,
+  )
+  return res.data
 }

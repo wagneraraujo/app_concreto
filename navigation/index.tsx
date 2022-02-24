@@ -99,6 +99,7 @@ function BottomTabNavigator() {
   const { user } = useAuth()
 
   const noEmpresa = user.tipo_conta
+  console.log(noEmpresa)
 
   return (
     <BottomTab.Navigator
@@ -185,7 +186,8 @@ function BottomTabNavigator() {
         name="configuracoes"
         component={ConfigStack}
         options={{
-          title: !noEmpresa ? 'Minha Conta' : 'Gerente/Empresa',
+          headerShown: false,
+          title: noEmpresa === 'empresa' ? 'Gerenciar' : 'Minha Conta',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
       />

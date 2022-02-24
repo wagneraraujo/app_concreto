@@ -10,10 +10,10 @@ import {
 } from 'react-native'
 import { TextInput, Button } from 'react-native-paper'
 import { useAuth } from '../../hooks/auth'
+import { theme } from '../../theme/theme'
 export default function ConfigScreen() {
   const { Logout, user } = useAuth()
   const navigation = useNavigation()
-  console.log(user)
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Configurações</Text>
@@ -22,13 +22,28 @@ export default function ConfigScreen() {
       <Text style={styles.textN}>Telefone: {user.telefone}</Text>
       <Text style={styles.textN}>Nome: {user.nome_sobrenome}</Text>
       <Text style={styles.textN}>Tipo de Usuário: {user.tipo_conta}</Text>
-      <Button
-        icon="camera"
-        mode="contained"
-        onPress={() => navigation.navigate('CadastrarEmpresa')}
-      >
-        Cadastrar Empresa
-      </Button>
+
+      {user.tipo_conta === 'empresa' && (
+        <View>
+          <Button
+            icon="domain"
+            mode="contained"
+            onPress={() => navigation.navigate('CadastrarEmpresa')}
+          >
+            Cadastrar Empresa
+          </Button>
+
+          <Button
+            icon="camera"
+            mode="contained"
+            color={theme.colors.onSurface}
+            onPress={() => navigation.navigate('ListEmpresasScreen')}
+          >
+            Empresas Cadastradas
+          </Button>
+        </View>
+      )}
+
       <TouchableOpacity onPress={Logout} style={styles.link}>
         <Text style={styles.linkText}>Sair</Text>
       </TouchableOpacity>
