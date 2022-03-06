@@ -140,3 +140,8 @@ export const getMyEmpresas = async (username: string) => {
   )
   return res.data
 }
+
+export const getServicos = async () => {
+  const res = await api.get('/api/tipos-servicos')
+  return res.data
+}

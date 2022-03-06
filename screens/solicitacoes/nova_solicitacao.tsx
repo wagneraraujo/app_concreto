@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { StyleSheet, ScrollView, Alert } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
+import { StyleSheet, ScrollView, Alert, RefreshControl } from 'react-native'
 import { Text, View } from '../../components/Themed'
 import { theme } from '../../theme/theme'
 import { Button, TextInput } from 'react-native-paper'
@@ -8,20 +8,24 @@ import { useForm, Controller } from 'react-hook-form'
 import { Image } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { useAuth } from '../../hooks/auth'
-import SelectDropdown from 'react-native-select-dropdown'
-import { getMyEmpresas } from '../../services/api'
+import SelectDropdown, {
+  SelectDropdownProps,
+} from 'react-native-select-dropdown'
+import { getMyEmpresas, getServicos } from '../../services/api'
 import Loading from '../../components/LoadingScreen'
 
 export default function NovaSolicitacaoScreen() {
-  const [selectedLanguage, setSelectedLanguage] = useState()
-  const [selectedOption, setSelectedOption] = useState(null)
   const [myEmpresas, setMyEmpresas] = useState([] as any)
+  const [servicos, setServicos] = useState([] as any)
   const [loading, setLoading] = useState(true)
   const { user } = useAuth()
   const route = useRoute
   const nativation = useNavigation()
+  let newArrayEmpresas = myEmpresas.map(
+    (empresa: any) => empresa.attributes.Nome_Empresa,
+  )
+  const firtEmpresa = newArrayEmpresas[0]
 
-  const dataEm = []
   const navigation = useNavigation()
   const {
     register,
@@ -36,11 +40,11 @@ export default function NovaSolicitacaoScreen() {
       titulo: '',
       descricao: '',
       empresa: '',
-      tipos_servicos: '',
+      tipos_servicos: null,
       // imagens: [],
     },
   })
-
+  const dropdownRef = useRef<any>('')
   const [text, setText] = useState('')
   const [image, setImage] = useState(null)
   const pickImage = async () => {
@@ -59,24 +63,35 @@ export default function NovaSolicitacaoScreen() {
   function handleSubmitLogin(data: any) {
     console.log('enviado')
     console.log(data)
+    reset()
     createTwoButtonAlert()
-    setTimeout(() => {
-      // navigation.navigate('SolicitacoesScreen')
-    }, 3000)
+    dropdownRef.current.reset()
+
+    // navigation.navigate('SolicitacoesScreen')
   }
-  const countries = ['Egypt', 'Canada', 'Australia', 'Ireland']
 
   const createTwoButtonAlert = () =>
     Alert.alert(
       'Sua solicitação foi criada com sucesso!',
       'Por favor, aguarde nosso retorno',
-      [{ text: 'OK', onPress: () => console.log('OK Pressed') }],
+      [
+        {
+          text: 'Ok',
+          // onPress: () => navigation.navigate('SolicitacoesScreen'),
+        },
+      ],
     )
 
+  const getData = () => {
+    return Promise.all([getMyEmpresas(user.email), getServicos()])
+  }
+
   useEffect(() => {
-    getMyEmpresas(user.email)
-      .then((res) => {
-        setMyEmpresas(res)
+    reset()
+    getData()
+      .then(([thenEmpresas, thenServicos]) => {
+        setMyEmpresas(thenEmpresas.data)
+        setServicos(thenServicos.data)
         // console.log(res)
         setLoading(false)
       })
@@ -86,6 +101,8 @@ export default function NovaSolicitacaoScreen() {
       })
   }, [])
 
+  let newArrayServicos = servicos.map((servico: any) => servico.attributes.Nome)
+  // console.log(newArrayServicos)
   return (
     <>
       {loading ? (
@@ -123,14 +140,18 @@ export default function NovaSolicitacaoScreen() {
 
             <Controller
               control={control}
+              rules={{ required: true }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <>
                   <View style={styles.linhaSelect}>
-                    <Text>Minha Empresa</Text>
+                    <Text style={styles.labeldestaque}>Para qual Empresa?</Text>
                     <SelectDropdown
-                      dropdownStyle={{ backgroundColor: '#fff', width: '80%' }}
-                      data={myEmpresas}
-                      onSelect={(value, index) => {
+                      dropdownStyle={{ backgroundColor: '#fff', width: 280 }}
+                      data={newArrayEmpresas}
+                      ref={dropdownRef}
+                      defaultButtonText="Escolha empresa"
+                      onSelect={(value) => {
+                        onChange(value)
                         setValue('empresa', value)
                       }}
                       buttonTextAfterSelection={(value, index) => {
@@ -149,12 +170,17 @@ export default function NovaSolicitacaoScreen() {
               render={({ field: { onChange, onBlur, value } }) => (
                 <>
                   <View style={styles.linhaSelect}>
-                    <Text>Serviços</Text>
+                    <Text style={styles.labeldestaque}>
+                      Qual Serviço deseja?
+                    </Text>
+                    <Text>Senão tiver na lista, pode deixar em branco</Text>
                     <SelectDropdown
-                      dropdownStyle={{ backgroundColor: '#fff', width: '80%' }}
-                      data={countries}
-                      onSelect={(value, index) => {
-                        setValue('empresa', value)
+                      dropdownStyle={{ backgroundColor: '#fff', width: 280 }}
+                      defaultButtonText="Escolha um serviço"
+                      data={newArrayServicos}
+                      onSelect={(value) => {
+                        onChange(value)
+                        setValue('tipos_servicos', value)
                       }}
                       buttonTextAfterSelection={(value, index) => {
                         return value
@@ -274,5 +300,9 @@ const styles = StyleSheet.create({
   linhaSelect: {
     width: '100%',
     marginVertical: 6,
+  },
+  labeldestaque: {
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 })
