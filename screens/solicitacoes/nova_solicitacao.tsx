@@ -11,7 +11,7 @@ import { useAuth } from '../../hooks/auth'
 import SelectDropdown, {
   SelectDropdownProps,
 } from 'react-native-select-dropdown'
-import { getMyEmpresas, getServicos } from '../../services/api'
+import { createServices, getMyEmpresas, getServicos } from '../../services/api'
 import Loading from '../../components/LoadingScreen'
 
 export default function NovaSolicitacaoScreen() {
@@ -21,9 +21,19 @@ export default function NovaSolicitacaoScreen() {
   const { user } = useAuth()
   const route = useRoute
   const nativation = useNavigation()
-  let newArrayEmpresas = myEmpresas.map(
-    (empresa: any) => empresa.attributes.Nome_Empresa,
-  )
+  let newArrayEmpresas = myEmpresas.map((empresa: any) => {
+    return {
+      nome: empresa.attributes.Nome_Empresa,
+      id: empresa.id,
+    }
+  })
+  let newArrayServicos = servicos.map((servico: any) => {
+    return {
+      nome: servico.attributes.Nome,
+      id: servico.id,
+    }
+  })
+  // console.log(newArrayEmpresas)
   const firtEmpresa = newArrayEmpresas[0]
 
   const navigation = useNavigation()
@@ -39,12 +49,13 @@ export default function NovaSolicitacaoScreen() {
     defaultValues: {
       titulo: '',
       descricao: '',
-      empresa: '',
+      empresa: null,
       tipos_servicos: null,
       // imagens: [],
     },
   })
-  const dropdownRef = useRef<any>('')
+  const dropdownRef = useRef<any>(null)
+  const dropdownRef2 = useRef<any>(null)
   const [text, setText] = useState('')
   const [image, setImage] = useState(null)
   const pickImage = async () => {
@@ -61,10 +72,24 @@ export default function NovaSolicitacaoScreen() {
     }
   }
   function handleSubmitLogin(data: any) {
-    console.log('enviado')
-    console.log(data)
-    reset()
-    createTwoButtonAlert()
+    // console.log(data)
+    createServices(
+      data.titulo,
+      data.descricao,
+      data.empresa,
+      data.tipos_servicos,
+      user.token,
+    )
+      .then((res) => {
+        createTwoButtonAlert()
+        dropdownRef.current.reset()
+        dropdownRef2.current.reset()
+        reset()
+        navigation.navigate('SolicitacoesScreen')
+      })
+      .catch((err) => {
+        console.log(err)
+      })
     dropdownRef.current.reset()
 
     // navigation.navigate('SolicitacoesScreen')
@@ -101,7 +126,6 @@ export default function NovaSolicitacaoScreen() {
       })
   }, [])
 
-  let newArrayServicos = servicos.map((servico: any) => servico.attributes.Nome)
   // console.log(newArrayServicos)
   return (
     <>
@@ -152,13 +176,13 @@ export default function NovaSolicitacaoScreen() {
                       defaultButtonText="Escolha empresa"
                       onSelect={(value) => {
                         onChange(value)
-                        setValue('empresa', value)
+                        setValue('empresa', value.id)
                       }}
                       buttonTextAfterSelection={(value, index) => {
-                        return value
+                        return value.nome
                       }}
                       rowTextForSelection={(item, index) => {
-                        return item
+                        return item.nome
                       }}
                     />
                   </View>
@@ -178,15 +202,16 @@ export default function NovaSolicitacaoScreen() {
                       dropdownStyle={{ backgroundColor: '#fff', width: 280 }}
                       defaultButtonText="Escolha um serviço"
                       data={newArrayServicos}
+                      ref={dropdownRef2}
                       onSelect={(value) => {
                         onChange(value)
-                        setValue('tipos_servicos', value)
+                        setValue('tipos_servicos', value.id)
                       }}
                       buttonTextAfterSelection={(value, index) => {
-                        return value
+                        return value.nome
                       }}
                       rowTextForSelection={(item, index) => {
-                        return item
+                        return item.nome
                       }}
                     />
                   </View>
