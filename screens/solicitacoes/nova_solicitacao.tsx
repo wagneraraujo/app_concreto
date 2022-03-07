@@ -78,6 +78,7 @@ export default function NovaSolicitacaoScreen() {
       data.descricao,
       data.empresa,
       data.tipos_servicos,
+      user.id,
       user.token,
     )
       .then((res) => {
