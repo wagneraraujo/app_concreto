@@ -28,19 +28,18 @@ export const ItemServicoCliente = ({
             <Text
               style={[
                 {
-                  color:
-                    progresso === 'Em progresso'
-                      ? theme.colors.green
-                      : theme.colors.notification,
+                  color: progresso
+                    ? theme.colors.green
+                    : theme.colors.notification,
                 },
 
                 styles.textProgress,
               ]}
             >
-              {progresso}
+              {!progresso ? 'Não iniciado' : 'iniciado'}
             </Text>
 
-            {progresso === 'Não iniciado' ? (
+            {!progresso ? (
               <Text style={styles.textBairro}></Text>
             ) : (
               <Text style={styles.textBairro}>por {nomeColaborador}</Text>

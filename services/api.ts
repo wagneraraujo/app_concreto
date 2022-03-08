@@ -149,6 +149,13 @@ export const getServicos = async () => {
 }
 
 export const getServicosSolicitados = async (username: string) => {
-  const res = await api.get('')
+  const res = await api.get(
+    `/api/criar-servicos?filters[adminempresa][username][$eq]=${username}&populate=*`,
+  )
+  return res.data
+}
+
+export const getServicoId = async (id: number) => {
+  const res = await api.get(`/api/criar-servicos/${id}?populate=*`)
   return res.data
 }

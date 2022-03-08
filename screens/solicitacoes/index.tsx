@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, ScrollView } from 'react-native'
 import { NomeUsuario } from '../../components/NomeUser'
 import { Text, View } from '../../components/Themed'
@@ -11,85 +11,97 @@ import { ItemServico } from '../../components/ItemListaServico'
 import { useRoute } from '@react-navigation/native'
 import { HeaderColors } from '../../components/headerColor'
 import { ItemServicoCliente } from '../../components/ItemListaServicoCliete'
+import { useAuth } from '../../hooks/auth'
+import { getServicosSolicitados } from '../../services/api'
+import Loading from '../../components/LoadingScreen'
 
-export default function SolicitacoesScreen({
-  navigation,
-}: RootTabScreenProps<'TabOne'>) {
-  const route = useRoute
+export default function SolicitacoesScreen({ navigation }: any) {
+  const [servicos, setServicos] = useState<any>([])
+  const [loading, setLoading] = useState(true)
+
+  const route = useRoute()
+  const { user } = useAuth()
+  useEffect(() => {
+    getServicosSolicitados(user.email)
+      .then((res) => {
+        // console.log(res)
+        setServicos(res.data)
+        setLoading(false)
+      })
+      .then((err) => {
+        console.log(err)
+        setLoading(false)
+      })
+  }, [])
+  // console.log('servicos:', servicos)
   return (
     <>
       <ScrollView style={styles.AllView}>
-        <HeaderColors
-          title="Solicitações"
-          subtitle="Acompanhe suas solicitações"
-        />
-        <View style={styles.containerResumos}>
-          <ResumoCard
-            nameIcon="alarm-outline"
-            sizeIcon={24}
-            titleCard="Serviços Solicitados"
-            qtd={5}
-            themeColor={theme.colors.primary}
-            navegacao={() => console.log('v')}
-          />
+        {loading ? (
+          <Loading />
+        ) : (
+          <>
+            <HeaderColors
+              title="Solicitações"
+              subtitle="Acompanhe suas solicitações"
+            />
+            <View style={styles.containerResumos}>
+              <ResumoCard
+                nameIcon="alarm-outline"
+                sizeIcon={24}
+                titleCard="Serviços Solicitados"
+                qtd={5}
+                themeColor={theme.colors.primary}
+                navegacao={() => console.log('v')}
+              />
 
-          <ResumoCard
-            nameIcon="checkbox"
-            sizeIcon={24}
-            titleCard="Solicitações concluídas"
-            qtd={3}
-            themeColor={theme.colors.green}
-            navegacao={() => console.log('navegacao')}
-          />
-        </View>
+              <ResumoCard
+                nameIcon="checkbox"
+                sizeIcon={24}
+                titleCard="Solicitações concluídas"
+                qtd={3}
+                themeColor={theme.colors.green}
+                navegacao={() => console.log('navegacao')}
+              />
+            </View>
 
-        {/* <View style={styles.ViewCriarSolicitacao}>
-          <Text style={styles.textsolicitarservico}>
-            Deseja solicitar um serviço agora?
-          </Text>
-          <Button
-            icon="alert"
-            mode="contained"
-            color={theme.colors.blue}
-            style={styles.buttonSolicitarServico}
-            onPress={() => navigation.navigate('NovaSolicitacaoScreen')}
-          >
-            Solicitar Serviço
-          </Button>
-        </View> */}
-        <View style={styles.containerListaServicos}>
-          <Title>Minhas Solicitações</Title>
-          <Divider />
+            {/* <View style={styles.ViewCriarSolicitacao}>
+ <Text style={styles.textsolicitarservico}>
+   Deseja solicitar um serviço agora?
+ </Text>
+ <Button
+   icon="alert"
+   mode="contained"
+   color={theme.colors.blue}
+   style={styles.buttonSolicitarServico}
+   onPress={() => navigation.navigate('NovaSolicitacaoScreen')}
+ >
+   Solicitar Serviço
+ </Button>
+</View> */}
+            <View style={styles.containerListaServicos}>
+              <Title>Minhas Solicitações</Title>
+              <Divider />
 
-          <ItemServicoCliente
-            titulo="Manutenção portão eletrônico"
-            progresso="Não iniciado"
-            nomeColaborador=""
-            key={1}
-            navegacao={() => navigation.navigate('DetalheServico', { id: 1 })}
-          />
-
-          <ItemServicoCliente
-            titulo="Pintura de parede"
-            progresso="Em progresso"
-            nomeColaborador="Marcos Silva"
-            key={2}
-            navegacao={() => navigation.navigate('DetalheServico')}
-          />
-          <ItemServicoCliente
-            titulo="Pintura de parede"
-            progresso="Não iniciado"
-            key={3}
-            navegacao={() => navigation.navigate('DetalheServico')}
-          />
-          <ItemServicoCliente
-            titulo="Pintura de parede"
-            progresso="Em progresso"
-            nomeColaborador="Marcos Silva"
-            key={4}
-            navegacao={() => navigation.navigate('DetalheServico')}
-          />
-        </View>
+              {servicos.map((item: any) => {
+                const { Titulo, Status_servico } = item.attributes
+                return (
+                  <ItemServicoCliente
+                    key={item.id}
+                    titulo={Titulo}
+                    progresso={Status_servico}
+                    nomeColaborador=""
+                    navegacao={() =>
+                      navigation.navigate('DetalheSolicitacaoScreen', {
+                        id: item.id,
+                      })
+                    }
+                  />
+                )
+              })}
+            </View>
+          </>
+        )}
       </ScrollView>
     </>
   )
