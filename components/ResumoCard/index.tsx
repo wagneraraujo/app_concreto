@@ -43,7 +43,7 @@ export const ResumoCard = ({
           <Badge size={24} style={{ backgroundColor: themeColor }}>
             {qtd}
           </Badge>
-          <Text style={[{ color: themeColor }, styles.btnVer]}>Ver +</Text>
+          <Text style={[{ color: themeColor }, styles.btnVer]}></Text>
         </View>
       </Pressable>
     </>

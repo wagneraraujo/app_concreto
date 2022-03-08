@@ -23,7 +23,7 @@ export const DetalheServicoScreen = () => {
   const [titulo, setTitulo] = useState('')
   const [nomeEmpresa, setNomeempresa] = useState('')
   const [descricao, setDescricao] = useState('')
-  const [status, setStatus] = useState(false)
+  const [status, setStatus] = useState('')
   const [dataSolicitacao, setDatasolicitacao] = useState('')
   const [endereco, setEndereco] = useState('')
   const [valor, setValor] = useState(null)
@@ -51,7 +51,7 @@ export const DetalheServicoScreen = () => {
             res.data.attributes.empresas.data[0].attributes.Nome_Empresa,
           )
           setDescricao(res.data.attributes.Descricao)
-          setStatus(res.data.attributes.Status_servico)
+          setStatus(res.data.attributes.Status)
           setValor(res.data.attributes.Valor)
           setEndereco(res.data.attributes.empresas.data[0].attributes.Endereco)
           setTelefone(res.data.attributes.empresas.data[0].attributes.telefone)
@@ -85,12 +85,7 @@ export const DetalheServicoScreen = () => {
           </View>
           <View style={styles.viewTitleServico}>
             <Title style={{ color: theme.colors.text }}>
-              Status:{' '}
-              {status === false ? (
-                <Text style={styles.valorNaoDefinido}>Não iniciado</Text>
-              ) : (
-                <Text style={styles.textGreen}>Iniciado</Text>
-              )}
+              <Text style={styles.textSmall}>Status:</Text> {status}
             </Title>
             <Title style={{ color: theme.colors.darkGreen }}>
               Valor:{' '}

@@ -34,6 +34,23 @@ export default function SolicitacoesScreen({ navigation }: any) {
       })
   }, [])
   // console.log('servicos:', servicos)
+
+  let qtdServicos = servicos.length
+  let servTotal = servicos.map((item: any, index: number) => {
+    return {
+      qtd: index,
+      item: item,
+    }
+  })
+
+  let solicitacoesConcluidas = (item: any) =>
+    item.attributes.Status === 'Finalizado'
+
+  const servicConcluidos = servicos.filter(solicitacoesConcluidas)
+  const servicosConlcuidosQtd = servicConcluidos.length
+
+  console.log('concluidoooooo=========', servicConcluidos)
+
   return (
     <>
       <ScrollView style={styles.AllView}>
@@ -50,18 +67,18 @@ export default function SolicitacoesScreen({ navigation }: any) {
                 nameIcon="alarm-outline"
                 sizeIcon={24}
                 titleCard="Serviços Solicitados"
-                qtd={5}
+                qtd={qtdServicos}
                 themeColor={theme.colors.primary}
-                navegacao={() => console.log('v')}
+                navegacao={() => {}}
               />
 
               <ResumoCard
                 nameIcon="checkbox"
                 sizeIcon={24}
                 titleCard="Solicitações concluídas"
-                qtd={3}
+                qtd={servicosConlcuidosQtd}
                 themeColor={theme.colors.green}
-                navegacao={() => console.log('navegacao')}
+                navegacao={() => {}}
               />
             </View>
 
@@ -84,12 +101,12 @@ export default function SolicitacoesScreen({ navigation }: any) {
               <Divider />
 
               {servicos.map((item: any) => {
-                const { Titulo, Status_servico } = item.attributes
+                const { Titulo, Status } = item.attributes
                 return (
                   <ItemServicoCliente
                     key={item.id}
                     titulo={Titulo}
-                    progresso={Status_servico}
+                    progresso={Status}
                     nomeColaborador=""
                     navegacao={() =>
                       navigation.navigate('DetalheSolicitacaoScreen', {

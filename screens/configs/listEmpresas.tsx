@@ -74,7 +74,7 @@ export default function ListEmpresasScreen() {
           })}
 
           <Button
-            icon="camera"
+            icon="arrow-right"
             mode="contained"
             onPress={() => navigation.navigate('CadastrarEmpresa')}
           >

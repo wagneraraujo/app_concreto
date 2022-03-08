@@ -6,16 +6,31 @@ import { RFValue } from 'react-native-responsive-fontsize'
 
 interface ItemServicoProps {
   titulo: string
-  progresso: 'Em progresso' | 'Não iniciado'
+  progresso: 'Finalizado' | 'Andamento' | 'Aguardando'
   nomeColaborador?: string
   navegacao: any
 }
+
 export const ItemServicoCliente = ({
   titulo,
   progresso,
   nomeColaborador,
   navegacao,
 }: ItemServicoProps) => {
+  function StatusServico() {
+    if (progresso === 'Aguardando') {
+      return (
+        <Text style={{ color: theme.colors.notification }}>Aguardando</Text>
+      )
+    }
+    if (progresso === 'Andamento') {
+      return <Text style={{ color: theme.colors.blue }}>Andamento</Text>
+    }
+    if (progresso === 'Finalizado') {
+      return <Text style={{ color: theme.colors.green }}>Finalizado</Text>
+    }
+    return <></>
+  }
   return (
     <>
       <Pressable style={styles.pressable} onPress={navegacao}>
@@ -25,25 +40,9 @@ export const ItemServicoCliente = ({
           </View>
 
           <View style={styles.viewProgresso}>
-            <Text
-              style={[
-                {
-                  color: progresso
-                    ? theme.colors.green
-                    : theme.colors.notification,
-                },
+            {/* <Text style={[styles.textProgress]}>{progresso}</Text> */}
 
-                styles.textProgress,
-              ]}
-            >
-              {!progresso ? 'Não iniciado' : 'iniciado'}
-            </Text>
-
-            {!progresso ? (
-              <Text style={styles.textBairro}></Text>
-            ) : (
-              <Text style={styles.textBairro}>por {nomeColaborador}</Text>
-            )}
+            <StatusServico />
           </View>
         </View>
         <AntDesign name="arrowright" size={24} color={theme.colors.primary} />
@@ -63,6 +62,7 @@ const styles = StyleSheet.create({
   titleServico: {
     fontSize: RFValue(20),
     fontWeight: 'bold',
+    textTransform: 'capitalize',
   },
   subTitle: {
     flexDirection: 'row',
@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
   textProgress: {
     marginRight: RFValue(10),
     fontWeight: 'bold',
+    color: '#191919',
     // color: theme.colors.darkGreen,
   },
   nomeColaborador: {
