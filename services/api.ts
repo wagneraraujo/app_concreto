@@ -136,9 +136,9 @@ export const getEmpresas = async () => {
   return res.data
 }
 
-export const getMyEmpresas = async (username: string) => {
+export const getMyEmpresas = async (email: string) => {
   const res = await api.get(
-    `/api/empresas?filters[adminempresa][username][$eq]=${username}`,
+    `/api/empresas?filters[adminempresa][username]=${email}`,
   )
   return res.data
 }

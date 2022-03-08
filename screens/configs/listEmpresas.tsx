@@ -31,6 +31,7 @@ export default function ListEmpresasScreen() {
   useEffect(() => {
     getMyEmpresas(user.email)
       .then((res) => {
+        console.log(res)
         setEmpresas(res)
         setLoading(false)
       })

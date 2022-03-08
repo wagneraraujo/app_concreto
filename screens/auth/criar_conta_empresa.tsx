@@ -125,6 +125,7 @@ export function CriarContaEmpresaScreen() {
                   onBlur={onBlur}
                   onChangeText={(value) => onChange(value)}
                   value={value}
+                  autoCapitalize="none"
                   label="Email"
                   style={styles.spaceInput}
                   right={<TextInput.Icon name="email" />}

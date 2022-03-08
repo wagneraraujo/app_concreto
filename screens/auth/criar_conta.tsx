@@ -130,6 +130,7 @@ export function CriarContaScreen() {
                   onChangeText={(value) => onChange(value)}
                   value={value}
                   label="Email"
+                  autoCapitalize="none"
                   keyboardType="email-address"
                   style={styles.spaceInput}
                   right={<TextInput.Icon name="email" />}

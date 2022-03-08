@@ -58,6 +58,7 @@ export function Login() {
               onBlur={onBlur}
               onChangeText={(value) => onChange(value)}
               value={value}
+              autoCapitalize="none"
               right={<TextInput.Icon name="email" />}
             />
           )}
