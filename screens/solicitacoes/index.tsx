@@ -28,7 +28,7 @@ export default function SolicitacoesScreen({ navigation }: any) {
   useEffect(() => {
     getServicosSolicitados(user.email)
       .then((res) => {
-        console.log(res)
+        // console.log(res)
         setServicos(res.data)
         setLoading(false)
       })
@@ -54,7 +54,7 @@ export default function SolicitacoesScreen({ navigation }: any) {
 
   const onRefresh = React.useCallback(() => {
     getServicosSolicitados(user.email).then((res) => {
-      console.log(res)
+      // console.log(res)
       setServicos(res.data)
       setLoading(false)
     })

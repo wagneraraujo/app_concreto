@@ -15,20 +15,22 @@ import { Button } from 'react-native-paper'
 import { getServicoId } from '../../services/api'
 import Loading from '../../components/LoadingScreen'
 import { useAuth } from '../../hooks/auth'
+import { formatDate } from '../../utils/formatData'
+import { formatCurrency } from '../../utils/formatCurrency'
 
 export const DetalheServicoScreen = () => {
-  const [servico, setServico] = useState<any>()
+  const [servico, setServico] = useState({} as any)
   const [loading, setLoading] = useState(true)
 
-  const [titulo, setTitulo] = useState('')
-  const [nomeEmpresa, setNomeempresa] = useState('')
-  const [descricao, setDescricao] = useState('')
-  const [status, setStatus] = useState('')
-  const [dataSolicitacao, setDatasolicitacao] = useState('')
-  const [endereco, setEndereco] = useState('')
-  const [valor, setValor] = useState(null)
-  const [colaborador, setColaborador] = useState(false)
-  const [telefone, setTelefone] = useState('#')
+  // const [titulo, setTitulo] = useState('' as any)
+  // const [nomeEmpresa, setNomeempresa] = useState('' as any)
+  // const [descricao, setDescricao] = useState('' as any)
+  // const [status, setStatus] = useState('' as any)
+  // const [dataSolicitacao, setDatasolicitacao] = useState('' as any)
+  // const [endereco, setEndereco] = useState('' as any)
+  // const [valor, setValor] = useState(null)
+  // const [colaborador, setColaborador] = useState(false)
+  // const [telefone, setTelefone] = useState('#' as any)
 
   const route = useRoute()
   // let abortController = new AbortController()
@@ -44,25 +46,27 @@ export const DetalheServicoScreen = () => {
     }
     getServicoId(route.params?.id)
       .then((res) => {
-        if (isMounted) {
-          // console.log(res)
-          setTitulo(res.data.attributes.Titulo)
-          setNomeempresa(
-            res.data.attributes.empresas.data[0].attributes.Nome_Empresa,
-          )
-          setDescricao(res.data.attributes.Descricao)
-          setStatus(res.data.attributes.Status)
-          setValor(res.data.attributes.Valor)
-          setEndereco(res.data.attributes.empresas.data[0].attributes.Endereco)
-          setTelefone(res.data.attributes.empresas.data[0].attributes.telefone)
-          setDatasolicitacao(
-            res.data.attributes.createdAt.toLocaleString('pt-BR', options),
-          )
-          setLoading(false)
-        }
+        console.log(res)
+        setServico(res)
+        setLoading(false)
+
+        // console.log(res)
+        // // console.log(res.data.attributes.empresa.data.attributes.Nome_Empresa)
+        // setTitulo(res.data.attributes.Titulo)
+        // setNomeempresa(
+        //   res.data.attributes.empresa.data[0].attributes.Nome_Empresa,
+        // )
+        // setDescricao(res.data.attributes.Descricao)
+        // setStatus(res.data.attributes.Status)
+        // setValor(res.data.attributes.Valor)
+        // setEndereco(res.data.attributes.empresas.data[0].attributes.Endereco)
+        // setTelefone(res.data.attributes.empresas.data[0].attributes.telefone)
+        // setDatasolicitacao(
+        //   res.data.attributes.createdAt.toLocaleString('pt-BR', options),
+        // )
       })
       .catch((err) => {
-        console.log(err)
+        console.log('erro:', err)
         setLoading(false)
       })
     return () => {
@@ -73,6 +77,9 @@ export const DetalheServicoScreen = () => {
   }, [])
 
   const userIsGerente = user.tipo_conta
+  console.log('tipo conta ==>', userIsGerente)
+
+  console.log(' servico ===', servico)
 
   return (
     <>
@@ -81,35 +88,46 @@ export const DetalheServicoScreen = () => {
       ) : (
         <ScrollView style={styles.container}>
           <View style={styles.viewTitleServico}>
-            <Title>{titulo}</Title>
+            <Title>{servico.data.attributes.Titulo}</Title>
           </View>
           <View style={styles.viewTitleServico}>
             <Title style={{ color: theme.colors.text }}>
-              <Text style={styles.textSmall}>Status:</Text> {status}
+              <Text style={styles.textSmall}>Status:</Text>{' '}
+              {!servico.data.attributes.Status_servico ? (
+                <Text style={{ fontSize: 14 }}>Não iniciado</Text>
+              ) : (
+                servico.data.attributes.Status_servico
+              )}
             </Title>
-            <Title style={{ color: theme.colors.darkGreen }}>
+            <Title style={{ color: theme.colors.darkGreen, fontSize: 14 }}>
               Valor:{' '}
-              {valor === null ? null : (
-                <Text style={styles.valorNaoDefinido}>R$ {valor}</Text>
+              {servico.data.attributes.Valor === null ? (
+                <Text>Não definido</Text>
+              ) : (
+                formatCurrency(servico.data.attributes.Valor)
               )}
             </Title>
           </View>
           <View style={styles.viewTwo}>
             <View style={styles.viewCol}>
-              <Text style={styles.subTitle}>{nomeEmpresa}</Text>
+              <Text style={styles.subTitle}>
+                {servico.data.attributes.empresa.data.attributes.Nome_Empresa}
+              </Text>
               <Text>Endereço:</Text>
-              <Text style={styles.subTitle}>{endereco}</Text>
+              <Text style={styles.subTitle}>
+                {servico.data.attributes.empresa.data.attributes.Endereco}
+              </Text>
             </View>
             <View style={styles.viewCol}>
               <Text style={styles.subTitle}>Data Solicitação</Text>
-              <Text>{dataSolicitacao}</Text>
+              <Text> {formatDate(servico.data.attributes.createdAt)}</Text>
 
-              {colaborador && (
+              {/* {colaborador && (
                 <>
                   <Text style={styles.subTitle}>Colaborador</Text>
                   <Text>{colaborador}</Text>
                 </>
-              )}
+              )} */}
             </View>
           </View>
 
@@ -117,7 +135,9 @@ export const DetalheServicoScreen = () => {
 
           <View>
             <Title>Mais informações</Title>
-            <Text style={styles.textDescricao}>{descricao}</Text>
+            <Text style={styles.textDescricao}>
+              {servico.data.attributes.Descricao}
+            </Text>
 
             {/* <Image
               style={styles.imagens}
@@ -127,17 +147,17 @@ export const DetalheServicoScreen = () => {
               }}
             /> */}
           </View>
-
-          {userIsGerente === 'gerente' && (
+          {/* 
+          {userIsGerente === 'empresa' && (
             <>
               <Title>Ações Colaborador</Title>
               <View style={styles.viewBtnCliente}>
                 <Button
                   icon="phone"
                   mode="outlined"
-                  onPress={() => {
-                    Linking.openURL(`tel:55${telefone}`)
-                  }}
+                  // onPress={() => {
+                  //   // Linking.openURL(`tel:55${telefone}`)
+                  // }}
                 >
                   Ligar cliente
                 </Button>
@@ -174,7 +194,7 @@ export const DetalheServicoScreen = () => {
                 </Button>
               </View>
             </>
-          )}
+          )} */}
         </ScrollView>
       )}
     </>
@@ -204,6 +224,7 @@ const styles = StyleSheet.create({
     fontSize: RFValue(16),
     fontWeight: 'bold',
     marginBottom: 6,
+    textTransform: 'capitalize',
   },
   separator: {
     marginVertical: 10,
