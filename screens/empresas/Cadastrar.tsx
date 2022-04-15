@@ -1,15 +1,24 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, ScrollView } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  RefreshControl,
+} from 'react-native'
 import { TextInput, Button } from 'react-native-paper'
 import { HeaderScreens } from '../../components/HeaderScreens'
 import { useForm, Controller } from 'react-hook-form'
-
+const wait = (timeout: any) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout))
+}
 import { theme } from '../../theme/theme'
 import { cadastrarEmpresa, createColaboradorAccount } from '../../services/api'
 import Loading from '../../components/LoadingScreen'
 import { useAuth } from '../../hooks/auth'
 export function CadastrarEmpresa() {
+  const [refreshing, setRefreshing] = React.useState(false)
   const [email, setEmail] = React.useState('')
   const [senha, setSenha] = React.useState('')
   const [nome, setNome] = React.useState('')
@@ -35,9 +44,14 @@ export function CadastrarEmpresa() {
     },
   })
 
+  //refresh
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true)
+    wait(2000).then(() => setRefreshing(false))
+  }, [cadastrarEmpresa])
+
   function handleSubmitLogin(data: any) {
     setLoading(true)
-
     cadastrarEmpresa(
       data.telefone,
       data.name,

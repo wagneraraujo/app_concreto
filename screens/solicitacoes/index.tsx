@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, ScrollView } from 'react-native'
+import { StyleSheet, ScrollView, RefreshControl } from 'react-native'
 import { NomeUsuario } from '../../components/NomeUser'
 import { Text, View } from '../../components/Themed'
 import { RootTabScreenProps } from '../../types'
@@ -14,8 +14,12 @@ import { ItemServicoCliente } from '../../components/ItemListaServicoCliete'
 import { useAuth } from '../../hooks/auth'
 import { getServicosSolicitados } from '../../services/api'
 import Loading from '../../components/LoadingScreen'
-
+const wait = (timeout: any) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout))
+}
 export default function SolicitacoesScreen({ navigation }: any) {
+  const [refreshing, setRefreshing] = React.useState(false)
+
   const [servicos, setServicos] = useState<any>([])
   const [loading, setLoading] = useState(true)
 
@@ -33,7 +37,6 @@ export default function SolicitacoesScreen({ navigation }: any) {
         setLoading(false)
       })
   }, [])
-  console.log('servicos:', servicos)
 
   let qtdServicos = servicos.length
   let servTotal = servicos.map((item: any, index: number) => {
@@ -49,11 +52,25 @@ export default function SolicitacoesScreen({ navigation }: any) {
   const servicConcluidos = servicos.filter(solicitacoesConcluidas)
   const servicosConlcuidosQtd = servicConcluidos.length
 
-  console.log('concluidoooooo=========', servicConcluidos)
+  const onRefresh = React.useCallback(() => {
+    getServicosSolicitados(user.email).then((res) => {
+      console.log(res)
+      setServicos(res.data)
+      setLoading(false)
+    })
+
+    setRefreshing(true)
+    wait(2000).then(() => setRefreshing(false))
+  }, [])
 
   return (
     <>
-      <ScrollView style={styles.AllView}>
+      <ScrollView
+        style={styles.AllView}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         {loading ? (
           <Loading />
         ) : (
@@ -99,6 +116,12 @@ export default function SolicitacoesScreen({ navigation }: any) {
             <View style={styles.containerListaServicos}>
               <Title>Minhas Solicitações</Title>
               <Divider />
+
+              {qtdServicos === 0 ? (
+                <Text>Você ainda não criou solicitações</Text>
+              ) : (
+                <Text>Lista de solicitações</Text>
+              )}
 
               {servicos.map((item: any) => {
                 const { Titulo, Status } = item.attributes

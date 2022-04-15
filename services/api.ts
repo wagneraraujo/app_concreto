@@ -107,10 +107,11 @@ export const cadastrarEmpresa = async (
 export const createServices = async (
   Titulo: string,
   Descricao: string,
-  empresas: number,
+  empresa: number,
   tipos_servicos: number,
   adminempresa: Number,
   jwt: any,
+  users: any,
 ) => {
   return api.post(
     '/api/criar-servicos',
@@ -118,9 +119,10 @@ export const createServices = async (
       data: {
         Titulo: Titulo,
         Descricao: Descricao,
-        empresas: empresas,
+        empresa: empresa,
         tipos_servicos: tipos_servicos,
         adminempresa: adminempresa,
+        users: users,
       },
     },
     {
@@ -138,7 +140,7 @@ export const getEmpresas = async () => {
 
 export const getMyEmpresas = async (email: string) => {
   const res = await api.get(
-    `/api/empresas?filters[adminempresa][username]=${email}`,
+    `/api/empresas?filters[adminempresa][email]=${email}`,
   )
   return res.data
 }
@@ -148,9 +150,9 @@ export const getServicos = async () => {
   return res.data
 }
 
-export const getServicosSolicitados = async (username: string) => {
+export const getServicosSolicitados = async (email: string) => {
   const res = await api.get(
-    `/api/criar-servicos?filters[adminempresa][username][$eq]=${username}&populate=*`,
+    `/api/criar-servicos?filters[users][email]=${email}&populate=*`,
   )
   return res.data
 }

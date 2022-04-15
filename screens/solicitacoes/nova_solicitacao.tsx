@@ -15,6 +15,7 @@ import { createServices, getMyEmpresas, getServicos } from '../../services/api'
 import Loading from '../../components/LoadingScreen'
 
 export default function NovaSolicitacaoScreen() {
+  const [refreshing, setRefreshing] = React.useState(false)
   const [myEmpresas, setMyEmpresas] = useState([] as any)
   const [servicos, setServicos] = useState([] as any)
   const [loading, setLoading] = useState(true)
@@ -80,6 +81,7 @@ export default function NovaSolicitacaoScreen() {
       data.tipos_servicos,
       user.id,
       user.token,
+      user.id,
     )
       .then((res) => {
         createTwoButtonAlert()
