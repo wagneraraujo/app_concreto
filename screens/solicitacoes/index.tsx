@@ -24,7 +24,7 @@ export default function SolicitacoesScreen({ navigation }: any) {
   useEffect(() => {
     getServicosSolicitados(user.email)
       .then((res) => {
-        // console.log(res)
+        console.log(res)
         setServicos(res.data)
         setLoading(false)
       })
@@ -33,7 +33,7 @@ export default function SolicitacoesScreen({ navigation }: any) {
         setLoading(false)
       })
   }, [])
-  // console.log('servicos:', servicos)
+  console.log('servicos:', servicos)
 
   let qtdServicos = servicos.length
   let servTotal = servicos.map((item: any, index: number) => {

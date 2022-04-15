@@ -92,7 +92,7 @@ export const cadastrarEmpresa = async (
         Telefone: Telefone,
         Nome_Empresa: Nome_Empresa,
         Endereco: Endereco,
-        cnpj: cnpj,
+        Cnpj: cnpj,
         adminempresa: adminempresa,
       },
     },

@@ -37,6 +37,7 @@ export function CadastrarEmpresa() {
 
   function handleSubmitLogin(data: any) {
     setLoading(true)
+
     cadastrarEmpresa(
       data.telefone,
       data.name,
@@ -52,6 +53,7 @@ export function CadastrarEmpresa() {
         }
       })
       .catch((err) => {
+        console.log(err)
         setLoading(false)
         setErrorRegister(true)
       })
