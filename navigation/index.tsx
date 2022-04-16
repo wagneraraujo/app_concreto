@@ -33,6 +33,7 @@ import { SolicitacoesAuth } from './solicitacoes_auth'
 import { theme } from '../theme/theme'
 import { navigationRef } from './RootNavigation'
 import NovaSolicitacaoScreen from '../screens/solicitacoes/nova_solicitacao'
+import Solicitacao from '../screens/solicitacoes/solicitacao'
 export default function Navigation({
   colorScheme,
 }: {
@@ -128,11 +129,11 @@ function BottomTabNavigator() {
           />
 
           <BottomTab.Screen
-            name="ServicosSolicitados"
-            component={NovaSolicitacaoScreen}
+            name="Solicitacao"
+            component={Solicitacao}
             options={{
               headerShown: true,
-              title: 'Novo Serviço',
+              title: 'Solicitar Serviço',
               tabBarIcon: ({ color }) => (
                 <TabBarIcon name="plus" color={color} />
               ),

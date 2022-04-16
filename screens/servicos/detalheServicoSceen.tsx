@@ -17,6 +17,7 @@ import Loading from '../../components/LoadingScreen'
 import { useAuth } from '../../hooks/auth'
 import { formatDate } from '../../utils/formatData'
 import { formatCurrency } from '../../utils/formatCurrency'
+import { red400 } from 'react-native-paper/lib/typescript/styles/colors'
 
 export const DetalheServicoScreen = () => {
   const [servico, setServico] = useState({} as any)
@@ -147,10 +148,38 @@ export const DetalheServicoScreen = () => {
               }}
             /> */}
           </View>
-          {/* 
+
           {userIsGerente === 'empresa' && (
             <>
-              <Title>Ações Colaborador</Title>
+              <Title>Ações de gerente</Title>
+              <View style={styles.viewBtnCliente}>
+                {/* <Button
+                  icon="application-import"
+                  compact
+                  mode="contained"
+                  // onPress={() => {
+                  //   // Linking.openURL(`tel:55${telefone}`)
+                  // }}
+                >
+                  Editar Solicitação
+                </Button> */}
+
+                <Button
+                  icon="tag-off"
+                  mode="outlined"
+                  compact
+                  color="red"
+                  onPress={() => console.log('Pressed')}
+                >
+                  Cancelar Solicitação
+                </Button>
+              </View>
+            </>
+          )}
+
+          {userIsGerente === 'colaborador' && (
+            <>
+              <Title>Ações de colaborador</Title>
               <View style={styles.viewBtnCliente}>
                 <Button
                   icon="phone"
@@ -194,7 +223,7 @@ export const DetalheServicoScreen = () => {
                 </Button>
               </View>
             </>
-          )} */}
+          )}
         </ScrollView>
       )}
     </>
