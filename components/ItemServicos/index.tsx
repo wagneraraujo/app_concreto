@@ -1,41 +1,64 @@
 import * as React from 'react'
-import { Avatar, Checkbox, List } from 'react-native-paper'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { Icon } from 'react-native-paper/lib/typescript/components/Avatar/Avatar'
-export const ItemServicos = () => {
+import { Avatar, Checkbox, List, Surface } from 'react-native-paper'
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Pressable,
+} from 'react-native'
+import { theme } from '../../theme/theme'
+import { formatCurrency } from '../../utils/formatCurrency'
+
+interface itemServicoProps {
+  title: string
+  icon: string
+  price?: any
+  onPress?: any
+  onLongPress: any
+  id?: number
+  selected?: any
+  qtd: number
+}
+
+export const ItemServicos = ({
+  title,
+  icon,
+  price,
+  onLongPress,
+  onPress,
+  id,
+  selected,
+  qtd,
+}: itemServicoProps) => {
   const [checked, setChecked] = React.useState(false)
 
   return (
     <>
-      <TouchableOpacity style={styles.button}>
+      <Pressable
+        style={({ pressed }) => [
+          {
+            backgroundColor: pressed ? theme.colors.primary : '#ffffff',
+          },
+          styles.button,
+        ]}
+        onPress={onPress}
+        onLongPress={onLongPress}
+      >
         <View style={styles.iconContainer}>
           <Avatar.Icon
             size={36}
             color="#fff"
             style={{ backgroundColor: '#191919' }}
-            icon="alert-box-outline"
+            icon={icon}
           />
         </View>
         <View style={styles.container}>
-          <Text style={styles.titleServico}>Manuteção Portão</Text>
+          <Text style={styles.titleServico}>{title}</Text>
+          <Text style={styles.titleServico}>R$ {formatCurrency(price)}</Text>
         </View>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.button}>
-        <View style={styles.iconContainer}>
-          <Avatar.Icon
-            size={36}
-            color="#fff"
-            style={{ backgroundColor: '#191919' }}
-            icon="alert-box-outline"
-          />
-        </View>
-        <View style={styles.container}>
-          <Text style={styles.titleServico}>
-            Manuteção Portão test titulo maior
-          </Text>
-        </View>
-      </TouchableOpacity>
+        {selected && <View style={styles.overlay} />}
+      </Pressable>
     </>
   )
 }
@@ -47,21 +70,43 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: 'center',
+    textAlign: 'center',
     paddingHorizontal: 4,
     paddingVertical: 8,
-    width: 140,
-    textAlign: 'center',
+    width: '40%',
+    borderColor: theme.colors.primary,
+    overflow: 'hidden',
     borderWidth: 0.7,
     borderRadius: 8,
-    borderColor: '#191919',
-    backgroundColor: '#ececec',
-    margin: 4,
+    margin: '4%',
     height: 80,
   },
 
-  iconContainer: {},
+  iconContainer: {
+    position: 'relative',
+    zIndex: 6,
+  },
   titleServico: {
     textAlign: 'center',
     fontSize: 12,
+    color: '#191919',
+    fontWeight: 'bold',
+    marginTop: 2,
+    position: 'relative',
+    zIndex: 6,
+  },
+  surface: {
+    elevation: 6,
+  },
+
+  overlay: {
+    position: 'absolute',
+    width: '106%',
+    height: 80,
+    padding: 0,
+    backgroundColor: '#d8a61d6f',
+    top: 0,
+    left: 0,
+    zIndex: 1,
   },
 })

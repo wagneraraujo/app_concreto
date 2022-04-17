@@ -8,6 +8,8 @@ import { useForm, Controller } from 'react-hook-form'
 import { Image } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { useAuth } from '../../hooks/auth'
+import { List } from 'react-native-paper'
+
 import SelectDropdown, {
   SelectDropdownProps,
 } from 'react-native-select-dropdown'
@@ -15,9 +17,14 @@ import { createServices, getMyEmpresas, getServicos } from '../../services/api'
 import Loading from '../../components/LoadingScreen'
 import { ItemServico } from '../../components/ItemListaServico'
 import { ItemServicos } from '../../components/ItemServicos'
-
+import { formatCurrency } from '../../utils/formatCurrency'
+const wait = (timeout: any) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout))
+}
 export default function Solicitacao() {
   const [refreshing, setRefreshing] = React.useState(false)
+  const [selectedItems, setSelectedItems] = React.useState([] as any)
+  const [valoresItems, setValoresItems] = React.useState([] as any)
   const [myEmpresas, setMyEmpresas] = useState([] as any)
   const [servicos, setServicos] = useState([] as any)
   const [loading, setLoading] = useState(true)
@@ -113,6 +120,7 @@ export default function Solicitacao() {
 
   useEffect(() => {
     reset()
+    desselect()
     getData()
       .then(([thenEmpresas, thenServicos]) => {
         setMyEmpresas(thenEmpresas.data)
@@ -125,24 +133,134 @@ export default function Solicitacao() {
       })
   }, [])
 
+  //refresh
+  const onRefresh = React.useCallback(() => {
+    getData().then(([thenEmpresas, thenServicos]) => {
+      setMyEmpresas(thenEmpresas.data)
+      setServicos(thenServicos.data)
+      setLoading(false)
+    })
+
+    setRefreshing(true)
+    wait(2000).then(() => setRefreshing(false))
+  }, [])
+
+  //somar valores
+  const valores = (item: any) => 1 * item.attributes.Preco
+  const somar = (acc: any, el: any) => acc + el
+
+  const handleOnPress = (item: any) => {
+    if (selectedItems.lenght) {
+      return selectItems(item.id)
+    }
+  }
+  const selectItems = (item: any) => {
+    // console.log(item.attributes.qtd)
+    // console.log(item.attributes.Preco)
+
+    if (selectedItems.includes(item.attributes.Nome, item.attributes.Valor)) {
+      const newListItems = selectedItems.filter(
+        (itemId: any) => itemId !== item.attributes.Nome,
+      )
+
+      const newValores = (selectedItems) => item.attributes.Valor
+
+      return {
+        selectitems: setSelectedItems(newListItems),
+        newvalores: setValoresItems(newValores),
+      }
+    }
+
+    setSelectedItems([...selectedItems, item.attributes.Nome])
+  }
+
+  const getSelected = (item: any) => {
+    return selectedItems.includes(item.attributes.Nome)
+  }
+
+  const qtdSelected = selectedItems.length
+  let valorServico = Number(3.698)
+
+  const desselect = () => setSelectedItems([])
+
+  console.log(valoresItems)
+
   return (
     <>
-      <ScrollView style={styles.AllView}>
+      <ScrollView
+        style={styles.AllView}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <View style={styles.ViewCriarSolicitacao}>
           <Text style={styles.textsolicitarservico}>
-            Preencha os campos abaixo e detalhe sua solicitação
+            "Segure o toque" para selecionar os serviços
           </Text>
         </View>
 
-        <View>
-          <ItemServicos />
+        <View style={styles.cartSerivcos}>
+          <View style={styles.descriptionCart}>
+            <Text> Qtd serviços Seleconados: {qtdSelected}</Text>
+          </View>
+          <View style={styles.priceCart}>
+            <Text>Valor:</Text>
+            <Text>R$ {formatCurrency(valorServico)}</Text>
+          </View>
         </View>
+
+        <View>
+          {selectedItems.map((item, i) => {
+            return (
+              <>
+                <Text key={i}>{item}</Text>
+              </>
+            )
+          })}
+        </View>
+
+        <View style={styles.viewServicosItem}>
+          {servicos.map((item: any, i: number) => {
+            // console.log(item.id)
+            return (
+              <ItemServicos
+                onLongPress={() => selectItems(item)}
+                onPress={() => handleOnPress(item)}
+                icon={
+                  item.attributes.Nome_Icone === null ||
+                  item.attributes.Nome_Icone === ''
+                    ? 'arrow-all'
+                    : item.attributes.Nome_Icone
+                }
+                title={item.attributes.Nome}
+                key={item.id}
+                selected={getSelected(item)}
+                qtd={item.attributes.qtd}
+                price={item.attributes.Preco}
+              />
+            )
+          })}
+        </View>
+
+        <Button onPress={() => desselect()}>Remover todos</Button>
       </ScrollView>
     </>
   )
 }
 
 const styles = StyleSheet.create({
+  cartSerivcos: {
+    paddingHorizontal: 22,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderWidth: 1,
+    borderColor: theme.colors.darkGreen,
+    paddingVertical: 6,
+    alignItems: 'center',
+  },
+  priceCart: {
+    flexDirection: 'row',
+  },
   AllView: {
     backgroundColor: '#fff',
   },
@@ -203,5 +321,10 @@ const styles = StyleSheet.create({
   labeldestaque: {
     fontWeight: 'bold',
     fontSize: 16,
+  },
+  viewServicosItem: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
   },
 })
