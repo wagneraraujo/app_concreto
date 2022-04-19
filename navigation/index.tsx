@@ -34,6 +34,7 @@ import { theme } from '../theme/theme'
 import { navigationRef } from './RootNavigation'
 import NovaSolicitacaoScreen from '../screens/solicitacoes/nova_solicitacao'
 import Solicitacao from '../screens/solicitacoes/solicitacao'
+import CreateSolicitacao from '../screens/solicitacoes/solicitacao-servicos'
 export default function Navigation({
   colorScheme,
 }: {
@@ -182,6 +183,16 @@ function BottomTabNavigator() {
           />
         </>
       )}
+
+      <BottomTab.Screen
+        name="CreateSolicitacao"
+        component={CreateSolicitacao}
+        options={{
+          headerShown: false,
+          title: 'Solicitação',
+          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+        }}
+      />
 
       <BottomTab.Screen
         name="configuracoes"

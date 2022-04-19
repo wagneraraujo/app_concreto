@@ -10,6 +10,8 @@ import { theme } from './theme/theme'
 import { withTheme } from 'react-native-paper'
 import { AuthProvider, useAuth } from './hooks/auth'
 import Loading from './components/LoadingScreen'
+import React from 'react'
+import CartProvider from './hooks/cart'
 export default function App(props: any) {
   const isLoadingComplete = useCachedResources()
   const colorScheme = useColorScheme()
@@ -21,7 +23,9 @@ export default function App(props: any) {
       <SafeAreaProvider>
         <PaperProvider theme={theme}>
           <AuthProvider>
-            <Navigation colorScheme={colorScheme} />
+            <CartProvider>
+              <Navigation colorScheme={colorScheme} />
+            </CartProvider>
           </AuthProvider>
           <StatusBar />
         </PaperProvider>

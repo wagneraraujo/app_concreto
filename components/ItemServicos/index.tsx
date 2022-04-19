@@ -12,10 +12,10 @@ import { formatCurrency } from '../../utils/formatCurrency'
 
 interface itemServicoProps {
   title: string
-  icon: string
+  icon?: string
   price?: any
   onPress?: any
-  onLongPress: any
+  onLongPress?: any
   id?: number
   selected?: any
   qtd: number
@@ -73,13 +73,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingHorizontal: 4,
     paddingVertical: 8,
-    width: '40%',
+    width: 160,
     borderColor: theme.colors.primary,
     overflow: 'hidden',
     borderWidth: 0.7,
     borderRadius: 8,
     margin: '4%',
-    height: 80,
+    height: 90,
   },
 
   iconContainer: {
