@@ -5,6 +5,7 @@ import {
   Alert,
   RefreshControl,
   FlatList,
+  TouchableOpacity,
 } from 'react-native'
 import { Text, View } from '../../components/Themed'
 import { theme } from '../../theme/theme'
@@ -18,17 +19,21 @@ import { ItemServico } from '../../components/ItemListaServico'
 import { ItemServicos } from '../../components/ItemServicos'
 import { useCart } from '../../hooks/cart'
 import uuid from 'react-native-uuid'
+import { formatCurrency } from '../../utils/formatCurrency'
+import ContentPrice from '../../components/ContentPrice'
 
 export default function CreateSolicitacao() {
   const [refreshing, setRefreshing] = React.useState(false)
+  const [selectedItems, setSelectedItems] = React.useState([] as any)
   const [myEmpresas, setMyEmpresas] = useState([] as any)
+
   const [servicos, setServicos] = useState([] as any)
   const [loading, setLoading] = useState(true)
   const { user } = useAuth()
   const route = useRoute
   const nativation = useNavigation()
 
-  const { add, cart, totalValue, remove } = useCart()
+  const { add, cart, totalValue, remove, textActivo } = useCart()
   const getData = () => {
     return Promise.all([getMyEmpresas(user.email), getServicos()])
   }
@@ -38,7 +43,7 @@ export default function CreateSolicitacao() {
       .then(([thenEmpresas, thenServicos]) => {
         setMyEmpresas(thenEmpresas.data)
         setServicos(thenServicos.data)
-        // console.log(thenServicos)
+        // console.log('servicos ===', thenServicos)
         setLoading(false)
       })
       .catch((err) => {
@@ -47,21 +52,16 @@ export default function CreateSolicitacao() {
       })
   }, [])
 
-  //   console.log(servicos)
-
   return (
     <>
-      <View>
-        <Text>Nova Solicitacão</Text>
-      </View>
+      <ContentPrice price={totalValue} qtd={cart} />
       {/* carrinho */}
+
       <View>
         {cart.map((item: any, index: number) => {
-          console.log('index cart page:', item.item.attributes.Nome)
           return (
             <View key={index}>
               <Text>{item.item.attributes.Nome}</Text>
-
               <IconButton
                 icon="delete"
                 color={Colors.red500}
@@ -72,40 +72,34 @@ export default function CreateSolicitacao() {
           )
         })}
       </View>
-      {/* fim carrinho */}
 
+      {/* fim carrinho */}
+      <View>
+        <Text>Selecione os serviços</Text>
+      </View>
       <FlatList
         data={servicos}
         contentContainerStyle={styles.viewItem}
         numColumns={2}
-        renderItem={({ item, index }) => {
-          console.log('index flatlist:', index)
+        renderItem={(itemServico) => {
           return (
             <ItemServicos
-              onPress={() => add({ item })}
+              onPress={() => add(itemServico)}
               icon={
-                item.attributes.Nome_Icone === null ||
-                item.attributes.Nome_Icone === ''
+                itemServico.item.attributes.Nome_Icone === null ||
+                itemServico.item.attributes.Nome_Icone === ''
                   ? 'arrow-all'
-                  : item.attributes.Nome_Icone
+                  : itemServico.item.attributes.Nome_Icone
               }
-              title={item.attributes.Nome}
-              key={item.id}
-              qtd={item.attributes.qtd}
-              price={item.attributes.Preco}
+              title={itemServico.item.attributes.Nome}
+              key={itemServico.item.id}
+              qtd={itemServico.item.attributes.qtd}
+              price={itemServico.item.attributes.Preco}
+              textSelect={textActivo}
             />
           )
         }}
       />
-      <View>
-        <Text>
-          <Text>Quantidade: {Object.keys(cart).length}</Text> / Total:{' '}
-          <Text>R$ {totalValue}</Text>
-        </Text>
-      </View>
-      {/* {servicos.map((item: any) => {
-          console.log(item.attributes.Nome)
-        })} */}
     </>
   )
 }

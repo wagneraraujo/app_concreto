@@ -19,6 +19,7 @@ interface itemServicoProps {
   id?: number
   selected?: any
   qtd: number
+  textSelect?: any
 }
 
 export const ItemServicos = ({
@@ -30,6 +31,7 @@ export const ItemServicos = ({
   id,
   selected,
   qtd,
+  textSelect,
 }: itemServicoProps) => {
   const [checked, setChecked] = React.useState(false)
 
@@ -57,7 +59,10 @@ export const ItemServicos = ({
           <Text style={styles.titleServico}>{title}</Text>
           <Text style={styles.titleServico}>R$ {formatCurrency(price)}</Text>
         </View>
-        {selected && <View style={styles.overlay} />}
+        <View>
+          <Text>{textSelect}</Text>
+        </View>
+        {textSelect && <View style={styles.overlay} />}
       </Pressable>
     </>
   )
@@ -74,12 +79,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
     paddingVertical: 8,
     width: 160,
-    borderColor: theme.colors.primary,
+    borderColor: '#ccc',
     overflow: 'hidden',
-    borderWidth: 0.7,
+    borderWidth: 2,
     borderRadius: 8,
     margin: '4%',
-    height: 90,
+    height: 110,
   },
 
   iconContainer: {

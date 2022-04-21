@@ -188,8 +188,8 @@ function BottomTabNavigator() {
         name="CreateSolicitacao"
         component={CreateSolicitacao}
         options={{
-          headerShown: false,
-          title: 'Solicitação',
+          headerShown: true,
+          title: 'Solicitação de Serviço',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
       />
