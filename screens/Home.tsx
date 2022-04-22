@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import { StyleSheet, ScrollView } from 'react-native'
 import { NomeUsuario } from '../components/NomeUser'
 import { Text, View } from '../components/Themed'
@@ -9,10 +9,9 @@ import { Title } from 'react-native-paper'
 import { RFValue } from 'react-native-responsive-fontsize'
 import { ItemServico } from '../components/ItemListaServico'
 import { useRoute } from '@react-navigation/native'
+import { DrawerMenu } from '../navigation/menu_drawer'
 
-export default function HomeScreen({
-  navigation,
-}: RootTabScreenProps<'TabOne'>) {
+export default function HomeScreen({ navigation }: any) {
   const route = useRoute
   return (
     <>

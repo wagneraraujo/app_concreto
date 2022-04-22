@@ -23,19 +23,19 @@ export function ConfigStack() {
           name="ConfigScreen"
           component={ConfigScreen}
           options={{
-            headerShown: true,
+            headerShown: false,
             title: !noEmpresa ? 'Minha Conta' : 'Gerente/Empresa',
           }}
         />
         <Stack.Screen
           name="CadastrarEmpresa"
           component={CadastrarEmpresa}
-          options={{ title: 'Cadastrar minha empresa', headerShown: true }}
+          options={{ title: 'Cadastrar minha empresa', headerShown: false }}
         />
         <Stack.Screen
           name="ListEmpresasScreen"
           component={ListEmpresasScreen}
-          options={{ title: 'Lista de Empresas', headerShown: true }}
+          options={{ title: 'Lista de Empresas', headerShown: false }}
         />
         <Stack.Screen
           name="CadastroEmpresaOk"

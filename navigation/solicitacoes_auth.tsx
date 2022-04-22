@@ -4,6 +4,7 @@ import SolicitacoesScreen from '../screens/solicitacoes'
 import NovaSolicitacaoScreen from '../screens/solicitacoes/nova_solicitacao'
 import { DetalheServicoScreen } from '../screens/servicos/detalheServicoSceen'
 import ResumoSolicitacao from '../screens/solicitacoes/resumo'
+import CreateSolicitacao from '../screens/solicitacoes/solicitacao-servicos'
 
 //pages
 
@@ -23,12 +24,19 @@ export function SolicitacoesAuth() {
         <Stack.Screen
           name="DetalheSolicitacaoScreen"
           component={DetalheServicoScreen}
-          options={{ headerShown: true, title: 'Detalhe do Serviço' }}
+          options={{ headerShown: false, title: 'Detalhe do Serviço' }}
         />
+
+        <Stack.Screen
+          name="CreateSolicitacao"
+          component={CreateSolicitacao}
+          options={{ headerShown: false, title: 'Criar solicitação' }}
+        />
+
         <Stack.Screen
           name="ResumoSolicitacao"
           component={ResumoSolicitacao}
-          options={{ headerShown: true, title: 'Finalizar solicitação' }}
+          options={{ headerShown: false, title: 'Finalizar solicitação' }}
         />
       </Stack.Group>
     </Stack.Navigator>

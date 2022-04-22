@@ -1,3 +1,4 @@
+import * as React from 'react'
 /**
  * If you are not familiar with React Navigation, refer to the "Fundamentals" guide:
  * https://reactnavigation.org/docs/getting-started
@@ -11,7 +12,6 @@ import {
   DarkTheme,
 } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import * as React from 'react'
 import { ColorSchemeName, Pressable } from 'react-native'
 
 import Colors from '../constants/Colors'
@@ -35,6 +35,8 @@ import { navigationRef } from './RootNavigation'
 import NovaSolicitacaoScreen from '../screens/solicitacoes/nova_solicitacao'
 import Solicitacao from '../screens/solicitacoes/solicitacao'
 import CreateSolicitacao from '../screens/solicitacoes/solicitacao-servicos'
+import { OpenDrawer } from '../components/openDrawer'
+import { DrawerMenu } from './menu_drawer'
 export default function Navigation({
   colorScheme,
 }: {
@@ -50,7 +52,7 @@ export default function Navigation({
     >
       {/* <RootNavigator /> */}
       {/* <AuthStack /> */}
-      {user.id ? <RootNavigator /> : <AuthStack />}
+      {user.id ? <DrawerMenu /> : <AuthStack />}
     </NavigationContainer>
   )
 }
@@ -59,7 +61,7 @@ export default function Navigation({
  * A root stack navigator is often used for displaying modals on top of all other content.
  * https://reactnavigation.org/docs/modal
  */
-const Stack = createNativeStackNavigator<RootStackParamList>()
+const Stack = createNativeStackNavigator()
 
 function RootNavigator() {
   return (
@@ -94,14 +96,13 @@ function RootNavigator() {
  * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
  * https://reactnavigation.org/docs/bottom-tab-navigator
  */
-const BottomTab = createBottomTabNavigator<RootTabParamList>()
+const BottomTab = createBottomTabNavigator()
 
 function BottomTabNavigator() {
   const colorScheme = useColorScheme()
   const { user } = useAuth()
 
   const noEmpresa = user.tipo_conta
-  console.log(noEmpresa)
 
   return (
     <BottomTab.Navigator
@@ -122,10 +123,11 @@ function BottomTabNavigator() {
             name="Solicitações"
             component={SolicitacoesAuth}
             options={{
-              headerShown: false,
+              headerShown: true,
               tabBarIcon: ({ color }) => (
                 <TabBarIcon name="file-text" color={color} />
               ),
+              headerLeft: () => <OpenDrawer />,
             }}
           />
         </>
@@ -136,11 +138,12 @@ function BottomTabNavigator() {
           <BottomTab.Screen
             name="TabOne"
             component={HomeScreen}
-            options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
+            options={({ navigation }: any) => ({
               title: 'Serviços',
               tabBarIcon: ({ color }) => (
                 <TabBarIcon name="home" color={color} />
               ),
+              headerLeft: () => <OpenDrawer />,
               headerRight: () => (
                 <Pressable
                   onPress={() => navigation.navigate('Modal')}
@@ -164,6 +167,7 @@ function BottomTabNavigator() {
             component={HomeScreen}
             options={{
               title: 'Meus Serviços',
+              headerLeft: () => <OpenDrawer />,
               tabBarIcon: ({ color }) => (
                 <TabBarIcon name="codepen" color={color} />
               ),

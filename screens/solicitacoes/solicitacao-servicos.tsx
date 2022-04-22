@@ -23,6 +23,7 @@ import { useCart } from '../../hooks/cart'
 import uuid from 'react-native-uuid'
 import { formatCurrency } from '../../utils/formatCurrency'
 import ContentPrice from '../../components/ContentPrice'
+import ModalInfo from '../../components/ModalInfo'
 const wait = (timeout: any) => {
   return new Promise((resolve) => setTimeout(resolve, timeout))
 }
@@ -30,7 +31,7 @@ export default function CreateSolicitacao() {
   const [refreshing, setRefreshing] = React.useState(false)
   const [selectedItems, setSelectedItems] = React.useState([] as any)
   const [myEmpresas, setMyEmpresas] = useState([] as any)
-
+  const [visible, setVisible] = React.useState(false)
   const [servicos, setServicos] = useState([] as any)
   const [loading, setLoading] = useState(true)
   const { user } = useAuth()
@@ -68,8 +69,16 @@ export default function CreateSolicitacao() {
     wait(2000).then(() => setRefreshing(false))
   }, [])
 
+  const showModal = () => setVisible(true)
+  const hideModal = () => setVisible(false)
+
   return (
     <>
+      <ModalInfo
+        hideModal={hideModal}
+        showModal={showModal}
+        visible={visible}
+      />
       <SafeAreaView style={{ flex: 1, height: '100%' }}>
         <ContentPrice price={totalValue} qtd={cart} />
 
@@ -101,6 +110,7 @@ export default function CreateSolicitacao() {
                 qtd={itemServico.item.attributes.qtd}
                 price={itemServico.item.attributes.Preco}
                 textSelect={textActivo}
+                onPress={showModal}
               />
             )
           }}

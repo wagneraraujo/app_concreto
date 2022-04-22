@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import * as React from 'react'
+
+import { useEffect, useState } from 'react'
 import { StyleSheet, ScrollView, RefreshControl } from 'react-native'
 import { NomeUsuario } from '../../components/NomeUser'
 import { Text, View } from '../../components/Themed'
@@ -14,10 +16,11 @@ import { ItemServicoCliente } from '../../components/ItemListaServicoCliete'
 import { useAuth } from '../../hooks/auth'
 import { getServicosSolicitados } from '../../services/api'
 import Loading from '../../components/LoadingScreen'
+import { DrawerMenu } from '../../navigation/menu_drawer'
 const wait = (timeout: any) => {
   return new Promise((resolve) => setTimeout(resolve, timeout))
 }
-export default function SolicitacoesScreen({ navigation }: any) {
+export default function SolicitacoesScreen({ navigation }) {
   const [refreshing, setRefreshing] = React.useState(false)
 
   const [servicos, setServicos] = useState<any>([])
@@ -117,7 +120,6 @@ export default function SolicitacoesScreen({ navigation }: any) {
             </View>
             <View style={styles.containerListaServicos}>
               <Title>Minhas Solicitações</Title>
-              <Divider />
 
               {qtdServicos === 0 ? (
                 <Text>Você ainda não criou solicitações</Text>

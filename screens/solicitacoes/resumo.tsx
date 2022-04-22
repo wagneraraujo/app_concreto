@@ -1,5 +1,7 @@
+import * as React from 'react'
+
 import { useNavigation, useRoute } from '@react-navigation/native'
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { StyleSheet, ScrollView, Alert, View, Text } from 'react-native'
 import { Colors, IconButton, Button, TextInput } from 'react-native-paper'
 import SelectDropdown, {
@@ -75,6 +77,8 @@ export default function ResumoSolicitacao() {
 
   function handleSubmitLogin(data: any) {
     console.log(data)
+    createTwoButtonAlert()
+    navigation.navigate('SolicitacoesScreen')
     // createServices(
     //   `Nova solicitação #${new Date()}`,
     //   data.descricao,
@@ -130,35 +134,6 @@ export default function ResumoSolicitacao() {
       </View>
 
       <View style={styles.viewForm}>
-        <Controller
-          control={control}
-          rules={{ required: true }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <>
-              <Text style={styles.labeldestaque}>Para qual Empresa?</Text>
-              <View style={styles.linhaSelect}>
-                <SelectDropdown
-                  dropdownStyle={{ backgroundColor: '#fff', width: 280 }}
-                  data={newArrayEmpresas}
-                  ref={dropdownRef}
-                  defaultValue={newArrayEmpresas[0]}
-                  defaultButtonText="Selecione a empresa na lista"
-                  onSelect={(value) => {
-                    onChange(value)
-                    setValue('empresa', value.id)
-                  }}
-                  buttonTextAfterSelection={(value, index) => {
-                    return value.nome
-                  }}
-                  rowTextForSelection={(item, index) => {
-                    return item.nome
-                  }}
-                />
-              </View>
-            </>
-          )}
-        />
-
         <Controller
           control={control}
           rules={{
