@@ -6,6 +6,8 @@ import {
   RefreshControl,
   FlatList,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  SafeAreaView,
 } from 'react-native'
 import { Text, View } from '../../components/Themed'
 import { theme } from '../../theme/theme'
@@ -21,7 +23,9 @@ import { useCart } from '../../hooks/cart'
 import uuid from 'react-native-uuid'
 import { formatCurrency } from '../../utils/formatCurrency'
 import ContentPrice from '../../components/ContentPrice'
-
+const wait = (timeout: any) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout))
+}
 export default function CreateSolicitacao() {
   const [refreshing, setRefreshing] = React.useState(false)
   const [selectedItems, setSelectedItems] = React.useState([] as any)
@@ -52,58 +56,69 @@ export default function CreateSolicitacao() {
       })
   }, [])
 
+  const onRefresh = React.useCallback(() => {
+    getData().then(([thenEmpresas, thenServicos]) => {
+      setMyEmpresas(thenEmpresas.data)
+      setServicos(thenServicos.data)
+      // console.log('servicos ===', thenServicos)
+      setLoading(false)
+    })
+
+    setRefreshing(true)
+    wait(2000).then(() => setRefreshing(false))
+  }, [])
+
   return (
     <>
-      <ContentPrice price={totalValue} qtd={cart} />
-      {/* carrinho */}
+      <SafeAreaView style={{ flex: 1, height: '100%' }}>
+        <ContentPrice price={totalValue} qtd={cart} />
 
-      <View>
-        {cart.map((item: any, index: number) => {
-          return (
-            <View key={index}>
-              <Text>{item.item.attributes.Nome}</Text>
-              <IconButton
-                icon="delete"
-                color={Colors.red500}
-                size={20}
-                onPress={() => remove(index)}
+        <View style={styles.viewAvisotext}>
+          <Text style={styles.textAviso}>
+            Toque e segure para selecionar um serviço
+          </Text>
+        </View>
+        <FlatList
+          data={servicos}
+          contentContainerStyle={styles.viewItem}
+          numColumns={2}
+          scrollEnabled
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+          renderItem={(itemServico) => {
+            return (
+              <ItemServicos
+                onLongPress={() => add(itemServico)}
+                icon={
+                  itemServico.item.attributes.Nome_Icone === null ||
+                  itemServico.item.attributes.Nome_Icone === ''
+                    ? 'arrow-all'
+                    : itemServico.item.attributes.Nome_Icone
+                }
+                title={itemServico.item.attributes.Nome}
+                key={itemServico.item.id}
+                qtd={itemServico.item.attributes.qtd}
+                price={itemServico.item.attributes.Preco}
+                textSelect={textActivo}
               />
-            </View>
-          )
-        })}
-      </View>
-
-      {/* fim carrinho */}
-      <View>
-        <Text>Selecione os serviços</Text>
-      </View>
-      <FlatList
-        data={servicos}
-        contentContainerStyle={styles.viewItem}
-        numColumns={2}
-        renderItem={(itemServico) => {
-          return (
-            <ItemServicos
-              onPress={() => add(itemServico)}
-              icon={
-                itemServico.item.attributes.Nome_Icone === null ||
-                itemServico.item.attributes.Nome_Icone === ''
-                  ? 'arrow-all'
-                  : itemServico.item.attributes.Nome_Icone
-              }
-              title={itemServico.item.attributes.Nome}
-              key={itemServico.item.id}
-              qtd={itemServico.item.attributes.qtd}
-              price={itemServico.item.attributes.Preco}
-              textSelect={textActivo}
-            />
-          )
-        }}
-      />
+            )
+          }}
+        />
+      </SafeAreaView>
     </>
   )
 }
 
 const styles = StyleSheet.create({
-  viewItem: { flex: 1 },
+  viewItem: { flex: 1, height: '100%' },
+  viewAvisotext: {
+    backgroundColor: theme.colors.blue,
+    padding: 2,
+  },
+  textAviso: {
+    color: '#fff',
+    textAlign: 'center',
+    fontSize: 12,
+  },
 })

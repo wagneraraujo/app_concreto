@@ -128,18 +128,6 @@ function BottomTabNavigator() {
               ),
             }}
           />
-
-          <BottomTab.Screen
-            name="Solicitacao"
-            component={Solicitacao}
-            options={{
-              headerShown: true,
-              title: 'Solicitar Serviço',
-              tabBarIcon: ({ color }) => (
-                <TabBarIcon name="plus" color={color} />
-              ),
-            }}
-          />
         </>
       )}
 

@@ -183,8 +183,6 @@ export default function Solicitacao() {
 
   const desselect = () => setSelectedItems([])
 
-  console.log(valoresItems)
-
   return (
     <>
       <ScrollView

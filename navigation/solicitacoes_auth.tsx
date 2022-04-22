@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import SolicitacoesScreen from '../screens/solicitacoes'
 import NovaSolicitacaoScreen from '../screens/solicitacoes/nova_solicitacao'
 import { DetalheServicoScreen } from '../screens/servicos/detalheServicoSceen'
+import ResumoSolicitacao from '../screens/solicitacoes/resumo'
 
 //pages
 
@@ -18,15 +19,16 @@ export function SolicitacoesAuth() {
           component={SolicitacoesScreen}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name="NovaSolicitacaoScreen"
-          component={NovaSolicitacaoScreen}
-          options={{ headerShown: true, title: 'Solicitar Serviço' }}
-        />
+
         <Stack.Screen
           name="DetalheSolicitacaoScreen"
           component={DetalheServicoScreen}
           options={{ headerShown: true, title: 'Detalhe do Serviço' }}
+        />
+        <Stack.Screen
+          name="ResumoSolicitacao"
+          component={ResumoSolicitacao}
+          options={{ headerShown: true, title: 'Finalizar solicitação' }}
         />
       </Stack.Group>
     </Stack.Navigator>

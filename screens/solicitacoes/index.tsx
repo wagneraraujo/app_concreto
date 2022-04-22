@@ -99,20 +99,22 @@ export default function SolicitacoesScreen({ navigation }: any) {
               />
             </View>
 
-            {/* <View style={styles.ViewCriarSolicitacao}>
- <Text style={styles.textsolicitarservico}>
-   Deseja solicitar um serviço agora?
- </Text>
- <Button
-   icon="alert"
-   mode="contained"
-   color={theme.colors.blue}
-   style={styles.buttonSolicitarServico}
-   onPress={() => navigation.navigate('NovaSolicitacaoScreen')}
- >
-   Solicitar Serviço
- </Button>
-</View> */}
+            <View style={styles.ViewCriarSolicitacao}>
+              <Text style={styles.textsolicitarservico}>
+                Deseja solicitar um serviço agora?
+              </Text>
+
+              <Button
+                compact
+                icon="alert"
+                mode="contained"
+                color={theme.colors.blue}
+                style={styles.buttonSolicitarServico}
+                onPress={() => navigation.navigate('CreateSolicitacao')}
+              >
+                Solicitar Serviço
+              </Button>
+            </View>
             <View style={styles.containerListaServicos}>
               <Title>Minhas Solicitações</Title>
               <Divider />
