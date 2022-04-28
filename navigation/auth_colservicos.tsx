@@ -17,7 +17,7 @@ export function StackServicosColaborador() {
   // Stack contains Screen & Navigator properties
 
   return (
-    <Stack.Navigator screenOptions={{ eaderShown: false }}>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Group>
         <Stack.Screen
           name="HomeColaborador"
