@@ -8,7 +8,7 @@ interface ItemServicoProps {
   titulo: string
   empresa?: string
   bairro?: string
-  progresso: 'Em progresso' | 'Não iniciado' | 'Concluído'
+  progresso: Boolean
   nomeColaborador?: string
   navegacao: any
 }
@@ -35,36 +35,33 @@ export const ItemServico = ({
             <Text style={styles.textBairro}>{bairro}</Text>
           </View>
           <View style={styles.viewProgresso}>
-            <Text
-              style={[
-                {
-                  color:
-                    progresso === 'Não iniciado'
-                      ? theme.colors.notification
-                      : theme.colors.accent,
-                },
+            {!progresso ? (
+              <Text
+                style={[
+                  {
+                    color: theme.colors.error,
+                  },
 
-                styles.textProgress,
-              ]}
-            >
-              {progresso === 'Concluído' ? (
-                <Text
-                  style={[
-                    {
-                      color: theme.colors.green,
-                    },
+                  styles.textProgress,
+                ]}
+              >
+                Não iniciado
+              </Text>
+            ) : (
+              <Text
+                style={[
+                  {
+                    color: theme.colors.green,
+                  },
 
-                    styles.textProgress,
-                  ]}
-                >
-                  {progresso}
-                </Text>
-              ) : (
-                <Text>{progresso}</Text>
-              )}
-            </Text>
+                  styles.textProgress,
+                ]}
+              >
+                Iniciado
+              </Text>
+            )}
 
-            {progresso === 'Não iniciado' ? (
+            {!progresso ? (
               <Text style={styles.textBairro}></Text>
             ) : (
               <Text style={styles.textBairro}>por {nomeColaborador}</Text>
@@ -96,7 +93,7 @@ const styles = StyleSheet.create({
   },
   textEmpresa: {
     color: '#191919',
-    fontWeight: 'bold',
+    fontWeight: '100',
     marginRight: RFValue(10),
   },
   textBairro: {

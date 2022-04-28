@@ -149,6 +149,12 @@ export const getServicos = async () => {
   const res = await api.get('/api/tipos-servicos')
   return res.data
 }
+export const getAllServicosSolicitados = async () => {
+  const res = await api.get(
+    '/api/criar-servicos?pagination[page]=1&pagination[pageSize]=16&populate=*',
+  )
+  return res.data
+}
 
 export const getServicosSolicitados = async (email: string) => {
   const res = await api.get(

@@ -1,5 +1,11 @@
 import * as React from 'react'
-import { StyleSheet, ScrollView } from 'react-native'
+import {
+  StyleSheet,
+  ScrollView,
+  RefreshControl,
+  FlatList,
+  SafeAreaView,
+} from 'react-native'
 import { NomeUsuario } from '../components/NomeUser'
 import { Text, View } from '../components/Themed'
 import { RootTabScreenProps } from '../types'
@@ -10,99 +16,123 @@ import { RFValue } from 'react-native-responsive-fontsize'
 import { ItemServico } from '../components/ItemListaServico'
 import { useRoute } from '@react-navigation/native'
 import { DrawerMenu } from '../navigation/menu_drawer'
-
+import { useEffect, useState } from 'react'
+import { useAuth } from '../hooks/auth'
+import { getAllServicosSolicitados } from '../services/api'
+import Loading from '../components/LoadingScreen'
+const wait = (timeout: any) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout))
+}
 export default function HomeScreen({ navigation }: any) {
-  const route = useRoute
+  const [refreshing, setRefreshing] = React.useState(false)
+
+  const [servicos, setServicos] = useState<any>([])
+  const [loading, setLoading] = useState(true)
+
+  const route = useRoute()
+  const { user } = useAuth()
+  useEffect(() => {
+    getAllServicosSolicitados()
+      .then((res) => {
+        setServicos(res.data)
+        setLoading(false)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [])
+
+  const onRefresh = React.useCallback(() => {
+    getAllServicosSolicitados().then((res) => {
+      // console.log(res)
+      setServicos(res.data)
+      setLoading(false)
+    })
+
+    setRefreshing(true)
+    wait(2000).then(() => setRefreshing(false))
+  }, [])
+
+  // console.log(servicos)
+
   return (
     <>
-      <ScrollView style={styles.containerView}>
-        <NomeUsuario nome="Carlos Alves" />
-        <View style={styles.container}>
-          <ResumoCard
-            nameIcon="alarm-outline"
-            sizeIcon={24}
-            titleCard="Solitações de serviços"
-            qtd={5}
-            themeColor={theme.colors.primary}
-            navegacao={() => console.log('v')}
-          />
-          <ResumoCard
-            nameIcon="cog"
-            sizeIcon={24}
-            titleCard="Em progresso"
-            qtd={3}
-            themeColor={theme.colors.accent}
-            navegacao={() => console.log('navegacao', {})}
-          />
-          <ResumoCard
-            nameIcon="checkbox"
-            sizeIcon={24}
-            titleCard="Serviços concluídos"
-            qtd={3}
-            themeColor={theme.colors.green}
-            navegacao={() => console.log('navegacao')}
-          />
+      {loading ? (
+        <Loading />
+      ) : (
+        <ScrollView
+          style={styles.containerView}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
+          <NomeUsuario nome="Carlos Alves" />
+          <View style={styles.container}>
+            <ResumoCard
+              nameIcon="alarm-outline"
+              sizeIcon={24}
+              titleCard="Solitações de serviços"
+              qtd={Number(servicos.length)}
+              themeColor={theme.colors.primary}
+              navegacao={() => console.log('v')}
+            />
+            <ResumoCard
+              nameIcon="cog"
+              sizeIcon={24}
+              titleCard="Em progresso"
+              qtd={3}
+              themeColor={theme.colors.accent}
+              navegacao={() => console.log('navegacao', {})}
+            />
+            <ResumoCard
+              nameIcon="checkbox"
+              sizeIcon={24}
+              titleCard="Serviços concluídos"
+              qtd={3}
+              themeColor={theme.colors.green}
+              navegacao={() => console.log('navegacao')}
+            />
 
-          <View
-            style={styles.separator}
-            lightColor="#eee"
-            darkColor="rgba(255,255,255,0.1)"
-          />
-        </View>
+            <View
+              style={styles.separator}
+              lightColor="#eee"
+              darkColor="rgba(255,255,255,0.1)"
+            />
+          </View>
 
-        <View style={styles.containerListaServicos}>
-          <Title>Solicitações Recentes</Title>
+          <View style={styles.containerListaServicos}>
+            <Title>Todas Solicitações de clientes</Title>
 
-          <ItemServico
-            titulo="Manutenção portão eletrônico"
-            empresa="Cond. Atelier Life"
-            bairro="Caxias do Sul"
-            progresso="Não iniciado"
-            nomeColaborador=""
-            key={1}
-            navegacao={() => navigation.navigate('DetalheServico', { id: 1 })}
-          />
-
-          <ItemServico
-            titulo="Pintura de parede"
-            empresa="Lojão dos fornos"
-            bairro="RJ centro"
-            progresso="Em progresso"
-            nomeColaborador="Marcos Silva"
-            key={2}
-            navegacao={() => navigation.navigate('DetalheServico')}
-          />
-
-          <ItemServico
-            titulo="Limpeza de poço"
-            empresa="Cond. Cidade dos mundos"
-            bairro="Caxias do Sul"
-            progresso="Concluído"
-            nomeColaborador="João Costa"
-            key={3}
-            navegacao={() => navigation.navigate('DetalheServico')}
-          />
-          <ItemServico
-            titulo="Pintura de parede"
-            empresa="Lojão dos fornos"
-            bairro="RJ centro"
-            progresso="Em progresso"
-            nomeColaborador="Marcos Silva"
-            key={4}
-            navegacao={() => navigation.navigate('DetalheServico')}
-          />
-
-          <ItemServico
-            titulo="Limpeza de poço"
-            empresa="Cond. Cidade dos mundos"
-            bairro="Caxias do Sul"
-            progresso="Concluído"
-            nomeColaborador="João Costa"
-            key={5}
-            navegacao={() => navigation.navigate('DetalheServico')}
-          />
-        </View>
-      </ScrollView>
+            {servicos.map((item: any) => {
+              // console.log(item.attributes.empresa.data.attributes.Endereco)
+              console.log(item)
+              return (
+                <ItemServico
+                  empresa={item.attributes.empresa.data.attributes.Nome_Empresa.substring(
+                    0,
+                    20,
+                  )}
+                  key={item.id}
+                  titulo={
+                    item.attributes.tipos_servicos.data[0].attributes.Nome
+                  }
+                  progresso={item.attributes.Status_servico}
+                  // nomeColaborador="col teste nome"
+                  bairro={item.attributes.empresa.data.attributes.Endereco.substring(
+                    0,
+                    45,
+                  )}
+                  navegacao={() =>
+                    navigation.navigate('DetalheSolicitacaoScreen', {
+                      id: item.id,
+                    })
+                  }
+                />
+              )
+            })}
+          </View>
+        </ScrollView>
+      )}
     </>
   )
 }

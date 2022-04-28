@@ -2,7 +2,7 @@ import * as React from 'react'
 import { StyleSheet } from 'react-native'
 import { Modal, Portal, Text, Button, Provider } from 'react-native-paper'
 
-const ModalInfo = ({ visible, showModal, hideModal }) => {
+const ModalInfo = ({ visible, showModal, hideModal }: any) => {
   const containerStyle = { backgroundColor: 'white', padding: 20 }
 
   return (
