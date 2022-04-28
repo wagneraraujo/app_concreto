@@ -80,7 +80,7 @@ export default function HomeScreen({ navigation }: any) {
               nameIcon="cog"
               sizeIcon={24}
               titleCard="Em progresso"
-              qtd={3}
+              qtd={0}
               themeColor={theme.colors.accent}
               navegacao={() => console.log('navegacao', {})}
             />
@@ -88,7 +88,7 @@ export default function HomeScreen({ navigation }: any) {
               nameIcon="checkbox"
               sizeIcon={24}
               titleCard="Serviços concluídos"
-              qtd={3}
+              qtd={0}
               themeColor={theme.colors.green}
               navegacao={() => console.log('navegacao')}
             />
@@ -105,7 +105,7 @@ export default function HomeScreen({ navigation }: any) {
 
             {servicos.map((item: any) => {
               // console.log(item.attributes.empresa.data.attributes.Endereco)
-              console.log(item)
+
               return (
                 <ItemServico
                   empresa={item.attributes.empresa.data.attributes.Nome_Empresa.substring(
@@ -123,7 +123,7 @@ export default function HomeScreen({ navigation }: any) {
                     45,
                   )}
                   navegacao={() =>
-                    navigation.navigate('DetalheSolicitacaoScreen', {
+                    navigation.navigate('DetalheServicoScreenColaborador', {
                       id: item.id,
                     })
                   }

@@ -28,6 +28,7 @@ import { SolicitacoesAuth } from './solicitacoes_auth'
 import { useAuth } from '../hooks/auth'
 import { ConfigStack } from './configs_stack'
 import { FA5Style } from '@expo/vector-icons/build/FontAwesome5'
+import { StackServicosCol, StackServicosColaborador } from './auth_colservicos'
 
 const Drawer = createDrawerNavigator()
 export const DrawerMenu = () => {
@@ -70,11 +71,11 @@ export const DrawerMenu = () => {
       {noEmpresa === 'colaborador' && (
         <>
           <Drawer.Screen
-            name="HomeScreen"
-            component={HomeScreen}
+            name="StackServicosColaborador"
+            component={StackServicosColaborador}
             options={{
-              headerTitle: 'Todos Serviços Solicitados',
-              title: 'Todos Serviços Solicitados',
+              headerShown: false,
+              title: 'Todas Solicitações',
             }}
           />
 

@@ -7,7 +7,7 @@ export const OpenDrawer = () => {
   return (
     <>
       <IconButton
-        icon="camera"
+        icon="menu"
         color={Colors.blue600}
         size={20}
         onPress={() => navigation.dispatch(DrawerActions.openDrawer())}

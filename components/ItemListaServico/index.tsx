@@ -64,7 +64,7 @@ export const ItemServico = ({
             {!progresso ? (
               <Text style={styles.textBairro}></Text>
             ) : (
-              <Text style={styles.textBairro}>por {nomeColaborador}</Text>
+              <Text style={styles.textBairro}> {nomeColaborador}</Text>
             )}
           </View>
         </View>

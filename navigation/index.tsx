@@ -37,6 +37,7 @@ import Solicitacao from '../screens/solicitacoes/solicitacao'
 import CreateSolicitacao from '../screens/solicitacoes/solicitacao-servicos'
 import { OpenDrawer } from '../components/openDrawer'
 import { DrawerMenu } from './menu_drawer'
+import { StackServicosCol } from './auth_colservicos'
 export default function Navigation({
   colorScheme,
 }: {
@@ -137,7 +138,7 @@ function BottomTabNavigator() {
         <>
           <BottomTab.Screen
             name="TabOne"
-            component={HomeScreen}
+            component={StackServicosCol}
             options={({ navigation }: any) => ({
               title: 'Serviços',
               tabBarIcon: ({ color }) => (
