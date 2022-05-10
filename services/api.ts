@@ -112,6 +112,7 @@ export const createServices = async (
   adminempresa: Number,
   jwt: any,
   users: any,
+  Valor: number,
 ) => {
   return api.post(
     '/api/criar-servicos',
@@ -123,6 +124,7 @@ export const createServices = async (
         tipos_servicos: tipos_servicos,
         adminempresa: adminempresa,
         users: users,
+        Valor: Valor,
       },
     },
 

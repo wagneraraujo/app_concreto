@@ -68,18 +68,13 @@ export default function ResumoSolicitacao() {
       'Por favor, aguarde nosso retorno',
       [
         {
-          text: 'Ok',
+          text: 'Ok, obrigado',
           // onPress: () => navigation.navigate('SolicitacoesScreen'),
         },
       ],
     )
 
-  // console.log('empreasas', myEmpresas[0].id)
-
   function handleSubmitLogin(data: any) {
-    console.log(data)
-    createTwoButtonAlert()
-    // navigation.navigate('SolicitacoesScreen')
     createServices(
       `Solicitação #00${new Date().getMonth()}${new Date().getSeconds()}`,
       data.descricao,
@@ -88,6 +83,7 @@ export default function ResumoSolicitacao() {
       user.id,
       user.token,
       user.id,
+      totalValue,
     )
       .then((res) => {
         createTwoButtonAlert()
@@ -96,7 +92,6 @@ export default function ResumoSolicitacao() {
       .catch((err) => {
         console.log(err)
       })
-    navigation.navigate('SolicitacoesScreen')
   }
 
   //console.log(arrId)

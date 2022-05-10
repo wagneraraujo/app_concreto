@@ -47,7 +47,6 @@ export const DetalheServicoScreen = () => {
     }
     getServicoId(route.params?.id)
       .then((res) => {
-        console.log(res)
         setServico(res)
         setLoading(false)
 
@@ -78,9 +77,6 @@ export const DetalheServicoScreen = () => {
   }, [])
 
   const userIsGerente = user.tipo_conta
-  console.log('tipo conta ==>', userIsGerente)
-
-  console.log(' servico ===', servico)
 
   return (
     <>
@@ -101,7 +97,7 @@ export const DetalheServicoScreen = () => {
               )}
             </Title>
             <Title style={{ color: theme.colors.darkGreen, fontSize: 14 }}>
-              Valor:{' '}
+              Valor: R${' '}
               {servico.data.attributes.Valor === null ? (
                 <Text>Não definido</Text>
               ) : (

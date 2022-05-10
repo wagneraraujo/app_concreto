@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
   textAviso: {
     color: '#fff',
     textAlign: 'center',
-    fontSize: 12,
+    fontSize: 13,
+    fontWeight: 'bold',
   },
 })
