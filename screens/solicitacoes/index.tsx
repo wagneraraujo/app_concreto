@@ -60,6 +60,9 @@ export default function SolicitacoesScreen({ navigation }) {
   const servicosConlcuidosQtd = servicConcluidos.length
 
   const onRefresh = React.useCallback(() => {
+    getMyEmpresas(user.email).then((res) => {
+      setQtdEmpresas(res.data)
+    })
     getServicosSolicitados(user.email).then((res) => {
       // console.log(res)
       setServicos(res.data)

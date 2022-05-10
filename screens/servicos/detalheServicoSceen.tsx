@@ -196,7 +196,8 @@ export const DetalheServicoScreen = () => {
                 </Button>
               </View>
               <View style={styles.separator} />
-
+              <Text>Nenhum colaborador foi selecionado para este serviço</Text>
+              {/* 
               <View style={styles.viewBtnAcao}>
                 <Button
                   icon="play-circle"
@@ -217,7 +218,7 @@ export const DetalheServicoScreen = () => {
                 >
                   Finalizar Serviço
                 </Button>
-              </View>
+              </View> */}
             </>
           )}
         </ScrollView>

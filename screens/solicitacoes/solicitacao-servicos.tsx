@@ -37,13 +37,15 @@ export default function CreateSolicitacao() {
   const { user } = useAuth()
   const route = useRoute
   const nativation = useNavigation()
-
+  const [qtdEmpresas, setQtdEmpresas] = useState<any>([])
   const { add, cart, totalValue, remove, textActivo } = useCart()
   const getData = () => {
     return Promise.all([getMyEmpresas(user.email), getServicos()])
   }
   useEffect(() => {
-    // reset()
+    getMyEmpresas(user.email).then((res) => {
+      setQtdEmpresas(res.data)
+    })
     getData()
       .then(([thenEmpresas, thenServicos]) => {
         setMyEmpresas(thenEmpresas.data)
@@ -71,6 +73,7 @@ export default function CreateSolicitacao() {
 
   const showModal = () => setVisible(true)
   const hideModal = () => setVisible(false)
+  let qtdServicos = servicos.length
 
   return (
     <>
@@ -79,6 +82,21 @@ export default function CreateSolicitacao() {
         showModal={showModal}
         visible={visible}
       />
+
+      {qtdEmpresas.length === 0 ? (
+        <View
+          style={{
+            marginVertical: 16,
+            marginHorizontal: 16,
+            backgroundColor: 'red',
+          }}
+        >
+          <Text>Antes de solicitar, você precisa cadastrar uma empresa</Text>
+        </View>
+      ) : (
+        <Text>{''}</Text>
+      )}
+
       <SafeAreaView style={{ flex: 1, height: '100%' }}>
         <ContentPrice price={totalValue} qtd={cart} ids={ItemServico} />
 
