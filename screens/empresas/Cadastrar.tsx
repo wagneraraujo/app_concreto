@@ -63,6 +63,7 @@ export function CadastrarEmpresa() {
       .then((res) => {
         if (res.status == 200) {
           reset()
+          onRefresh()
           navigation.navigate('CadastroEmpresaOk')
         }
       })

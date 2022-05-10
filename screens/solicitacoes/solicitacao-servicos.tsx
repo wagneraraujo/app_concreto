@@ -80,7 +80,7 @@ export default function CreateSolicitacao() {
         visible={visible}
       />
       <SafeAreaView style={{ flex: 1, height: '100%' }}>
-        <ContentPrice price={totalValue} qtd={cart} />
+        <ContentPrice price={totalValue} qtd={cart} ids={ItemServico} />
 
         <View style={styles.viewAvisotext}>
           <Text style={styles.textAviso}>

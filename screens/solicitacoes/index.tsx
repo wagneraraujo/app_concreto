@@ -14,7 +14,7 @@ import { useRoute } from '@react-navigation/native'
 import { HeaderColors } from '../../components/headerColor'
 import { ItemServicoCliente } from '../../components/ItemListaServicoCliete'
 import { useAuth } from '../../hooks/auth'
-import { getServicosSolicitados } from '../../services/api'
+import { getMyEmpresas, getServicosSolicitados } from '../../services/api'
 import Loading from '../../components/LoadingScreen'
 import { DrawerMenu } from '../../navigation/menu_drawer'
 const wait = (timeout: any) => {
@@ -24,11 +24,15 @@ export default function SolicitacoesScreen({ navigation }) {
   const [refreshing, setRefreshing] = React.useState(false)
 
   const [servicos, setServicos] = useState<any>([])
+  const [qtdEmpresas, setQtdEmpresas] = useState<any>([])
   const [loading, setLoading] = useState(true)
 
   const route = useRoute()
   const { user } = useAuth()
   useEffect(() => {
+    getMyEmpresas(user.email).then((res) => {
+      setQtdEmpresas(res.data)
+    })
     getServicosSolicitados(user.email)
       .then((res) => {
         // console.log(res)
@@ -65,6 +69,8 @@ export default function SolicitacoesScreen({ navigation }) {
     setRefreshing(true)
     wait(2000).then(() => setRefreshing(false))
   }, [])
+
+  // console.log(qtdEmpresas.length)
 
   return (
     <>
@@ -107,16 +113,34 @@ export default function SolicitacoesScreen({ navigation }) {
                 Deseja solicitar um serviço agora?
               </Text>
 
-              <Button
-                compact
-                icon="alert"
-                mode="contained"
-                color={theme.colors.blue}
-                style={styles.buttonSolicitarServico}
-                onPress={() => navigation.navigate('CreateSolicitacao')}
-              >
-                Solicitar Serviço
-              </Button>
+              {qtdEmpresas.length === 0 ? (
+                <>
+                  <Text>
+                    Antes de solicitar, você precisa cadastrar uma empresa
+                  </Text>
+                  <Button
+                    compact
+                    icon="alert"
+                    mode="contained"
+                    color={theme.colors.blue}
+                    style={styles.buttonSolicitarServico}
+                    onPress={() => navigation.navigate('CadastrarEmpresa')}
+                  >
+                    Cadastrar empresa
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  compact
+                  icon="alert"
+                  mode="contained"
+                  color={theme.colors.blue}
+                  style={styles.buttonSolicitarServico}
+                  onPress={() => navigation.navigate('CreateSolicitacao')}
+                >
+                  Solicitar Serviço
+                </Button>
+              )}
             </View>
             <View style={styles.containerListaServicos}>
               <Title>Minhas Solicitações</Title>

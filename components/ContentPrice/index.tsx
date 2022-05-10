@@ -8,9 +8,10 @@ import { useNavigation } from '@react-navigation/native'
 interface resumoProps {
   qtd: any
   price: any
+  ids: any
 }
 
-export default function ContentPrice({ qtd, price }: resumoProps) {
+export default function ContentPrice({ qtd, price, ids }: resumoProps) {
   const navigation = useNavigation()
   return (
     <View style={styles.contentResumo}>
@@ -25,7 +26,7 @@ export default function ContentPrice({ qtd, price }: resumoProps) {
       </View>
 
       <TouchableOpacity
-        onPress={() => navigationRef.navigate('ResumoSolicitacao')}
+        onPress={() => navigation.navigate('ResumoSolicitacao')}
         style={styles.viewCartItem}
       >
         <Text style={styles.textsmall}>Finalizar Sol. </Text>

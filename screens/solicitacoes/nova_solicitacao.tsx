@@ -73,7 +73,7 @@ export default function NovaSolicitacaoScreen() {
     }
   }
   function handleSubmitLogin(data: any) {
-    // console.log(data)
+    console.log(data)
     createServices(
       data.titulo,
       data.descricao,
@@ -84,11 +84,11 @@ export default function NovaSolicitacaoScreen() {
       user.id,
     )
       .then((res) => {
-        createTwoButtonAlert()
+        // createTwoButtonAlert()
         dropdownRef.current.reset()
         dropdownRef2.current.reset()
         reset()
-        navigation.navigate('SolicitacoesScreen')
+        // navigation.navigate('SolicitacoesScreen')
       })
       .catch((err) => {
         console.log(err)

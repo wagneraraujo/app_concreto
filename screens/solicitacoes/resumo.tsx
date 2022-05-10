@@ -16,10 +16,11 @@ import { useForm, Controller } from 'react-hook-form'
 import Loading from '../../components/LoadingScreen'
 export default function ResumoSolicitacao() {
   const [loading, setLoading] = useState(true)
+  const [objid, setObjid] = useState([] as any)
   const [myEmpresas, setMyEmpresas] = useState([] as any)
   const { add, cart, totalValue, remove, textActivo } = useCart()
   const { user } = useAuth()
-  const route = useRoute
+  const route = useRoute()
   const navigation = useNavigation()
   const getData = () => {
     return Promise.all([getMyEmpresas(user.email)])
@@ -30,6 +31,12 @@ export default function ResumoSolicitacao() {
       id: empresa.id,
     }
   })
+
+  let arrId: any = []
+  let newArrayServicos = cart.map((empresa: any) => {
+    arrId.push(empresa.item.id)
+  })
+
   const {
     register,
     setValue,
@@ -38,15 +45,7 @@ export default function ResumoSolicitacao() {
     reset,
     watch,
     formState: { errors },
-  } = useForm({
-    defaultValues: {
-      titulo: '',
-      descricao: '',
-      empresa: null,
-      tipos_servicos: null,
-      // imagens: [],
-    },
-  })
+  } = useForm()
   const dropdownRef = useRef<any>(null)
   const dropdownRef2 = useRef<any>(null)
   useEffect(() => {
@@ -75,33 +74,32 @@ export default function ResumoSolicitacao() {
       ],
     )
 
+  // console.log('empreasas', myEmpresas[0].id)
+
   function handleSubmitLogin(data: any) {
     console.log(data)
     createTwoButtonAlert()
-    navigation.navigate('SolicitacoesScreen')
-    // createServices(
-    //   `Nova solicitação #${new Date()}`,
-    //   data.descricao,
-    //   data.empresa,
-    //   data.tipos_servicos,
-    //   user.id,
-    //   user.token,
-    //   user.id,
-    // )
-    //   .then((res) => {
-    //     createTwoButtonAlert()
-    //     dropdownRef.current.reset()
-    //     dropdownRef2.current.reset()
-    //     reset()
-    //     navigation.navigate('SolicitacoesScreen')
-    //   })
-    //   .catch((err) => {
-    //     console.log(err)
-    //   })
-    // dropdownRef.current.reset()
-
     // navigation.navigate('SolicitacoesScreen')
+    createServices(
+      `Solicitação #00${new Date().getMonth()}${new Date().getSeconds()}`,
+      data.descricao,
+      myEmpresas[0].id,
+      arrId,
+      user.id,
+      user.token,
+      user.id,
+    )
+      .then((res) => {
+        createTwoButtonAlert()
+        navigation.navigate('SolicitacoesScreen')
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    navigation.navigate('SolicitacoesScreen')
   }
+
+  //console.log(arrId)
   return (
     <ScrollView style={{ padding: 8 }}>
       <View>
