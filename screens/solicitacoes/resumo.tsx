@@ -18,7 +18,7 @@ export default function ResumoSolicitacao() {
   const [loading, setLoading] = useState(true)
   const [objid, setObjid] = useState([] as any)
   const [myEmpresas, setMyEmpresas] = useState([] as any)
-  const { add, cart, totalValue, remove, textActivo } = useCart()
+  const { add, cart, totalValue, remove, textActivo, CleanCart } = useCart()
   const { user } = useAuth()
   const route = useRoute()
   const navigation = useNavigation()
@@ -75,6 +75,18 @@ export default function ResumoSolicitacao() {
     )
 
   function handleSubmitLogin(data: any) {
+    if (arrId === '') {
+      Alert.alert(
+        'Você não adicionou servicos a solicitação',
+        'Volte na tela de serviços e adicione',
+        [
+          {
+            text: 'Ok, obrigado',
+            // onPress: () => navigation.navigate('SolicitacoesScreen'),
+          },
+        ],
+      )
+    }
     createServices(
       `Solicitação #00${new Date().getMonth()}${new Date().getSeconds()}`,
       data.descricao,
@@ -88,6 +100,7 @@ export default function ResumoSolicitacao() {
       .then((res) => {
         createTwoButtonAlert()
         navigation.navigate('SolicitacoesScreen')
+        CleanCart()
       })
       .catch((err) => {
         console.log(err)

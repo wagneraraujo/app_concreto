@@ -33,12 +33,17 @@ export default function CartProvider({ children }: any) {
     setTextActivo(false), setCart([...newCart])
   }
 
+  function CleanCart() {
+    setCart([])
+  }
+
   const store = {
     add,
     cart,
     totalValue,
     remove,
     textActivo,
+    CleanCart,
   }
 
   useEffect(() => {
@@ -56,7 +61,7 @@ export default function CartProvider({ children }: any) {
 export function useCart() {
   const context = useContext(CartContext)
 
-  const { cart, add, totalValue, remove, textActivo } = context
+  const { cart, add, totalValue, remove, textActivo, CleanCart } = context
 
   return {
     cart,
@@ -64,5 +69,6 @@ export function useCart() {
     totalValue,
     textActivo,
     remove,
+    CleanCart,
   }
 }

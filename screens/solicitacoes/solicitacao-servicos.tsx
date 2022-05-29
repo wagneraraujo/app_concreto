@@ -92,7 +92,7 @@ export default function CreateSolicitacao() {
       setTitleModalServico(res.data.attributes.Nome)
       setTextModalServico(res.data.attributes.Descricao)
     })
-    console.log('showc', id)
+    // console.log('showc', id)
   }
   const hideModal = () => setVisible(false)
   let qtdServicos = servicos.length
