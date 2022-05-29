@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import SolicitacoesScreen from '../screens/solicitacoes'
-import NovaSolicitacaoScreen from '../screens/solicitacoes/nova_solicitacao'
+import NovaSolicitacaoScreen from '../screens/solicitacoes/_nova_solicitacao'
 import { DetalheServicoScreen } from '../screens/servicos/detalheServicoSceen'
 import ResumoSolicitacao from '../screens/solicitacoes/resumo'
 import CreateSolicitacao from '../screens/solicitacoes/solicitacao-servicos'

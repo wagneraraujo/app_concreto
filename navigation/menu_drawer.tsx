@@ -20,7 +20,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons'
 import ResumoSolicitacao from '../screens/solicitacoes/resumo'
 import MenuDrawerContent from '../components/MenuDrawerContent'
 
-import Solicitacao from '../screens/solicitacoes/solicitacao'
+import Solicitacao from '../screens/solicitacoes/_solicitacao'
 import HomeScreen from '../screens/Home'
 import SolicitacoesScreen from '../screens/solicitacoes'
 import CreateSolicitacao from '../screens/solicitacoes/solicitacao-servicos'

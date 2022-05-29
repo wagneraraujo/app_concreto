@@ -16,7 +16,12 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import { useForm, Controller } from 'react-hook-form'
 
 import { useAuth } from '../../hooks/auth'
-import { createServices, getMyEmpresas, getServicos } from '../../services/api'
+import {
+  createServices,
+  getMyEmpresas,
+  getServicos,
+  getServicosId,
+} from '../../services/api'
 import { ItemServico } from '../../components/ItemListaServico'
 import { ItemServicos } from '../../components/ItemServicos'
 import { useCart } from '../../hooks/cart'
@@ -33,6 +38,12 @@ export default function CreateSolicitacao() {
   const [myEmpresas, setMyEmpresas] = useState([] as any)
   const [visible, setVisible] = React.useState(false)
   const [servicos, setServicos] = useState([] as any)
+  const [titleModalServico, setTitleModalServico] = useState(
+    'Carregando...' as string,
+  )
+  const [textModelservico, setTextModalServico] = useState(
+    'Carregando detalhes...' as string,
+  )
   const [loading, setLoading] = useState(true)
   const { user } = useAuth()
   const route = useRoute
@@ -50,7 +61,7 @@ export default function CreateSolicitacao() {
       .then(([thenEmpresas, thenServicos]) => {
         setMyEmpresas(thenEmpresas.data)
         setServicos(thenServicos.data)
-        // console.log('servicos ===', thenServicos)
+        console.log('servicos ===', thenServicos)
         setLoading(false)
       })
       .catch((err) => {
@@ -71,7 +82,18 @@ export default function CreateSolicitacao() {
     wait(2000).then(() => setRefreshing(false))
   }, [])
 
-  const showModal = () => setVisible(true)
+  const DetailService = (id: number) => {
+    console.log('buscar tipo servico', id)
+  }
+  const showModal = (id: number) => {
+    setVisible(true)
+    getServicosId(id).then((res) => {
+      console.log(res.data.attributes.Nome)
+      setTitleModalServico(res.data.attributes.Nome)
+      setTextModalServico(res.data.attributes.Descricao)
+    })
+    console.log('showc', id)
+  }
   const hideModal = () => setVisible(false)
   let qtdServicos = servicos.length
 
@@ -81,6 +103,8 @@ export default function CreateSolicitacao() {
         hideModal={hideModal}
         showModal={showModal}
         visible={visible}
+        content={textModelservico}
+        title={titleModalServico}
       />
 
       {qtdEmpresas.length === 0 ? (
@@ -102,7 +126,7 @@ export default function CreateSolicitacao() {
 
         <View style={styles.viewAvisotext}>
           <Text style={styles.textAviso}>
-            Toque e segure para selecionar um serviço
+            Toque e segure para selecionar um serviços
           </Text>
         </View>
         <FlatList
@@ -128,7 +152,7 @@ export default function CreateSolicitacao() {
                 qtd={itemServico.item.attributes.qtd}
                 price={itemServico.item.attributes.Preco}
                 textSelect={textActivo}
-                onPress={showModal}
+                onPress={() => showModal(itemServico.item.id)}
               />
             )
           }}

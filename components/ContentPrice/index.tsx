@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     height: 40,
     paddingHorizontal: 6,
+    marginTop: -15,
   },
   linhaResumo: {
     flexDirection: 'row',

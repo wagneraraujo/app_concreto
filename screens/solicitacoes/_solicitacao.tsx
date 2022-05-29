@@ -194,7 +194,7 @@ export default function Solicitacao() {
       >
         <View style={styles.ViewCriarSolicitacao}>
           <Text style={styles.textsolicitarservico}>
-            "Segure o toque" para selecionar os serviços
+            "Segure o toque" para selecionar os serviçosss
           </Text>
         </View>
 

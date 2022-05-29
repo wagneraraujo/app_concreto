@@ -1,8 +1,17 @@
 import * as React from 'react'
-import { StyleSheet } from 'react-native'
-import { Modal, Portal, Text, Button, Provider } from 'react-native-paper'
+import { StyleSheet, View } from 'react-native'
+import {
+  Modal,
+  Portal,
+  Text,
+  Button,
+  Provider,
+  Headline,
+  Divider,
+} from 'react-native-paper'
+import Markdown from 'react-native-markdown-display'
 
-const ModalInfo = ({ visible, showModal, hideModal }: any) => {
+const ModalInfo = ({ visible, showModal, hideModal, content, title }: any) => {
   const containerStyle = { backgroundColor: 'white', padding: 20 }
 
   return (
@@ -13,7 +22,22 @@ const ModalInfo = ({ visible, showModal, hideModal }: any) => {
         onDismiss={hideModal}
         contentContainerStyle={containerStyle}
       >
-        <Text>Example Modal. Click outside this area to dismiss.</Text>
+        <Headline>{title}</Headline>
+        <Markdown>{content}</Markdown>
+        <Divider style={{ marginVertical: 12 }} />
+
+        <View style={styles.viewmodal}>
+          <Button
+            icon="close"
+            mode="outlined"
+            onPress={hideModal}
+            color={'red'}
+            compact
+            style={styles.sizebutton}
+          >
+            Fechar{' '}
+          </Button>
+        </View>
       </Modal>
     </Portal>
   )
@@ -25,5 +49,14 @@ const styles = StyleSheet.create({
   modalstyle: {
     margin: 3,
     padding: 8,
+    overflow: 'scroll',
+    flex: 1,
+  },
+  viewmodal: {
+    justifyContent: 'space-between',
+    flexDirection: 'row-reverse',
+  },
+  sizebutton: {
+    maxWidth: '80%',
   },
 })

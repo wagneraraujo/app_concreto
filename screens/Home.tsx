@@ -66,7 +66,7 @@ export default function HomeScreen({ navigation }: any) {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
         >
-          <NomeUsuario nome="Carlos Alves" />
+          {/* <NomeUsuario nome="Carlos Alves" /> */}
           <View style={styles.container}>
             <ResumoCard
               nameIcon="alarm-outline"
