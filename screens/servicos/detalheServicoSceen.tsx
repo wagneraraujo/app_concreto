@@ -1,4 +1,4 @@
-import { useRoute } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
 import {
   ScrollView,
@@ -7,21 +7,28 @@ import {
   StyleSheet,
   Image,
   Linking,
+  Alert,
 } from 'react-native'
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize'
-import { Title } from 'react-native-paper'
+import { Portal, Title } from 'react-native-paper'
 import { theme } from '../../theme/theme'
-import { Button } from 'react-native-paper'
-import { getServicoId } from '../../services/api'
+import { Button, Dialog } from 'react-native-paper'
+import { deleteServicoId, getServicoId } from '../../services/api'
 import Loading from '../../components/LoadingScreen'
 import { useAuth } from '../../hooks/auth'
 import { formatDate } from '../../utils/formatData'
 import { formatCurrency } from '../../utils/formatCurrency'
 import { red400 } from 'react-native-paper/lib/typescript/styles/colors'
+import AlertComponent from '../../components/AlertComponent'
 
 export const DetalheServicoScreen = () => {
   const [servico, setServico] = useState({} as any)
   const [loading, setLoading] = useState(true)
+  const [visible, setVisible] = React.useState(false)
+
+  const showDialog = () => setVisible(true)
+
+  const hideDialog = () => setVisible(false)
 
   // const [titulo, setTitulo] = useState('' as any)
   // const [nomeEmpresa, setNomeempresa] = useState('' as any)
@@ -36,6 +43,7 @@ export const DetalheServicoScreen = () => {
   const route = useRoute()
   // let abortController = new AbortController()
   const { user } = useAuth()
+  const navigation = useNavigation()
 
   useEffect(() => {
     let isMounted = true
@@ -50,7 +58,7 @@ export const DetalheServicoScreen = () => {
         setServico(res)
         setLoading(false)
 
-        // console.log(res)
+        // console.log(res.data.id)
         // // console.log(res.data.attributes.empresa.data.attributes.Nome_Empresa)
         // setTitulo(res.data.attributes.Titulo)
         // setNomeempresa(
@@ -77,6 +85,24 @@ export const DetalheServicoScreen = () => {
   }, [])
 
   const userIsGerente = user.tipo_conta
+  // const serviceIniciado = servico.data.attributes.Status_servico
+  // console.log(serviceIniciado)
+
+  const cancelarService = (id: number) => {
+    // console.log('deseja cancelar ', id)
+    deleteServicoId(id, user.token).then((res) => {
+      Alert.alert('Deletado com sucesso', '', [
+        {
+          text: 'Ok',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'default',
+        },
+      ])
+      setTimeout(() => {
+        navigation.navigate('SolicitacoesScreen')
+      }, 2000)
+    })
+  }
 
   return (
     <>
@@ -93,7 +119,7 @@ export const DetalheServicoScreen = () => {
               {!servico.data.attributes.Status_servico ? (
                 <Text style={{ fontSize: 14 }}>Não iniciado</Text>
               ) : (
-                servico.data.attributes.Status_servico
+                <Text style={{ fontSize: 14, color: 'green' }}>Iniciado</Text>
               )}
             </Title>
             <Title style={{ color: theme.colors.darkGreen, fontSize: 14 }}>
@@ -159,16 +185,13 @@ export const DetalheServicoScreen = () => {
                 >
                   Editar Solicitação
                 </Button> */}
-
-                <Button
-                  icon="tag-off"
-                  mode="outlined"
-                  compact
-                  color="red"
-                  onPress={() => console.log('Pressed')}
-                >
-                  Cancelar Solicitação
-                </Button>
+                {!servico.data.attributes.Status_servico ? (
+                  <AlertComponent
+                    funcDelete={() => cancelarService(servico.data.id)}
+                  />
+                ) : (
+                  <Text></Text>
+                )}
               </View>
             </>
           )}
@@ -231,6 +254,8 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: RFValue(16),
     paddingVertical: RFValue(16),
+    position: 'relative',
+    zIndex: 1,
   },
   viewTitleServico: {
     marginBottom: RFValue(10),
@@ -273,6 +298,9 @@ const styles = StyleSheet.create({
     marginBottom: RFValue(20),
     flexDirection: 'row',
     justifyContent: 'space-between',
+    position: 'relative',
+    zIndex: 6,
+    width: '100%',
   },
   viewBtnAcao: {
     marginBottom: RFValue(40),

@@ -43,7 +43,7 @@ export default function SolicitacoesScreen({ navigation }) {
         console.log(err)
         setLoading(false)
       })
-  }, [])
+  }, [navigation])
 
   let qtdServicos = servicos.length
   let servTotal = servicos.map((item: any, index: number) => {
@@ -73,6 +73,20 @@ export default function SolicitacoesScreen({ navigation }) {
     wait(2000).then(() => setRefreshing(false))
   }, [])
 
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      getMyEmpresas(user.email).then((res) => {
+        setQtdEmpresas(res.data)
+      })
+      getServicosSolicitados(user.email).then((res) => {
+        // console.log(res)
+        setServicos(res.data)
+        setLoading(false)
+        console.log('servicos')
+      })
+    })
+    return unsubscribe
+  }, [navigation])
   // console.log(qtdEmpresas.length)
 
   return (

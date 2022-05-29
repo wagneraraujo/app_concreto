@@ -88,6 +88,7 @@ export default function Solicitacao() {
       user.id,
       user.token,
       user.id,
+      data.Valor,
     )
       .then((res) => {
         createTwoButtonAlert()

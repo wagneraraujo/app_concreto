@@ -3,8 +3,8 @@ import { UserInterfaceIdiom } from 'expo-constants'
 import { useAuth } from '../hooks/auth'
 
 // http://192.168.0.106:1337/api/empresas?filters[adminempresa][username][$eq]=marcos@gmail.com
-// const baseUrl = 'http://localhost:1337'
-const baseUrl = 'http://192.168.0.106:1337'
+const baseUrl = 'http://192.168.0.107:1337'
+// const baseUrl = 'https://strapi-16gl.onrender.com'
 //http://192.168.0.108:1337/api/auth/local/register
 export const api = axios.create({
   baseURL: baseUrl,
@@ -169,4 +169,13 @@ export const getServicosSolicitados = async (email: string) => {
 export const getServicoId = async (id: number) => {
   const res = await api.get(`/api/criar-servicos/${id}?populate=*`)
   return res.data
+}
+
+export const deleteServicoId = async (id: number, jwt: any) => {
+  await api.delete(`/api/criar-servicos/${id}`, {
+    headers: {
+      Authorization: 'Bearer ' + jwt,
+    },
+  })
+  return
 }
