@@ -58,7 +58,7 @@ export const DetalheServicoScreen = () => {
         setServico(res)
         setLoading(false)
 
-        // console.log(res.data.id)
+        console.log(res)
         // // console.log(res.data.attributes.empresa.data.attributes.Nome_Empresa)
         // setTitulo(res.data.attributes.Titulo)
         // setNomeempresa(

@@ -54,7 +54,16 @@ export default function HomeScreen({ navigation }: any) {
   }, [])
 
   // console.log(servicos)
-
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      getAllServicosSolicitados().then((res) => {
+        // console.log(res)
+        setServicos(res.data)
+        setLoading(false)
+      })
+    })
+    return unsubscribe
+  }, [navigation])
   return (
     <>
       {loading ? (

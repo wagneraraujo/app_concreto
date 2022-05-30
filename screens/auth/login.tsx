@@ -36,7 +36,7 @@ export function Login() {
 
   function handleSubmitLogin(data: any) {
     // console.log(data)
-    loginAuth(data.email.toLowerCase(), data.password)
+    loginAuth(data.email.toLowerCase().replace(/\s/g, ''), data.password)
     // console.log(data.email, data.senha)
   }
 
