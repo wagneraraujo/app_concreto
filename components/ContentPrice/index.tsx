@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import { theme } from '../../theme/theme'
 import { Button, IconButton } from 'react-native-paper'
 import { navigationRef } from '../../navigation/RootNavigation'
@@ -13,6 +13,26 @@ interface resumoProps {
 
 export default function ContentPrice({ qtd, price, ids }: resumoProps) {
   const navigation = useNavigation()
+  console.log(price)
+
+  const FinalizarServicos = () => {
+    if (qtd.length === 0) {
+      Alert.alert(
+        'Você ainda não adicionou serviços',
+        'Adicione serviços a solicitação para finalizar',
+        [
+          {
+            text: 'Ok, obrigado',
+            // onPress: () => navigation.navigate('SolicitacoesScreen'),
+          },
+        ],
+      )
+      return false
+    }
+
+    navigation.navigate('ResumoSolicitacao')
+  }
+
   return (
     <View style={styles.contentResumo}>
       <View style={styles.linhaResumo}>
@@ -25,12 +45,9 @@ export default function ContentPrice({ qtd, price, ids }: resumoProps) {
         <Text style={styles.descricao}>{price}</Text>
       </View>
 
-      <TouchableOpacity
-        onPress={() => navigation.navigate('ResumoSolicitacao')}
-        style={styles.viewCartItem}
-      >
+      <TouchableOpacity onPress={FinalizarServicos} style={styles.viewCartItem}>
         <Text style={styles.textsmall}>Finalizar Sol. </Text>
-        <IconButton icon="file-document" size={20} />
+        <IconButton icon="file-document" color="orange" size={18} />
       </TouchableOpacity>
     </View>
   )
@@ -63,8 +80,14 @@ const styles = StyleSheet.create({
   viewCartItem: {
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: '#b34303',
+    paddingHorizontal: 4,
   },
   textsmall: {
     fontSize: 13,
+    position: 'relative',
+    left: 4,
+    color: '#fff',
+    fontWeight: 'bold',
   },
 })

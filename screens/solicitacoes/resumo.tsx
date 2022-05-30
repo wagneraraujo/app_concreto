@@ -32,6 +32,8 @@ export default function ResumoSolicitacao() {
     }
   })
 
+  // console.log(cart)
+
   let arrId: any = []
   let newArrayServicos = cart.map((empresa: any) => {
     arrId.push(empresa.item.id)
@@ -75,18 +77,6 @@ export default function ResumoSolicitacao() {
     )
 
   function handleSubmitLogin(data: any) {
-    if (arrId === '') {
-      Alert.alert(
-        'Você não adicionou servicos a solicitação',
-        'Volte na tela de serviços e adicione',
-        [
-          {
-            text: 'Ok, obrigado',
-            // onPress: () => navigation.navigate('SolicitacoesScreen'),
-          },
-        ],
-      )
-    }
     createServices(
       `Solicitação #00${new Date().getMonth()}${new Date().getSeconds()}`,
       data.descricao,
@@ -158,7 +148,7 @@ export default function ResumoSolicitacao() {
           )}
           name="descricao"
         />
-        {errors.titulo && (
+        {errors.descricao && (
           <Text style={styles.msgErroText}>
             Descreva o serviço que precisa, esse campo não pode ficar vazio
           </Text>
@@ -225,6 +215,7 @@ const styles = StyleSheet.create({
   },
   msgErroText: {
     color: 'red',
+    marginBottom: 6,
   },
   marginInput: {
     marginVertical: 8,
