@@ -1,6 +1,4 @@
 import axios from 'axios'
-import { UserInterfaceIdiom } from 'expo-constants'
-import { useAuth } from '../hooks/auth'
 
 // http://192.168.0.106:1337/api/empresas?filters[adminempresa][username][$eq]=marcos@gmail.com
 const baseUrl = 'http://192.168.0.107:1337'
@@ -136,6 +134,30 @@ export const createServices = async (
   )
 }
 
+export const updateServicesIdAdicionais = async (
+  text: any,
+  id: number,
+  jwt: any,
+) => {
+  return api.put(
+    '/api/criar-servicos/' + id,
+    {
+      data: {
+        Info_adicionais: [
+          {
+            Descreva: text,
+          },
+        ],
+      },
+    },
+
+    {
+      headers: {
+        Authorization: 'Bearer ' + jwt,
+      },
+    },
+  )
+}
 export const getEmpresas = async () => {
   const res = await api.get('/api/empresas')
   return res.data

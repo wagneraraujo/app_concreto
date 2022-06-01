@@ -26,7 +26,7 @@ const wait = (timeout: any) => {
 export default function HomeScreen({ navigation }: any) {
   const [refreshing, setRefreshing] = React.useState(false)
 
-  const [servicos, setServicos] = useState<any>([])
+  const [servicos, setServicos] = useState<any>([] as any)
   const [loading, setLoading] = useState(true)
 
   const route = useRoute()
@@ -113,14 +113,16 @@ export default function HomeScreen({ navigation }: any) {
             <Title>Todas Solicitações de clientes</Title>
 
             {servicos.map((item: any) => {
-              // console.log(item.attributes.empresa.data.attributes.Endereco)
-
+              console.log(item)
+              const empresa = item.attributes.empresa.data.attributes.Nome_Empresa.substring(
+                0,
+                20,
+              )
               return (
                 <ItemServico
-                  empresa={item.attributes.empresa.data.attributes.Nome_Empresa.substring(
-                    0,
-                    20,
-                  )}
+                  empresa={
+                    empresa === null ? 'Empresa não selecionada' : empresa
+                  }
                   key={item.id}
                   titulo={
                     item.attributes.tipos_servicos.data[0].attributes.Nome

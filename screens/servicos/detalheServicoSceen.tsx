@@ -13,22 +13,36 @@ import { RFPercentage, RFValue } from 'react-native-responsive-fontsize'
 import { Portal, Title } from 'react-native-paper'
 import { theme } from '../../theme/theme'
 import { Button, Dialog } from 'react-native-paper'
-import { deleteServicoId, getServicoId } from '../../services/api'
+import {
+  deleteServicoId,
+  getServicoId,
+  updateServicesId,
+  updateServicesIdAdicionais,
+} from '../../services/api'
 import Loading from '../../components/LoadingScreen'
 import { useAuth } from '../../hooks/auth'
 import { formatDate } from '../../utils/formatData'
 import { formatCurrency } from '../../utils/formatCurrency'
 import { red400 } from 'react-native-paper/lib/typescript/styles/colors'
 import AlertComponent from '../../components/AlertComponent'
+import { TextInput } from 'react-native-paper'
 
 export const DetalheServicoScreen = () => {
   const [servico, setServico] = useState({} as any)
   const [loading, setLoading] = useState(true)
   const [visible, setVisible] = React.useState(false)
+  const [showMoreInfo, setShowMoreinfo] = useState(false)
+  const [textInfo, setTextInfo] = useState('')
 
   const showDialog = () => setVisible(true)
-
   const hideDialog = () => setVisible(false)
+  const showMorebtninfo = () => {
+    if (showMoreInfo === false) {
+      setShowMoreinfo(true)
+    } else {
+      setShowMoreinfo(false)
+    }
+  }
 
   // const [titulo, setTitulo] = useState('' as any)
   // const [nomeEmpresa, setNomeempresa] = useState('' as any)
@@ -58,7 +72,7 @@ export const DetalheServicoScreen = () => {
         setServico(res)
         setLoading(false)
 
-        console.log(res)
+        // console.log(res.s.attributes.empresa.data.attributes.Telefone)
         // // console.log(res.data.attributes.empresa.data.attributes.Nome_Empresa)
         // setTitulo(res.data.attributes.Titulo)
         // setNomeempresa(
@@ -102,6 +116,25 @@ export const DetalheServicoScreen = () => {
         navigation.navigate('SolicitacoesScreen')
       }, 2000)
     })
+  }
+
+  const sendUpdateInfoText = () => {
+    if (textInfo === '') {
+      Alert.alert(
+        'Campo vazio',
+        'Digite informações adicionais antes de enviar',
+        [{ text: 'ok' }],
+      )
+
+      return false
+    }
+    updateServicesIdAdicionais(textInfo, servico.data.id, user.token)
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   return (
@@ -203,21 +236,47 @@ export const DetalheServicoScreen = () => {
                 <Button
                   icon="phone"
                   mode="outlined"
-                  // onPress={() => {
-                  //   // Linking.openURL(`tel:55${telefone}`)
-                  // }}
+                  compact
+                  onPress={() => {
+                    Linking.openURL(
+                      `tel:55${servico.data.attributes.empresa.data.attributes.Telefone}`,
+                    )
+                  }}
                 >
                   Ligar cliente
                 </Button>
 
                 <Button
                   icon="text"
+                  compact
                   mode="outlined"
-                  onPress={() => console.log('Pressed')}
+                  onPress={showMorebtninfo}
                 >
-                  Add infos
+                  {showMoreInfo ? 'Fechar Add Infos' : 'Add informações'}
                 </Button>
               </View>
+
+              {showMoreInfo && (
+                <View style={styles.containerViews}>
+                  <TextInput
+                    label="Digite aqui"
+                    mode="outlined"
+                    value={textInfo}
+                    multiline
+                    numberOfLines={3}
+                    onChangeText={(textInfo) => setTextInfo(textInfo)}
+                    style={styles.inputAddinfo}
+                  />
+                  <Button
+                    icon="text"
+                    mode="contained"
+                    onPress={sendUpdateInfoText}
+                  >
+                    Salvar informação
+                  </Button>
+                </View>
+              )}
+
               <View style={styles.separator} />
               <Text>Nenhum colaborador foi selecionado para este serviço</Text>
               {/* 
@@ -317,5 +376,11 @@ const styles = StyleSheet.create({
     color: '#00a767',
     fontSize: 14,
     fontWeight: 'bold',
+  },
+  containerViews: {
+    marginVertical: 6,
+  },
+  inputAddinfo: {
+    marginVertical: 6,
   },
 })
