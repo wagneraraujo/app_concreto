@@ -16,7 +16,6 @@ import { Button, Dialog } from 'react-native-paper'
 import {
   deleteServicoId,
   getServicoId,
-  updateServicesId,
   updateServicesIdAdicionais,
 } from '../../services/api'
 import Loading from '../../components/LoadingScreen'
@@ -29,10 +28,12 @@ import { TextInput } from 'react-native-paper'
 
 export const DetalheServicoScreen = () => {
   const [servico, setServico] = useState({} as any)
+  const [listInfoAdicionais, setlistInfoAdicionais] = useState('' as any)
   const [loading, setLoading] = useState(true)
   const [visible, setVisible] = React.useState(false)
   const [showMoreInfo, setShowMoreinfo] = useState(false)
-  const [textInfo, setTextInfo] = useState('')
+  const [textInfo, setTextInfo] = useState()
+  const [msgSucesso, setmsgSucess] = useState(['', ['']])
 
   const showDialog = () => setVisible(true)
   const hideDialog = () => setVisible(false)
@@ -53,6 +54,7 @@ export const DetalheServicoScreen = () => {
   // const [valor, setValor] = useState(null)
   // const [colaborador, setColaborador] = useState(false)
   // const [telefone, setTelefone] = useState('#' as any)
+  const [lastInfo, setLastinfo] = useState('' as any)
 
   const route = useRoute()
   // let abortController = new AbortController()
@@ -99,16 +101,11 @@ export const DetalheServicoScreen = () => {
   }, [])
 
   const userIsGerente = user.tipo_conta
-  // const serviceIniciado = servico.data.attributes.Status_servico
-  // console.log(serviceIniciado)
-
   const cancelarService = (id: number) => {
-    // console.log('deseja cancelar ', id)
     deleteServicoId(id, user.token).then((res) => {
       Alert.alert('Deletado com sucesso', '', [
         {
           text: 'Ok',
-          onPress: () => console.log('Cancel Pressed'),
           style: 'default',
         },
       ])
@@ -131,12 +128,21 @@ export const DetalheServicoScreen = () => {
     updateServicesIdAdicionais(textInfo, servico.data.id, user.token)
       .then((res) => {
         console.log(res)
+        setmsgSucess(['Adicionado com sucesso', 'green'])
+
+        setTimeout(() => {
+          setmsgSucess(['', ''])
+        }, 2000)
       })
       .catch((err) => {
         console.log(err)
+        setmsgSucess(['Algo deu errado, tente novamente', 'red'])
+        setTimeout(() => {
+          setmsgSucess(['', ''])
+        }, 2000)
       })
   }
-
+  console.log(servico.data.attributes)
   return (
     <>
       {loading ? (
@@ -276,6 +282,16 @@ export const DetalheServicoScreen = () => {
                   </Button>
                 </View>
               )}
+
+              <View>
+                {msgSucesso != [''] && (
+                  <>
+                    <Text style={{ color: msgSucesso[1] }}>
+                      {msgSucesso[0]}
+                    </Text>
+                  </>
+                )}
+              </View>
 
               <View style={styles.separator} />
               <Text>Nenhum colaborador foi selecionado para este serviço</Text>

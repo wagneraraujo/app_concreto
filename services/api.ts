@@ -143,11 +143,7 @@ export const updateServicesIdAdicionais = async (
     '/api/criar-servicos/' + id,
     {
       data: {
-        Info_adicionais: [
-          {
-            Descreva: text,
-          },
-        ],
+        Info_adicionais: text,
       },
     },
 
