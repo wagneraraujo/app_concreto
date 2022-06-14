@@ -22,7 +22,7 @@ export const createColaboradorAccount = async (
   username: string,
   telefone: string,
   tipo_conta: 'colaborador',
-  nome_sobrenome: string,
+  Primeiro_Nome: string,
 ) => {
   return api.post('/api/auth/local/register', {
     identifier: identifier,
@@ -31,7 +31,7 @@ export const createColaboradorAccount = async (
     username: username,
     telefone: telefone,
     tipo_conta: 'colaborador',
-    nome_sobrenome: nome_sobrenome,
+    Primeiro_Nome: Primeiro_Nome,
   })
 }
 
@@ -154,6 +154,30 @@ export const updateServicesIdAdicionais = async (
     },
   )
 }
+
+export const createColaborador = async (
+  user: string,
+  Nome: string,
+  Telefone: string,
+  jwt: any,
+) => {
+  return api.post(
+    '/api/colaboradores',
+    {
+      data: {
+        user: user,
+        Nome: Nome,
+        Telefone: Telefone,
+      },
+    },
+    {
+      headers: {
+        Authorization: 'Bearer ' + jwt,
+      },
+    },
+  )
+}
+
 export const getEmpresas = async () => {
   const res = await api.get('/api/empresas')
   return res.data

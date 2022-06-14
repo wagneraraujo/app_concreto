@@ -64,6 +64,8 @@ export default function HomeScreen({ navigation }: any) {
     })
     return unsubscribe
   }, [navigation])
+
+  console.log(user.token)
   return (
     <>
       {loading ? (

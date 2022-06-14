@@ -142,7 +142,7 @@ export const DetalheServicoScreen = () => {
         }, 2000)
       })
   }
-  console.log(servico.data.attributes)
+
   return (
     <>
       {loading ? (

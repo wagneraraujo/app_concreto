@@ -6,7 +6,7 @@ import { HeaderScreens } from '../../components/HeaderScreens'
 import { useForm, Controller } from 'react-hook-form'
 
 import { theme } from '../../theme/theme'
-import { createColaboradorAccount } from '../../services/api'
+import { createColaborador, createColaboradorAccount } from '../../services/api'
 import Loading from '../../components/LoadingScreen'
 export function CriarContaScreen() {
   const [email, setEmail] = React.useState('')
@@ -48,10 +48,23 @@ export function CriarContaScreen() {
       data.name,
     )
       .then((res) => {
+        // console.log(res.data.user.id)
+
         if (res.status == 200) {
+          createColaborador(
+            res.data.user.id,
+            data.name,
+            data.telefone,
+            res.data.jwt,
+          )
           navigation.navigate('RegisterOk')
         }
+
+        //
       })
+      // .then((res) => {
+
+      // })
       .catch((err) => {
         setLoading(false)
         setErrorRegister(true)
