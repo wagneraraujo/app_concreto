@@ -109,7 +109,7 @@ export const createServices = async (
   tipos_servicos: number,
   adminempresa: Number,
   jwt: any,
-  users: any,
+  Gerente_Empresa: any,
   Valor: number,
 ) => {
   return api.post(
@@ -121,7 +121,7 @@ export const createServices = async (
         empresa: empresa,
         tipos_servicos: tipos_servicos,
         adminempresa: adminempresa,
-        users: users,
+        Gerente_Empresa: Gerente_Empresa,
         Valor: Valor,
       },
     },
@@ -207,7 +207,7 @@ export const getAllServicosSolicitados = async () => {
 
 export const getServicosSolicitados = async (email: string) => {
   const res = await api.get(
-    `/api/criar-servicos?filters[users][email]=${email}&populate=*`,
+    `/api/criar-servicos?filters[Gerente_Empresa][email]=${email}&populate=*`,
   )
   return res.data
 }
