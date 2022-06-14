@@ -73,6 +73,7 @@ export const DetalheServicoScreen = () => {
       .then((res) => {
         setServico(res)
         setLoading(false)
+        // console.log(res.data.attributes.colaborador.data.attributes.Nome)
 
         // console.log(res.s.attributes.empresa.data.attributes.Telefone)
         // // console.log(res.data.attributes.empresa.data.attributes.Nome_Empresa)
@@ -143,6 +144,8 @@ export const DetalheServicoScreen = () => {
       })
   }
 
+  // console.log(servico.data.attributes.colaborador.data.attributes.Nome)
+
   return (
     <>
       {loading ? (
@@ -170,6 +173,7 @@ export const DetalheServicoScreen = () => {
               )}
             </Title>
           </View>
+
           <View style={styles.viewTwo}>
             <View style={styles.viewCol}>
               <Text style={styles.subTitle}>
@@ -183,13 +187,6 @@ export const DetalheServicoScreen = () => {
             <View style={styles.viewCol}>
               <Text style={styles.subTitle}>Data Solicitação</Text>
               <Text> {formatDate(servico.data.attributes.createdAt)}</Text>
-
-              {/* {colaborador && (
-                <>
-                  <Text style={styles.subTitle}>Colaborador</Text>
-                  <Text>{colaborador}</Text>
-                </>
-              )} */}
             </View>
           </View>
 
@@ -212,6 +209,47 @@ export const DetalheServicoScreen = () => {
 
           {userIsGerente === 'empresa' && (
             <>
+              {servico.data.attributes.colaborador.data === null ? (
+                <>
+                  <View style={styles.separator} />
+                  <Text>
+                    Não foi selecionado um colaborador para este serviço,
+                    aguarde.
+                  </Text>
+                </>
+              ) : (
+                <>
+                  <View style={styles.separator} />
+                  <View style={styles.viewTitleServico}>
+                    <Title style={{ color: theme.colors.text }}>
+                      <Text style={styles.textSmall}>Colaborador: </Text>
+                      <Text style={{ fontSize: 14 }}>
+                        {servico.data.attributes.colaborador.data === null
+                          ? ''
+                          : servico.data.attributes.colaborador.data.attributes
+                              .Nome}
+                      </Text>
+                    </Title>
+
+                    <Button
+                      compact
+                      color={'black'}
+                      icon="whatsapp"
+                      mode="outlined"
+                      style={{ borderRadius: 8 }}
+                      labelStyle={{ fontSize: 13 }}
+                      onPress={() => {
+                        Linking.openURL(
+                          `tel:55${servico.data.attributes.colaborador.data.attributes.Telefone}`,
+                        )
+                      }}
+                    >
+                      Ligar
+                    </Button>
+                  </View>
+                </>
+              )}
+
               <Title>Ações de gerente</Title>
               <View style={styles.viewBtnCliente}>
                 {/* <Button
@@ -237,19 +275,22 @@ export const DetalheServicoScreen = () => {
 
           {userIsGerente === 'colaborador' && (
             <>
+              <View style={styles.separator} />
               <Title>Ações de colaborador</Title>
               <View style={styles.viewBtnCliente}>
                 <Button
-                  icon="phone"
-                  mode="outlined"
                   compact
+                  color={'black'}
+                  icon="phone"
+                  mode="contained"
+                  labelStyle={{ fontSize: 13 }}
                   onPress={() => {
                     Linking.openURL(
                       `tel:55${servico.data.attributes.empresa.data.attributes.Telefone}`,
                     )
                   }}
                 >
-                  Ligar cliente
+                  Ligar
                 </Button>
 
                 <Button

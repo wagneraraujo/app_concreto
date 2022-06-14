@@ -5,12 +5,12 @@ import { theme } from '../../theme/theme'
 import { RFValue } from 'react-native-responsive-fontsize'
 
 interface ItemServicoProps {
-  titulo: string
+  titulo?: string
   empresa?: string
   bairro?: string
-  progresso: Boolean
+  progresso?: Boolean
   nomeColaborador?: string
-  navegacao: any
+  navegacao?: any
 }
 export const ItemServico = ({
   titulo,

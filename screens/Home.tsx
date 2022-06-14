@@ -18,11 +18,17 @@ import { useRoute } from '@react-navigation/native'
 import { DrawerMenu } from '../navigation/menu_drawer'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../hooks/auth'
-import { getAllServicosSolicitados } from '../services/api'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
+import {
+  getAllServicosSolicitados,
+  getServicosRelacionadoColaborador,
+} from '../services/api'
 import Loading from '../components/LoadingScreen'
 const wait = (timeout: any) => {
   return new Promise((resolve) => setTimeout(resolve, timeout))
 }
+
 export default function HomeScreen({ navigation }: any) {
   const [refreshing, setRefreshing] = React.useState(false)
 
@@ -30,11 +36,14 @@ export default function HomeScreen({ navigation }: any) {
   const [loading, setLoading] = useState(true)
 
   const route = useRoute()
+  // const { user } = useAuth()
   const { user } = useAuth()
+
   useEffect(() => {
-    getAllServicosSolicitados()
+    getServicosRelacionadoColaborador(user.meuIdcol)
       .then((res) => {
-        setServicos(res.data)
+        // console.log('id busca', res)
+        // setServicos(res.data)
         setLoading(false)
       })
       .catch((err) => {
@@ -43,7 +52,7 @@ export default function HomeScreen({ navigation }: any) {
   }, [])
 
   const onRefresh = React.useCallback(() => {
-    getAllServicosSolicitados().then((res) => {
+    getServicosRelacionadoColaborador(user.meuIdcol).then((res) => {
       // console.log(res)
       setServicos(res.data)
       setLoading(false)
@@ -56,7 +65,7 @@ export default function HomeScreen({ navigation }: any) {
   // console.log(servicos)
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      getAllServicosSolicitados().then((res) => {
+      getServicosRelacionadoColaborador(user.meuIdcol).then((res) => {
         // console.log(res)
         setServicos(res.data)
         setLoading(false)
@@ -64,6 +73,9 @@ export default function HomeScreen({ navigation }: any) {
     })
     return unsubscribe
   }, [navigation])
+
+  // console.log(servicos)
+
   return (
     <>
       {loading ? (
@@ -110,35 +122,35 @@ export default function HomeScreen({ navigation }: any) {
           </View>
 
           <View style={styles.containerListaServicos}>
-            <Title>Todas Solicitações de clientes</Title>
+            <Title>Todas Solicitações de clientes tes</Title>
 
             {servicos.map((item: any) => {
-              console.log(item)
+              // console.log(item.attributes.Status_servico)
               const empresa = item.attributes.empresa.data.attributes.Nome_Empresa.substring(
                 0,
                 20,
               )
               return (
-                <ItemServico
-                  empresa={
-                    empresa === null ? 'Empresa não selecionada' : empresa
-                  }
-                  key={item.id}
-                  titulo={
-                    item.attributes.tipos_servicos.data[0].attributes.Nome
-                  }
-                  progresso={item.attributes.Status_servico}
-                  // nomeColaborador="col teste nome"
-                  bairro={item.attributes.empresa.data.attributes.Endereco.substring(
-                    0,
-                    45,
-                  )}
-                  navegacao={() =>
-                    navigation.navigate('DetalheServicoScreenColaborador', {
-                      id: item.id,
-                    })
-                  }
-                />
+                <>
+                  <ItemServico
+                    empresa={empresa}
+                    key={item.id}
+                    titulo={
+                      item.attributes.tipos_servicos.data[0].attributes.Nome
+                    }
+                    progresso={item.attributes.Status_servico}
+                    // nomeColaborador="col teste nome"
+                    bairro={item.attributes.empresa.data.attributes.Endereco.substring(
+                      0,
+                      45,
+                    )}
+                    navegacao={() =>
+                      navigation.navigate('DetalheServicoScreenColaborador', {
+                        id: item.id,
+                      })
+                    }
+                  />
+                </>
               )
             })}
           </View>

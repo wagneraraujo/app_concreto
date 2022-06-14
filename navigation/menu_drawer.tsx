@@ -75,16 +75,7 @@ export const DrawerMenu = () => {
             component={StackServicosColaborador}
             options={{
               headerShown: false,
-              title: 'Todas Solicitações',
-            }}
-          />
-
-          <Drawer.Screen
-            name="MeusSErvicos"
-            component={HomeScreen}
-            options={{
-              headerTitle: 'Meus Serviços',
-              title: 'Meus Serviços',
+              title: 'Solicitações',
             }}
           />
         </>
