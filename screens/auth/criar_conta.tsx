@@ -56,8 +56,9 @@ export function CriarContaScreen() {
             data.name,
             data.telefone,
             res.data.jwt,
-          )
-          navigation.navigate('RegisterOk')
+          ).then((res) => {
+            navigation.navigate('RegisterOk')
+          })
         }
 
         //
