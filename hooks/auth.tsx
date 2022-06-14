@@ -7,7 +7,7 @@ import {
   useState,
   useEffect,
 } from 'react'
-import { loginUser } from '../services/api'
+import { idColaborador, loginUser } from '../services/api'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Loading from '../components/LoadingScreen'
 
@@ -25,6 +25,7 @@ interface User {
   nome_sobrenome: string
   tipo_conta: string
   token: any
+  meuIdcol?: number
 }
 interface AuthDataType {
   user: User
@@ -35,6 +36,7 @@ interface AuthDataType {
 }
 function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>({} as User)
+  const [colId, setColId] = useState<any>()
   const [userStorageLoading, setuserStorageLoading] = useState(true)
   const [loading, setLoading] = useState(false)
   const [erroReq, setErroReq] = useState(false)
@@ -43,8 +45,20 @@ function AuthProvider({ children }: AuthProviderProps) {
     try {
       setLoading(true)
       const response = await loginUser(identifier, password)
+
+      if (response.data.user.tipo_conta === 'colaborador') {
+        idColaborador(response.data.user.email)
+          .then((res) => {
+            setColId(res.data.data[0].id)
+            // console.log('resposta idcolaborador', res.data.data[0].id)
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      }
       // console.log(response.data.jwt)
       if (response.status === 200) {
+        // console.log('after local storage login id', colId)
         const userLogado = {
           id: response.data.user.id,
           name: response.data.user.username,
@@ -53,6 +67,7 @@ function AuthProvider({ children }: AuthProviderProps) {
           nome_sobrenome: response.data.user.nome_sobrenome,
           tipo_conta: response.data.user.tipo_conta,
           token: response.data.jwt,
+          meuIdcol: colId,
         }
 
         setUser(userLogado)
@@ -76,14 +91,13 @@ function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     async function LoadStorageUser() {
       const data = await AsyncStorage.getItem('@userConcreto')
-      // console.log(data)
       if (data) {
         const userLogado = JSON.parse(data) as User
         setUser(userLogado)
       }
+
       setuserStorageLoading(false)
     }
-
     LoadStorageUser()
   }, [])
 

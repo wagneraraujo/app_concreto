@@ -15,6 +15,13 @@ export const loginUser = async (identifier: any, password: any) => {
   })
 }
 
+export const idColaborador = async (email: string) => {
+  const res = api.get(
+    `/api/colaboradores?filters[user][email]=${email}&populate=*`,
+  )
+  return res
+}
+
 export const createColaboradorAccount = async (
   identifier: string,
   email: string,
@@ -208,6 +215,13 @@ export const getAllServicosSolicitados = async () => {
 export const getServicosSolicitados = async (email: string) => {
   const res = await api.get(
     `/api/criar-servicos?filters[Gerente_Empresa][email]=${email}&populate=*`,
+  )
+  return res.data
+}
+
+export const getServicosRelacionadoColaborador = async (id: any) => {
+  const res = await api.get(
+    `api/criar-servicos?filters[colaborador][id]=${id}&populate=*`,
   )
   return res.data
 }
