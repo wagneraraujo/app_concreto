@@ -139,7 +139,6 @@ export default function HomeScreen({ navigation }: any) {
                     item.attributes.tipos_servicos.data[0].attributes.Nome
                   }
                   progresso={item.attributes.Status_Servicos}
-                  // nomeColaborador="col teste nome"
                   bairro={item.attributes.empresa.data.attributes.Endereco.substring(
                     0,
                     45,

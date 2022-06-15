@@ -163,15 +163,15 @@ export const updateServicesIdAdicionais = async (
 }
 
 export const startServiceColaborador = async (
-  id: number,
-  Status_servico: boolean,
+  id: any,
+  Status_Servicos: string,
   jwt: any,
 ) => {
   return api.put(
     '/api/criar-servicos/' + id,
     {
       data: {
-        Status_servico: Status_servico,
+        Status_Servicos: Status_Servicos,
       },
     },
 

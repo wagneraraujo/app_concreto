@@ -8,7 +8,7 @@ interface ItemServicoProps {
   titulo?: string
   empresa?: string
   bairro?: string
-  progresso?: Boolean
+  progresso?: any
   nomeColaborador?: string
   navegacao?: any
 }
@@ -35,29 +35,30 @@ export const ItemServico = ({
             <Text style={styles.textBairro}>{bairro}</Text>
           </View>
           <View style={styles.viewProgresso}>
-            {!progresso ? (
-              <Text
-                style={[
-                  {
-                    color: theme.colors.error,
-                  },
-
-                  styles.textProgress,
-                ]}
-              >
-                Não iniciado
-              </Text>
-            ) : (
+            {progresso === 'Iniciado' ? (
               <Text
                 style={[
                   {
                     color: theme.colors.green,
+                    fontWeight: '800',
                   },
 
                   styles.textProgress,
                 ]}
               >
                 Iniciado
+              </Text>
+            ) : (
+              <Text
+                style={[
+                  {
+                    color: theme.colors.gray,
+                  },
+
+                  styles.textProgress,
+                ]}
+              >
+                Aguardando
               </Text>
             )}
 
@@ -107,7 +108,8 @@ const styles = StyleSheet.create({
   },
   textProgress: {
     marginRight: RFValue(10),
-    fontWeight: 'bold',
+    fontWeight: '600',
+    fontSize: 14,
     // color: theme.colors.darkGreen,
   },
   nomeColaborador: {

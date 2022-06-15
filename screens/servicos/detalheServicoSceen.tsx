@@ -8,6 +8,7 @@ import {
   Image,
   Linking,
   Alert,
+  RefreshControl,
 } from 'react-native'
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize'
 import { Portal, Title } from 'react-native-paper'
@@ -26,6 +27,9 @@ import { formatCurrency } from '../../utils/formatCurrency'
 import { red400 } from 'react-native-paper/lib/typescript/styles/colors'
 import AlertComponent from '../../components/AlertComponent'
 import { TextInput } from 'react-native-paper'
+const wait = (timeout: any) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout))
+}
 
 export const DetalheServicoScreen = () => {
   const [servico, setServico] = useState({} as any)
@@ -35,6 +39,7 @@ export const DetalheServicoScreen = () => {
   const [showMoreInfo, setShowMoreinfo] = useState(false)
   const [textInfo, setTextInfo] = useState()
   const [msgSucesso, setmsgSucess] = useState(['', ['']])
+  const [refreshing, setRefreshing] = React.useState(false)
 
   const showDialog = () => setVisible(true)
   const hideDialog = () => setVisible(false)
@@ -88,6 +93,7 @@ export const DetalheServicoScreen = () => {
   }, [])
 
   const userIsGerente = user.tipo_conta
+  //cancelar servico
   const cancelarService = (id: number) => {
     deleteServicoId(id, user.token).then((res) => {
       Alert.alert('Deletado com sucesso', '', [
@@ -102,6 +108,7 @@ export const DetalheServicoScreen = () => {
     })
   }
 
+  //informacoes adicionais
   const sendUpdateInfoText = () => {
     if (textInfo === '') {
       Alert.alert(
@@ -130,30 +137,63 @@ export const DetalheServicoScreen = () => {
       })
   }
 
-  console.log(route.params.id)
-
+  //iniciar servico
   const StartServico = () => {
-    console.log('iniciarrr')
-    startServiceColaborador(route.params.id, true, user.token).then((res) => {
-      console.log(res)
-    })
+    startServiceColaborador(route.params.id, 'Iniciado', user.token).then(
+      (res) => {
+        console.log(res)
+        onRefresh()
+      },
+    )
   }
+
+  //finalizar serviço
+  const finalizarService = () => {
+    console.log('finalizar servico')
+  }
+
+  const onRefresh = React.useCallback(() => {
+    getServicoId(route.params?.id)
+      .then((res) => {
+        setServico(res)
+        setLoading(false)
+        console.log(res)
+      })
+      .catch((err) => {
+        console.log('erro:', err)
+        setLoading(false)
+      })
+
+    setRefreshing(true)
+    wait(2000).then(() => setRefreshing(false))
+  }, [])
 
   return (
     <>
       {loading ? (
         <Loading />
       ) : (
-        <ScrollView style={styles.container}>
+        <ScrollView
+          style={styles.container}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
           <View style={styles.viewTitleServico}>
             <Title>{servico.data.attributes.Titulo}</Title>
           </View>
           <View style={styles.viewTitleServico}>
             <Title style={{ color: theme.colors.text }}>
               <Text style={styles.textSmall}>Status:</Text>{' '}
-              <Text style={{ color: theme.colors.blue, fontSize: 14 }}>
-                {servico.data.attributes.Status_Servicos}
-              </Text>
+              {servico.data.attributes.Status_Servicos === 'Iniciado' ? (
+                <Text style={{ color: theme.colors.darkGreen, fontSize: 14 }}>
+                  {servico.data.attributes.Status_Servicos}
+                </Text>
+              ) : (
+                <Text style={{ color: theme.colors.gray, fontSize: 14 }}>
+                  {servico.data.attributes.Status_Servicos}
+                </Text>
+              )}
             </Title>
             <Title style={{ color: theme.colors.darkGreen, fontSize: 14 }}>
               Valor: R${' '}
@@ -329,25 +369,46 @@ export const DetalheServicoScreen = () => {
               <View style={styles.separator} />
 
               <View style={styles.viewBtnAcao}>
-                <Button
-                  icon="play-circle"
-                  mode="contained"
-                  onPress={StartServico}
-                  compact
-                  color={theme.colors.green}
-                >
-                  Iniciar Serviço
-                </Button>
+                {servico.data.attributes.Status_Servicos === 'Iniciado' ? (
+                  <Button
+                    icon="alert-circle"
+                    mode="contained"
+                    onPress={
+                      servico.data.attributes.Status_Servicos === 'Finalizado'
+                        ? () => {}
+                        : finalizarService
+                    }
+                    compact
+                    color={theme.colors.blue}
+                    disabled={
+                      servico.data.attributes.Status_Servicos === 'Finalizado'
+                        ? true
+                        : false
+                    }
+                  >
+                    {servico.data.attributes.Status_Servicos === 'Finalizado'
+                      ? 'Serviço concluído'
+                      : 'Finalizar SErviço'}
+                  </Button>
+                ) : (
+                  <Text></Text>
+                )}
 
-                <Button
-                  icon="play-circle"
-                  mode="contained"
-                  onPress={() => console.log('Pressed')}
-                  compact
-                  color={theme.colors.darkGreen}
-                >
-                  Finalizar Serviço
-                </Button>
+                {servico.data.attributes.Status_Servicos === 'Aguardando' ? (
+                  <Button
+                    icon="play-circle"
+                    mode="contained"
+                    onPress={StartServico}
+                    compact
+                    color={theme.colors.green}
+                  >
+                    Iniciar Serviço
+                  </Button>
+                ) : (
+                  <Text></Text>
+                )}
+
+                {/* */}
               </View>
             </>
           )}
