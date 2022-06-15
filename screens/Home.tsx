@@ -38,6 +38,7 @@ export default function HomeScreen({ navigation }: any) {
   const route = useRoute()
   // const { user } = useAuth()
   const { user } = useAuth()
+  console.log(user.meuIdcol)
 
   useEffect(() => {
     getServicosRelacionadoColaborador(user.meuIdcol)
@@ -131,26 +132,24 @@ export default function HomeScreen({ navigation }: any) {
                 20,
               )
               return (
-                <>
-                  <ItemServico
-                    empresa={empresa}
-                    key={item.id}
-                    titulo={
-                      item.attributes.tipos_servicos.data[0].attributes.Nome
-                    }
-                    progresso={item.attributes.Status_servico}
-                    // nomeColaborador="col teste nome"
-                    bairro={item.attributes.empresa.data.attributes.Endereco.substring(
-                      0,
-                      45,
-                    )}
-                    navegacao={() =>
-                      navigation.navigate('DetalheServicoScreenColaborador', {
-                        id: item.id,
-                      })
-                    }
-                  />
-                </>
+                <ItemServico
+                  empresa={empresa}
+                  key={item.id}
+                  titulo={
+                    item.attributes.tipos_servicos.data[0].attributes.Nome
+                  }
+                  progresso={item.attributes.Status_Servicos}
+                  // nomeColaborador="col teste nome"
+                  bairro={item.attributes.empresa.data.attributes.Endereco.substring(
+                    0,
+                    45,
+                  )}
+                  navegacao={() =>
+                    navigation.navigate('DetalheServicoScreenColaborador', {
+                      id: item.id,
+                    })
+                  }
+                />
               )
             })}
           </View>

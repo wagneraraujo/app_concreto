@@ -16,6 +16,7 @@ import { Button, Dialog } from 'react-native-paper'
 import {
   deleteServicoId,
   getServicoId,
+  startServiceColaborador,
   updateServicesIdAdicionais,
 } from '../../services/api'
 import Loading from '../../components/LoadingScreen'
@@ -73,22 +74,7 @@ export const DetalheServicoScreen = () => {
       .then((res) => {
         setServico(res)
         setLoading(false)
-        // console.log(res.data.attributes.colaborador.data.attributes.Nome)
-
-        // console.log(res.s.attributes.empresa.data.attributes.Telefone)
-        // // console.log(res.data.attributes.empresa.data.attributes.Nome_Empresa)
-        // setTitulo(res.data.attributes.Titulo)
-        // setNomeempresa(
-        //   res.data.attributes.empresa.data[0].attributes.Nome_Empresa,
-        // )
-        // setDescricao(res.data.attributes.Descricao)
-        // setStatus(res.data.attributes.Status)
-        // setValor(res.data.attributes.Valor)
-        // setEndereco(res.data.attributes.empresas.data[0].attributes.Endereco)
-        // setTelefone(res.data.attributes.empresas.data[0].attributes.telefone)
-        // setDatasolicitacao(
-        //   res.data.attributes.createdAt.toLocaleString('pt-BR', options),
-        // )
+        console.log(res)
       })
       .catch((err) => {
         console.log('erro:', err)
@@ -144,7 +130,14 @@ export const DetalheServicoScreen = () => {
       })
   }
 
-  // console.log(servico.data.attributes.colaborador.data.attributes.Nome)
+  console.log(route.params.id)
+
+  const StartServico = () => {
+    console.log('iniciarrr')
+    startServiceColaborador(route.params.id, true, user.token).then((res) => {
+      console.log(res)
+    })
+  }
 
   return (
     <>
@@ -158,11 +151,9 @@ export const DetalheServicoScreen = () => {
           <View style={styles.viewTitleServico}>
             <Title style={{ color: theme.colors.text }}>
               <Text style={styles.textSmall}>Status:</Text>{' '}
-              {!servico.data.attributes.Status_servico ? (
-                <Text style={{ fontSize: 14 }}>Não iniciado</Text>
-              ) : (
-                <Text style={{ fontSize: 14, color: 'green' }}>Iniciado</Text>
-              )}
+              <Text style={{ color: theme.colors.blue, fontSize: 14 }}>
+                {servico.data.attributes.Status_Servicos}
+              </Text>
             </Title>
             <Title style={{ color: theme.colors.darkGreen, fontSize: 14 }}>
               Valor: R${' '}
@@ -282,15 +273,15 @@ export const DetalheServicoScreen = () => {
                   compact
                   color={'black'}
                   icon="phone"
-                  mode="contained"
-                  labelStyle={{ fontSize: 13 }}
+                  mode="outlined"
+                  labelStyle={{ fontSize: 11 }}
                   onPress={() => {
                     Linking.openURL(
                       `tel:55${servico.data.attributes.empresa.data.attributes.Telefone}`,
                     )
                   }}
                 >
-                  Ligar
+                  Ligar para cliente
                 </Button>
 
                 <Button
@@ -298,6 +289,7 @@ export const DetalheServicoScreen = () => {
                   compact
                   mode="outlined"
                   onPress={showMorebtninfo}
+                  labelStyle={{ fontSize: 11 }}
                 >
                   {showMoreInfo ? 'Fechar Add Infos' : 'Add informações'}
                 </Button>
@@ -335,17 +327,16 @@ export const DetalheServicoScreen = () => {
               </View>
 
               <View style={styles.separator} />
-              <Text>Nenhum colaborador foi selecionado para este serviço</Text>
-              {/* 
+
               <View style={styles.viewBtnAcao}>
                 <Button
                   icon="play-circle"
                   mode="contained"
-                  onPress={() => console.log('Pressed')}
+                  onPress={StartServico}
                   compact
                   color={theme.colors.green}
                 >
-                  Aceitar Serviço
+                  Iniciar Serviço
                 </Button>
 
                 <Button
@@ -357,7 +348,7 @@ export const DetalheServicoScreen = () => {
                 >
                   Finalizar Serviço
                 </Button>
-              </View> */}
+              </View>
             </>
           )}
         </ScrollView>
