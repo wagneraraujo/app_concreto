@@ -11,7 +11,7 @@ import {
   RefreshControl,
 } from 'react-native'
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize'
-import { Portal, Title } from 'react-native-paper'
+import { Portal, Title, List } from 'react-native-paper'
 import { theme } from '../../theme/theme'
 import { Button, Dialog } from 'react-native-paper'
 import {
@@ -40,6 +40,7 @@ export const DetalheServicoScreen = () => {
   const [textInfo, setTextInfo] = useState()
   const [msgSucesso, setmsgSucess] = useState(['', ['']])
   const [refreshing, setRefreshing] = React.useState(false)
+  const [statusSend, setStatussend] = React.useState(false)
 
   const showDialog = () => setVisible(true)
   const hideDialog = () => setVisible(false)
@@ -79,7 +80,7 @@ export const DetalheServicoScreen = () => {
       .then((res) => {
         setServico(res)
         setLoading(false)
-        console.log(res)
+        // console.log(res)
       })
       .catch((err) => {
         console.log('erro:', err)
@@ -110,6 +111,7 @@ export const DetalheServicoScreen = () => {
 
   //informacoes adicionais
   const sendUpdateInfoText = () => {
+    setStatussend(true)
     if (textInfo === '') {
       Alert.alert(
         'Campo vazio',
@@ -119,21 +121,29 @@ export const DetalheServicoScreen = () => {
 
       return false
     }
-    updateServicesIdAdicionais(textInfo, servico.data.id, user.token)
+    updateServicesIdAdicionais(textInfo, servico.data?.id, user.token)
       .then((res) => {
-        console.log(res)
-        setmsgSucess(['Adicionado com sucesso', 'green'])
+        // console.log(res)
+        setmsgSucess([
+          'Adicionado com sucesso, atualizando no servidor...',
+          'green',
+        ])
 
         setTimeout(() => {
           setmsgSucess(['', ''])
+          setShowMoreinfo(false)
+          onRefresh()
         }, 2000)
+
+        setStatussend(false)
       })
       .catch((err) => {
-        console.log(err)
+        // console.log(err)
         setmsgSucess(['Algo deu errado, tente novamente', 'red'])
         setTimeout(() => {
           setmsgSucess(['', ''])
         }, 2000)
+        setStatussend(false)
       })
   }
 
@@ -157,7 +167,7 @@ export const DetalheServicoScreen = () => {
       .then((res) => {
         setServico(res)
         setLoading(false)
-        console.log(res)
+        // console.log(res)
       })
       .catch((err) => {
         console.log('erro:', err)
@@ -167,6 +177,8 @@ export const DetalheServicoScreen = () => {
     setRefreshing(true)
     wait(2000).then(() => setRefreshing(false))
   }, [])
+
+  console.log(servico.data?.attributes.Pagamento)
 
   return (
     <>
@@ -180,67 +192,60 @@ export const DetalheServicoScreen = () => {
           }
         >
           <View style={styles.viewTitleServico}>
-            <Title>{servico.data.attributes.Titulo}</Title>
+            <Title>{servico.data?.attributes.Titulo}</Title>
           </View>
           <View style={styles.viewTitleServico}>
             <Title style={{ color: theme.colors.text }}>
               <Text style={styles.textSmall}>Status:</Text>{' '}
-              {servico.data.attributes.Status_Servicos === 'Iniciado' ? (
+              {servico.data?.attributes.Status_Servicos === 'Iniciado' ? (
                 <Text style={{ color: theme.colors.darkGreen, fontSize: 14 }}>
-                  {servico.data.attributes.Status_Servicos}
+                  {servico.data?.attributes.Status_Servicos}
                 </Text>
               ) : (
                 <Text style={{ color: theme.colors.gray, fontSize: 14 }}>
-                  {servico.data.attributes.Status_Servicos}
+                  {servico.data?.attributes.Status_Servicos}
                 </Text>
               )}
             </Title>
             <Title style={{ color: theme.colors.darkGreen, fontSize: 14 }}>
               Valor: R${' '}
-              {servico.data.attributes.Valor === null ? (
+              {servico.data?.attributes.Valor === null ? (
                 <Text>Não definido</Text>
               ) : (
-                formatCurrency(servico.data.attributes.Valor)
+                formatCurrency(servico.data?.attributes.Valor)
               )}
             </Title>
           </View>
 
           <View style={styles.viewTwo}>
             <View style={styles.viewCol}>
+              <Text>Status Pagamento:</Text>
               <Text style={styles.subTitle}>
-                {servico.data.attributes.empresa.data.attributes.Nome_Empresa}
+                {servico.data?.attributes.Pagamento}
+              </Text>
+            </View>
+          </View>
+
+          <View style={styles.viewTwo}>
+            <View style={styles.viewCol}>
+              <Text>Empresa:</Text>
+              <Text style={styles.subTitle}>
+                {servico.data?.attributes.empresa.data.attributes.Nome_Empresa}
               </Text>
               <Text>Endereço:</Text>
               <Text style={styles.subTitle}>
-                {servico.data.attributes.empresa.data.attributes.Endereco}
+                {servico.data?.attributes.empresa.data.attributes.Endereco}
               </Text>
             </View>
             <View style={styles.viewCol}>
               <Text style={styles.subTitle}>Data Solicitação</Text>
-              <Text> {formatDate(servico.data.attributes.createdAt)}</Text>
+              <Text> {formatDate(servico.data?.attributes.createdAt)}</Text>
             </View>
-          </View>
-
-          <View style={styles.separator} />
-
-          <View>
-            <Title>Mais informações</Title>
-            <Text style={styles.textDescricao}>
-              {servico.data.attributes.Descricao}
-            </Text>
-
-            {/* <Image
-              style={styles.imagens}
-              source={{
-                uri:
-                  'https://www.vidracarialapaz.com.br/wp-content/uploads/2020/12/ESQUADRIA-DE-ALUMINIO_PORTAO.jpg',
-              }}
-            /> */}
           </View>
 
           {userIsGerente === 'empresa' && (
             <>
-              {servico.data.attributes.colaborador.data === null ? (
+              {servico.data?.attributes.colaborador.data === null ? (
                 <>
                   <View style={styles.separator} />
                   <Text>
@@ -255,9 +260,9 @@ export const DetalheServicoScreen = () => {
                     <Title style={{ color: theme.colors.text }}>
                       <Text style={styles.textSmall}>Colaborador: </Text>
                       <Text style={{ fontSize: 14 }}>
-                        {servico.data.attributes.colaborador.data === null
+                        {servico.data?.attributes.colaborador.data === null
                           ? ''
-                          : servico.data.attributes.colaborador.data.attributes
+                          : servico.data?.attributes.colaborador.data.attributes
                               .Nome}
                       </Text>
                     </Title>
@@ -271,7 +276,7 @@ export const DetalheServicoScreen = () => {
                       labelStyle={{ fontSize: 13 }}
                       onPress={() => {
                         Linking.openURL(
-                          `tel:55${servico.data.attributes.colaborador.data.attributes.Telefone}`,
+                          `tel:55${servico.data?.attributes.colaborador.data.attributes.Telefone}`,
                         )
                       }}
                     >
@@ -293,9 +298,9 @@ export const DetalheServicoScreen = () => {
                 >
                   Editar Solicitação
                 </Button> */}
-                {!servico.data.attributes.Status_servico ? (
+                {!servico.data?.attributes.Status_servico ? (
                   <AlertComponent
-                    funcDelete={() => cancelarService(servico.data.id)}
+                    funcDelete={() => cancelarService(servico.data?.id)}
                   />
                 ) : (
                   <Text></Text>
@@ -317,7 +322,7 @@ export const DetalheServicoScreen = () => {
                   labelStyle={{ fontSize: 11 }}
                   onPress={() => {
                     Linking.openURL(
-                      `tel:55${servico.data.attributes.empresa.data.attributes.Telefone}`,
+                      `tel:55${servico.data?.attributes.empresa.data.attributes.Telefone}`,
                     )
                   }}
                 >
@@ -340,7 +345,7 @@ export const DetalheServicoScreen = () => {
                   <TextInput
                     label="Digite aqui"
                     mode="outlined"
-                    value={textInfo}
+                    value={servico.data?.attributes.Info_adicionais}
                     multiline
                     numberOfLines={3}
                     onChangeText={(textInfo) => setTextInfo(textInfo)}
@@ -350,43 +355,42 @@ export const DetalheServicoScreen = () => {
                     icon="text"
                     mode="contained"
                     onPress={sendUpdateInfoText}
+                    disabled={statusSend ? true : false}
                   >
-                    Salvar informação
+                    {statusSend ? 'Salvando' : 'Salvar informação'}
                   </Button>
                 </View>
               )}
 
               <View>
                 {msgSucesso != [''] && (
-                  <>
-                    <Text style={{ color: msgSucesso[1] }}>
-                      {msgSucesso[0]}
-                    </Text>
-                  </>
+                  <View>
+                    <Text color={msgSucesso[1]}>{msgSucesso[0]}</Text>
+                  </View>
                 )}
               </View>
 
               <View style={styles.separator} />
 
               <View style={styles.viewBtnAcao}>
-                {servico.data.attributes.Status_Servicos === 'Iniciado' ? (
+                {servico.data?.attributes.Status_Servicos === 'Iniciado' ? (
                   <Button
                     icon="alert-circle"
                     mode="contained"
                     onPress={
-                      servico.data.attributes.Status_Servicos === 'Finalizado'
+                      servico.data?.attributes.Status_Servicos === 'Finalizado'
                         ? () => {}
                         : finalizarService
                     }
                     compact
                     color={theme.colors.blue}
                     disabled={
-                      servico.data.attributes.Status_Servicos === 'Finalizado'
+                      servico.data?.attributes.Status_Servicos === 'Finalizado'
                         ? true
                         : false
                     }
                   >
-                    {servico.data.attributes.Status_Servicos === 'Finalizado'
+                    {servico.data?.attributes.Status_Servicos === 'Finalizado'
                       ? 'Serviço concluído'
                       : 'Finalizar SErviço'}
                   </Button>
@@ -394,7 +398,7 @@ export const DetalheServicoScreen = () => {
                   <Text></Text>
                 )}
 
-                {servico.data.attributes.Status_Servicos === 'Aguardando' ? (
+                {servico.data?.attributes.Status_Servicos === 'Aguardando' ? (
                   <Button
                     icon="play-circle"
                     mode="contained"
@@ -436,7 +440,7 @@ const styles = StyleSheet.create({
   },
   viewCol: {
     width: RFPercentage(36),
-    marginHorizontal: RFValue(6),
+    marginHorizontal: RFValue(0),
     marginVertical: 6,
   },
   subTitle: {
