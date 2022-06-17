@@ -6,17 +6,18 @@ import { theme } from '../../theme/theme'
 import { Badge } from 'react-native-paper'
 
 interface HeaderProps {
-  title: string
-  subtitle: string
+  title?: string
+  subtitle?: string
+  nameempresa?: string
 }
 
-export const HeaderColors = ({ title, subtitle }: HeaderProps) => {
+export const HeaderColors = ({ title, subtitle, nameempresa }: HeaderProps) => {
   return (
     <>
       <View style={styles.container}>
         <View>
           <Title style={styles.title}>{title}</Title>
-          <Text style={styles.razaoSocial}>Razao social da e mpresa</Text>
+          <Text style={styles.razaoSocial}>{nameempresa}</Text>
           <Subheading>{subtitle}</Subheading>
         </View>
       </View>
@@ -26,8 +27,8 @@ export const HeaderColors = ({ title, subtitle }: HeaderProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 36,
-    paddingBottom: 50,
+    paddingTop: 26,
+    paddingBottom: 10,
     paddingHorizontal: 16,
     backgroundColor: theme.colors.primary,
     width: '100%',
@@ -38,7 +39,8 @@ const styles = StyleSheet.create({
     color: theme.colors.background,
   },
   razaoSocial: {
-    fontSize: 12,
+    fontSize: 16,
     color: theme.colors.blue,
+    fontWeight: 'bold',
   },
 })

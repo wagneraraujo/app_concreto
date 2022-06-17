@@ -6,7 +6,7 @@ import { HeaderScreens } from '../../components/HeaderScreens'
 import { useForm, Controller } from 'react-hook-form'
 
 import { theme } from '../../theme/theme'
-import { createEmpresaAccount } from '../../services/api'
+import { cadastrarEmpresa, createEmpresaAccount } from '../../services/api'
 import Loading from '../../components/LoadingScreen'
 export function CriarContaEmpresaScreen() {
   const [email, setEmail] = React.useState('')
@@ -29,10 +29,14 @@ export function CriarContaEmpresaScreen() {
       email: '',
       telefone: '',
       name: '',
+      endereco: '',
+      cnpj: '',
+      namecontato: '',
     },
   })
 
   function handleSubmitLogin(data: any) {
+    // console.log(data)
     setLoading(true)
     createEmpresaAccount(
       data.email,
@@ -45,8 +49,25 @@ export function CriarContaEmpresaScreen() {
     )
       .then((res) => {
         if (res.status == 200) {
-          navigation.navigate('RegisterOk')
+          //
+
+          cadastrarEmpresa(
+            data.telefone,
+            data.name,
+            data.endereco,
+            data.cnpj,
+            data.email,
+            data.namecontato,
+            res.data.user.id,
+            res.data.jwt,
+          )
+            .then((res) => {})
+            .catch((err) => {
+              console.log(err)
+            })
         }
+
+        navigation.navigate('RegisterOk')
       })
       .catch((err) => {
         setLoading(false)
@@ -77,7 +98,7 @@ export function CriarContaEmpresaScreen() {
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
-                  label="Nome dono ou Gerente"
+                  label="Razão Social"
                   onBlur={onBlur}
                   onChangeText={(value) => onChange(value)}
                   value={value}
@@ -113,6 +134,80 @@ export function CriarContaEmpresaScreen() {
             />
             {errors.telefone && (
               <Text style={styles.msgErroText}>Campo telefone está vazio</Text>
+            )}
+
+            <Controller
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  label="Endereço"
+                  keyboardType="default"
+                  onBlur={onBlur}
+                  onChangeText={(value) => onChange(value)}
+                  value={value}
+                  style={styles.spaceInput}
+                  right={<TextInput.Icon name="map-marker-radius" />}
+                />
+              )}
+              name="endereco"
+            />
+            <Text style={styles.msgInput}>
+              Ex: Rua torres homem, 856, MeuBairro
+            </Text>
+            {errors.endereco && (
+              <Text style={styles.msgErroText}>Digite seu endereço</Text>
+            )}
+
+            <Controller
+              control={control}
+              rules={{
+                required: false,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  label="CNPJ"
+                  keyboardType="numeric"
+                  onBlur={onBlur}
+                  onChangeText={(value) => onChange(value)}
+                  value={value}
+                  style={styles.spaceInput}
+                  right={<TextInput.Icon name="office-building" />}
+                />
+              )}
+              name="cnpj"
+            />
+
+            {errors.cnpj && (
+              <Text style={styles.msgErroText}>Digite o CNPJ</Text>
+            )}
+
+            <Controller
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  label="Seu nome"
+                  keyboardType="default"
+                  onBlur={onBlur}
+                  onChangeText={(value) => onChange(value)}
+                  value={value}
+                  style={styles.spaceInput}
+                  right={<TextInput.Icon name="account" />}
+                />
+              )}
+              name="namecontato"
+            />
+            <Text style={styles.msgInput}>
+              Se precisarmos te ligar, falar com quem?
+            </Text>
+
+            {errors.cnpj && (
+              <Text style={styles.msgErroText}>Digite o CNPJ</Text>
             )}
 
             <Controller

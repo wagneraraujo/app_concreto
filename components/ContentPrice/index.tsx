@@ -29,7 +29,6 @@ export default function ContentPrice({ qtd, price, ids }: resumoProps) {
       )
       return false
     }
-
     navigation.navigate('ResumoSolicitacao')
   }
 

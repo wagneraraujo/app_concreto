@@ -33,6 +33,7 @@ interface AuthDataType {
   Logout(): void
   userStorageLoading: Boolean
   erroReq: any
+  colId: number
 }
 function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>({} as User)
@@ -42,59 +43,77 @@ function AuthProvider({ children }: AuthProviderProps) {
   const [erroReq, setErroReq] = useState(false)
 
   async function loginAuth(identifier: any, password: any) {
-    try {
-      setLoading(true)
-      const response = await loginUser(identifier, password)
+    await loginUser(identifier, password)
+      .then((res) => {
+        // console.log(response.data.jwt)
+        if (res.status === 200) {
+          // idColaborador(res.data?.user.email)
+          //   .then((res) => {
+          //     setColId(res.data.data[0].id)
+          //     console.log('resposta idcolaborador', res.data.data[0].id)
+          //     const idc = res.data?.data[0].id
+          //   })
+          //   .catch((err) => {
+          //     console.log(err)
+          //   })
+          // console.log('after local storage login id', colId)
+          const userLogado = {
+            id: res.data.user.id,
+            name: res.data.user.username,
+            email: res.data.user.email,
+            telefone: res.data.user.telefone,
+            nome_sobrenome: res.data.user.nome_sobrenome,
+            tipo_conta: res.data.user.tipo_conta,
+            token: res.data.jwt,
+          }
 
-      if (response.data.user.tipo_conta === 'colaborador') {
-        idColaborador(response.data.user.email)
-          .then((res) => {
-            setColId(res.data.data[0].id)
-            // console.log('resposta idcolaborador', res.data.data[0].id)
-          })
-          .catch((err) => {
-            console.log(err)
-          })
-      }
-      // console.log(response.data.jwt)
-      if (response.status === 200) {
-        // console.log('after local storage login id', colId)
-        const userLogado = {
-          id: response.data.user.id,
-          name: response.data.user.username,
-          email: response.data.user.email,
-          telefone: response.data.user.telefone,
-          nome_sobrenome: response.data.user.nome_sobrenome,
-          tipo_conta: response.data.user.tipo_conta,
-          token: response.data.jwt,
-          meuIdcol: colId,
+          setUser(userLogado)
+          AsyncStorage.setItem('@userConcreto', JSON.stringify(userLogado))
         }
 
-        setUser(userLogado)
-        await AsyncStorage.setItem('@userConcreto', JSON.stringify(userLogado))
-      }
-    } catch (error) {
-      // console.log(error)
-      setErroReq(true)
-      throw new Error(' Algo deu errado')
-    } finally {
-      setLoading(false)
-      // setErroReq(false)
-    }
+        idColaborador(res.data?.user.email).then((res) => {
+          console.log('idd==========0', res)
+          // setUser({ ...user, meuIdcol: 10 })
+          console.log('user auth', res.data.data[0].id)
+          setColId(res.data.data[0].id)
+          AsyncStorage.setItem(
+            '@colconcreto',
+            JSON.stringify(res.data?.data[0].id),
+          )
+          // AsyncStorage.setItem('@userConcreto', JSON.stringify(user))
+        })
+      })
+
+      .catch((err) => {
+        setErroReq(true)
+        throw new Error(' Algo deu errado')
+      })
   }
 
   async function Logout() {
     setUser({} as User)
     await AsyncStorage.removeItem('@userConcreto')
+    await AsyncStorage.removeItem('@colconcreto')
+    setColId({})
   }
 
   useEffect(() => {
     async function LoadStorageUser() {
       const data = await AsyncStorage.getItem('@userConcreto')
+      const collocal = await AsyncStorage.getItem('@colconcreto')
       if (data) {
+        const userCol = JSON.parse(collocal) as any
         const userLogado = JSON.parse(data) as User
+        const newuser = Object.assign(userLogado, { meuIdcol: userCol })
+        AsyncStorage.setItem('@userConcreto', JSON.stringify(newuser))
+        setColId(userCol)
         setUser(userLogado)
       }
+
+      // if (collocal) {
+      //   const userCol = JSON.parse(collocal) as any
+      //   console.log('localstorae', userCol)
+      // }
 
       setuserStorageLoading(false)
     }
@@ -103,7 +122,7 @@ function AuthProvider({ children }: AuthProviderProps) {
 
   return (
     <AuthContext.Provider
-      value={{ user, loginAuth, Logout, userStorageLoading, erroReq }}
+      value={{ user, loginAuth, Logout, userStorageLoading, erroReq, colId }}
     >
       {loading ? <Loading /> : children}
     </AuthContext.Provider>

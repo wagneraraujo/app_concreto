@@ -28,7 +28,7 @@ import { SolicitacoesAuth } from './solicitacoes_auth'
 import { useAuth } from '../hooks/auth'
 import { ConfigStack } from './configs_stack'
 import { FA5Style } from '@expo/vector-icons/build/FontAwesome5'
-import { StackServicosCol, StackServicosColaborador } from './auth_colservicos'
+import { StackServicosColaborador } from './auth_colservicos'
 import ServicosConcluidosCol from '../screens/servicos/servicosConcluidos'
 
 const Drawer = createDrawerNavigator()
@@ -51,14 +51,6 @@ export const DrawerMenu = () => {
       {noEmpresa === 'empresa' && (
         <>
           <Drawer.Screen
-            name="SolicitacoesAuth"
-            component={SolicitacoesAuth}
-            options={{
-              headerTitle: 'Minhas Solicitações',
-              title: 'Minhas Solicitações',
-            }}
-          />
-          <Drawer.Screen
             name="CreateSolicitacao"
             component={CreateSolicitacao}
             options={{
@@ -66,6 +58,22 @@ export const DrawerMenu = () => {
               title: 'Criar Solicitação',
             }}
           />
+          <Drawer.Screen
+            name="SolicitacoesAuth"
+            component={SolicitacoesAuth}
+            options={{
+              headerTitle: 'Minhas Solicitações',
+              title: 'Minhas Solicitações',
+            }}
+          />
+          {/* <Drawer.Screen
+            name="SolicitacoesAuth"
+            component={SolicitacoesAuth}
+            options={{
+              headerTitle: 'Solicitações concluídas',
+              title: 'Solicitações concluídas',
+            }}
+          /> */}
         </>
       )}
 

@@ -78,7 +78,7 @@ export default function ResumoSolicitacao() {
 
   function handleSubmitLogin(data: any) {
     createServices(
-      `Solicitação #00${new Date().getMonth()}${new Date().getSeconds()}`,
+      `Solicitação #0${new Date().getDay()}${new Date().getHours()}`,
       data.descricao,
       myEmpresas[0].id,
       arrId,

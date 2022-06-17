@@ -207,6 +207,11 @@ export const DetalheServicoScreen = () => {
     wait(2000).then(() => setRefreshing(false))
   }, [])
 
+  console.log(
+    '=========',
+    servico.data?.attributes.tipos_servicos.data[0].attributes.Nome,
+  )
+
   return (
     <>
       {loading ? (
@@ -272,6 +277,18 @@ export const DetalheServicoScreen = () => {
             <View style={styles.viewCol}>
               <Text style={styles.subTitle}>Data Solicitação</Text>
               <Text> {formatDate(servico.data?.attributes.createdAt)}</Text>
+            </View>
+          </View>
+          <View style={styles.viewTwo}>
+            <View style={styles.viewCol}>
+              <Text>Serviços Solicitados:</Text>
+              {servico.data?.attributes.tipos_servicos.data.map((item) => {
+                return (
+                  <Text key={item.id} style={styles.subTitle}>
+                    {item.attributes.Nome}
+                  </Text>
+                )
+              })}
             </View>
           </View>
 

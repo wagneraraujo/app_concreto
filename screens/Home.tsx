@@ -30,6 +30,7 @@ const wait = (timeout: any) => {
 }
 
 export default function HomeScreen({ navigation }: any) {
+  const { user, colId } = useAuth()
   const [refreshing, setRefreshing] = React.useState(false)
 
   const [servicos, setServicos] = useState<any>([] as any)
@@ -37,10 +38,9 @@ export default function HomeScreen({ navigation }: any) {
 
   const route = useRoute()
   // const { user } = useAuth()
-  const { user } = useAuth()
 
   useEffect(() => {
-    getServicosRelacionadoColaborador(user.meuIdcol)
+    getServicosRelacionadoColaborador(colId)
       .then((res) => {
         // console.log('id busca', res)
         // setServicos(res.data)
@@ -52,7 +52,7 @@ export default function HomeScreen({ navigation }: any) {
   }, [])
 
   const onRefresh = React.useCallback(() => {
-    getServicosRelacionadoColaborador(user.meuIdcol).then((res) => {
+    getServicosRelacionadoColaborador(colId).then((res) => {
       // console.log(res)
       setServicos(res.data)
       setLoading(false)
@@ -65,7 +65,7 @@ export default function HomeScreen({ navigation }: any) {
   // console.log(servicos)
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      getServicosRelacionadoColaborador(user.meuIdcol).then((res) => {
+      getServicosRelacionadoColaborador(colId).then((res) => {
         // console.log(res)
         setServicos(res.data)
         setLoading(false)
@@ -74,7 +74,7 @@ export default function HomeScreen({ navigation }: any) {
     return unsubscribe
   }, [navigation])
 
-  // console.log(servicos)
+  console.log('userlocal home', colId)
 
   return (
     <>

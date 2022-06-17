@@ -76,18 +76,18 @@ export default function SolicitacoesScreen({ navigation }) {
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       getMyEmpresas(user.email).then((res) => {
-        console.log(res)
+        // console.log(res)
         setQtdEmpresas(res.data)
       })
       getServicosSolicitados(user.email).then((res) => {
-        console.log(res)
+        // console.log(res)
         setServicos(res.data)
         setLoading(false)
       })
     })
     return unsubscribe
   }, [navigation])
-  // console.log(qtdEmpresas.length)
+  console.log(qtdEmpresas[0]?.attributes.Nome_Empresa)
 
   return (
     <>
@@ -104,8 +104,9 @@ export default function SolicitacoesScreen({ navigation }) {
             <HeaderColors
               title="Solicitações"
               subtitle="Acompanhe suas solicitações"
+              nameempresa={qtdEmpresas[0]?.attributes.Nome_Empresa}
             />
-            <View style={styles.containerResumos}>
+            {/* <View style={styles.containerResumos}>
               <ResumoCard
                 nameIcon="alarm-outline"
                 sizeIcon={24}
@@ -123,7 +124,7 @@ export default function SolicitacoesScreen({ navigation }) {
                 themeColor={theme.colors.green}
                 navegacao={() => {}}
               />
-            </View>
+            </View> */}
 
             <View style={styles.ViewCriarSolicitacao}>
               <Text style={styles.textsolicitarservico}>
@@ -229,6 +230,7 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     alignSelf: 'center',
     backgroundColor: '#fff',
+    marginTop: 16,
   },
   textsolicitarservico: {
     marginBottom: 6,

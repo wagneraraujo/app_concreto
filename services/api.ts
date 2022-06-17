@@ -19,7 +19,7 @@ export const idColaborador = async (email: string) => {
   const res = api.get(
     `/api/colaboradores?filters[user][email]=${email}&populate=*`,
   )
-  return res
+  return await res
 }
 
 export const createColaboradorAccount = async (
@@ -87,6 +87,8 @@ export const cadastrarEmpresa = async (
   Nome_Empresa: string,
   Endereco: string,
   cnpj: string,
+  Email: string,
+  Nome_contato: string,
   adminempresa: Number,
   jwt: any,
 ) => {
@@ -98,6 +100,8 @@ export const cadastrarEmpresa = async (
         Nome_Empresa: Nome_Empresa,
         Endereco: Endereco,
         Cnpj: cnpj,
+        Email: Email,
+        Nome_contato: Nome_contato,
         adminempresa: adminempresa,
       },
     },
@@ -261,7 +265,7 @@ export const getServicosSolicitados = async (email: string) => {
 
 export const getServicosRelacionadoColaborador = async (id: any) => {
   const res = await api.get(
-    `api/criar-servicos?filters[colaborador][id]=${id}&filters[Status_Servicos][$notContains]=Finalizado&populate=*`,
+    `api/criar-servicos?filters[colaborador][id]=${id}&populate=*`,
   )
   return res.data
 }
