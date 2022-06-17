@@ -261,7 +261,7 @@ export const getServicosSolicitados = async (email: string) => {
 
 export const getServicosRelacionadoColaborador = async (id: any) => {
   const res = await api.get(
-    `api/criar-servicos?filters[colaborador][id]=${id}&populate=*`,
+    `api/criar-servicos?filters[colaborador][id]=${id}&filters[Status_Servicos][$notContains]=Finalizado&populate=*`,
   )
   return res.data
 }

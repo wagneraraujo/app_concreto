@@ -131,12 +131,18 @@ export default function HomeScreen({ navigation }: any) {
                 0,
                 20,
               )
+
+              console.log(
+                item.attributes.tipos_servicos.data[0]?.attributes.Nome,
+              )
               return (
                 <ItemServico
                   empresa={empresa}
                   key={item.id}
                   titulo={
-                    item.attributes.tipos_servicos.data[0].attributes.Nome
+                    item.attributes.tipos_servicos.data[0]
+                      ? item.attributes.tipos_servicos.data[0]?.attributes.Nome
+                      : 'Serviço #app'
                   }
                   progresso={item.attributes.Status_Servicos}
                   bairro={item.attributes.empresa.data.attributes.Endereco.substring(

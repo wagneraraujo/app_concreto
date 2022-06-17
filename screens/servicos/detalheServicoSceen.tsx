@@ -219,7 +219,12 @@ export const DetalheServicoScreen = () => {
           }
         >
           <View style={styles.viewTitleServico}>
-            <Title>{servico.data?.attributes.Titulo}</Title>
+            <Title>
+              {servico.data?.attributes.tipos_servicos.data[0]?.attributes.Nome
+                ? servico.data?.attributes.tipos_servicos.data[0]?.attributes
+                    .Nome
+                : 'Serviço #app'}
+            </Title>
           </View>
           <View style={styles.viewTitleServico}>
             <Title style={{ color: theme.colors.text }}>
