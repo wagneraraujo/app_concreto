@@ -182,7 +182,26 @@ export const startServiceColaborador = async (
     },
   )
 }
+export const finalizarServiceColaborator = async (
+  id: any,
+  Status_Servicos: string,
+  jwt: any,
+) => {
+  return api.put(
+    '/api/criar-servicos/' + id,
+    {
+      data: {
+        Status_Servicos: Status_Servicos,
+      },
+    },
 
+    {
+      headers: {
+        Authorization: 'Bearer ' + jwt,
+      },
+    },
+  )
+}
 export const createColaborador = async (
   user: string,
   Nome: string,

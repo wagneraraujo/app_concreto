@@ -16,6 +16,7 @@ import { theme } from '../../theme/theme'
 import { Button, Dialog } from 'react-native-paper'
 import {
   deleteServicoId,
+  finalizarServiceColaborator,
   getServicoId,
   startServiceColaborador,
   updateServicesIdAdicionais,
@@ -159,7 +160,35 @@ export const DetalheServicoScreen = () => {
 
   //finalizar serviço
   const finalizarService = () => {
-    console.log('finalizar servico')
+    Alert.alert('Deseja Concluir o serviço?', 'Clique abaixo para confirmar', [
+      {
+        text: 'Ainda não',
+        onPress: () => console.log('ainda não'),
+      },
+      {
+        text: '',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {
+        text: 'Finalizar agora',
+        onPress: finalizarServiceAction,
+      },
+    ])
+  }
+
+  const finalizarServiceAction = () => {
+    finalizarServiceColaborator(route.params.id, 'Finalizado', user.token)
+      .then((res) => {
+        console.log('servico finalizado')
+
+        setTimeout(() => {
+          navigation.navigate('HomeColaborador')
+        }, 1000)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   const onRefresh = React.useCallback(() => {
@@ -177,8 +206,6 @@ export const DetalheServicoScreen = () => {
     setRefreshing(true)
     wait(2000).then(() => setRefreshing(false))
   }, [])
-
-  console.log(servico.data?.attributes.Pagamento)
 
   return (
     <>
