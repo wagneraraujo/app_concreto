@@ -58,7 +58,7 @@ export const ItemServico = ({
                   styles.textProgress,
                 ]}
               >
-                Aguardando
+                {progresso}
               </Text>
             )}
 

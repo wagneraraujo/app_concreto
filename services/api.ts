@@ -265,6 +265,12 @@ export const getServicosRelacionadoColaborador = async (id: any) => {
   )
   return res.data
 }
+export const getServicosRelacionadoColaboradorConcluidos = async (id: any) => {
+  const res = await api.get(
+    `api/criar-servicos?filters[colaborador][id]=${id}&filters[Status_Servicos][$contains]=Finalizado&populate=*`,
+  )
+  return res.data
+}
 
 export const getServicoId = async (id: number) => {
   const res = await api.get(`/api/criar-servicos/${id}?populate=*`)

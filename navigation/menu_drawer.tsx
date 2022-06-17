@@ -29,6 +29,7 @@ import { useAuth } from '../hooks/auth'
 import { ConfigStack } from './configs_stack'
 import { FA5Style } from '@expo/vector-icons/build/FontAwesome5'
 import { StackServicosCol, StackServicosColaborador } from './auth_colservicos'
+import ServicosConcluidosCol from '../screens/servicos/servicosConcluidos'
 
 const Drawer = createDrawerNavigator()
 export const DrawerMenu = () => {
@@ -76,6 +77,14 @@ export const DrawerMenu = () => {
             options={{
               headerShown: false,
               title: 'Solicitações',
+            }}
+          />
+          <Drawer.Screen
+            name="ServicosConcluidosCol"
+            component={ServicosConcluidosCol}
+            options={{
+              headerShown: false,
+              title: 'Solicitações Concluidas',
             }}
           />
         </>

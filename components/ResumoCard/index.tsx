@@ -6,11 +6,11 @@ import { theme } from '../../theme/theme'
 import { Badge } from 'react-native-paper'
 
 interface CardItemProps {
-  titleCard: string
-  nameIcon: string | any
-  qtd: any
-  navegacao: any
-  sizeIcon: number
+  titleCard?: string
+  nameIcon?: string | any
+  qtd?: any
+  navegacao?: any
+  sizeIcon?: number
   themeColor?: string
 }
 
@@ -40,10 +40,7 @@ export const ResumoCard = ({
         </View>
 
         <View style={styles.lineFooter}>
-          <Badge size={24} style={{ backgroundColor: themeColor }}>
-            {qtd}
-          </Badge>
-          <Text style={[{ color: themeColor }, styles.btnVer]}></Text>
+          <Text style={[{ color: themeColor }, styles.btnVer]}>Ver</Text>
         </View>
       </Pressable>
     </>

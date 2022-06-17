@@ -6,30 +6,30 @@ import {
   FlatList,
   SafeAreaView,
 } from 'react-native'
-import { NomeUsuario } from '../components/NomeUser'
-import { Text, View } from '../components/Themed'
-import { RootTabScreenProps } from '../types'
-import { ResumoCard } from '../components/ResumoCard'
-import { theme } from '../theme/theme'
+import { NomeUsuario } from '../../components/NomeUser'
+import { Text, View } from '../../components/Themed'
+import { RootTabScreenProps } from '../../types'
+import { ResumoCard } from '../../components/ResumoCard'
+import { theme } from '../../theme/theme'
 import { Title } from 'react-native-paper'
 import { RFValue } from 'react-native-responsive-fontsize'
-import { ItemServico } from '../components/ItemListaServico'
+import { ItemServico } from '../../components/ItemListaServico'
 import { useRoute } from '@react-navigation/native'
-import { DrawerMenu } from '../navigation/menu_drawer'
+import { DrawerMenu } from '../../navigation/menu_drawer'
 import { useEffect, useState } from 'react'
-import { useAuth } from '../hooks/auth'
+import { useAuth } from '../../hooks/auth'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import {
   getAllServicosSolicitados,
-  getServicosRelacionadoColaborador,
-} from '../services/api'
-import Loading from '../components/LoadingScreen'
+  getServicosRelacionadoColaboradorConcluidos,
+} from '../../services/api'
+import Loading from '../../components/LoadingScreen'
 const wait = (timeout: any) => {
   return new Promise((resolve) => setTimeout(resolve, timeout))
 }
 
-export default function HomeScreen({ navigation }: any) {
+export default function ServicosConcluidosCol({ navigation }: any) {
   const [refreshing, setRefreshing] = React.useState(false)
 
   const [servicos, setServicos] = useState<any>([] as any)
@@ -40,7 +40,7 @@ export default function HomeScreen({ navigation }: any) {
   const { user } = useAuth()
 
   useEffect(() => {
-    getServicosRelacionadoColaborador(user.meuIdcol)
+    getServicosRelacionadoColaboradorConcluidos(user.meuIdcol)
       .then((res) => {
         // console.log('id busca', res)
         // setServicos(res.data)
@@ -52,7 +52,7 @@ export default function HomeScreen({ navigation }: any) {
   }, [])
 
   const onRefresh = React.useCallback(() => {
-    getServicosRelacionadoColaborador(user.meuIdcol).then((res) => {
+    getServicosRelacionadoColaboradorConcluidos(user.meuIdcol).then((res) => {
       // console.log(res)
       setServicos(res.data)
       setLoading(false)
@@ -65,7 +65,7 @@ export default function HomeScreen({ navigation }: any) {
   // console.log(servicos)
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      getServicosRelacionadoColaborador(user.meuIdcol).then((res) => {
+      getServicosRelacionadoColaboradorConcluidos(user.meuIdcol).then((res) => {
         // console.log(res)
         setServicos(res.data)
         setLoading(false)
@@ -115,7 +115,7 @@ export default function HomeScreen({ navigation }: any) {
           </View> */}
 
           <View style={styles.containerListaServicos}>
-            <Title>Todas Solicitações de clientes</Title>
+            <Title>Serviços concluídos</Title>
 
             {servicos.map((item: any) => {
               // console.log(item.attributes.Status_servico)
@@ -124,9 +124,7 @@ export default function HomeScreen({ navigation }: any) {
                 20,
               )
 
-              // console.log(
-              //   item.attributes.tipos_servicos.data[0]?.attributes.Nome,
-              // )
+              console.log(item.attributes.Status_Servicos)
               return (
                 <ItemServico
                   empresa={empresa}
