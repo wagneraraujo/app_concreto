@@ -91,7 +91,7 @@ export const DrawerMenu = () => {
             name="ServicosConcluidosCol"
             component={ServicosConcluidosCol}
             options={{
-              headerShown: false,
+              headerShown: true,
               title: 'Solicitações Concluidas',
             }}
           />
